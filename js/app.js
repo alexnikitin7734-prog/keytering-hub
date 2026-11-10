@@ -161,23 +161,33 @@
     { key: 'maxi', name: 'Макси', img: 'img/menu/73249.webp',
       li: ['Канапе 5 видов, брускетты 5, рулетики 3', 'Мини-салаты 3 вида, горячее 3 вида', 'Мясное и сырное плато, десерты', 'Кофе, чай, морс, лимонад'] }
   ];
-  var KIT_GROUP = 'dostavka-fursheta-v-ofis';
-  function kitsBlock() {
-    return '<div class="ktg-kits"><div class="ktg-kits__head"><h3>Выездной фуршет комплектом</h3><p>Цена на гостя — всё приготовим и привезём. Дальше — отдельные позиции, если хочется собрать самим.</p></div><div class="ktg-kits__row">' +
-      KITS.map(function (k) {
-        var lv = FORMATS.furshet.levels[k.key], price = k.p || lv[0], out = k.out || lv[1];
+  // «Новый год» — те же комплекты с новогодним оформлением линии: +500 ₽ к Мини/Миди/Макси, боксы без декора (Маша №334); фото — лендинг /novogodniy-furshet/.
+  var NG_DECOR = 500;
+  var KIT_GROUPS = {
+    'dostavka-fursheta-v-ofis': { title: 'Выездной фуршет комплектом', kits: KITS },
+    'keytering-na-novyy-god': { title: 'Новогодний фуршет комплектом', kits: KITS.map(function (k) {
+      var img = { box: 'img/kits/ng-box.webp', mini: 'img/kits/ng-mini.webp', midi: 'img/kits/ng-midi.webp', maxi: 'img/kits/ng-maxi.webp' }[k.key];
+      return k.p ? Object.assign({}, k, { img: img }) : Object.assign({}, k, { img: img, add: NG_DECOR, li: ['Новогоднее оформление линии'].concat(k.li) });
+    }) }
+  };
+  function kitPrice(k) { return k.p || FORMATS.furshet.levels[k.key][0] + (k.add || 0); }
+  function kitsBlock(slug) {
+    var G = KIT_GROUPS[slug];
+    return '<div class="ktg-kits"><div class="ktg-kits__head"><h3>' + G.title + '</h3><p>Цена на гостя — всё приготовим и привезём. Дальше — отдельные позиции, если хочется собрать самим.</p></div><div class="ktg-kits__row">' +
+      G.kits.map(function (k) {
+        var out = k.out || FORMATS.furshet.levels[k.key][1];
         return '<div class="ktg-kit' + (k.hit ? ' is-hit' : '') + '">' + (k.hit ? '<span class="ktg-kit__hit">Чаще всего выбирают</span>' : '') +
           '<div class="ktg-kit__img"><img src="' + k.img + '" alt="" loading="lazy"></div><div class="ktg-kit__body"><b>' + k.name + '</b>' +
-          '<div class="ktg-kit__price">от ' + rub(price) + '</div><small>на гостя</small><span class="ktg-kit__out">' + out + ' на персону</span>' +
+          '<div class="ktg-kit__price">от ' + rub(kitPrice(k)) + '</div><small>на гостя</small><span class="ktg-kit__out">' + out + ' на персону</span>' +
           '<ul>' + k.li.map(function (x) { return '<li>' + TICK + x + '</li>'; }).join('') + '</ul>' +
-          '<button type="button" class="ktg-btn ktg-btn--wide ' + (k.hit ? 'ktg-btn--primary' : 'ktg-btn--ghost') + '" data-kit="' + k.key + '">' + (k.p ? 'Заказать боксы' : 'Посчитать') + '</button></div></div>';
+          '<button type="button" class="ktg-btn ktg-btn--wide ' + (k.hit ? 'ktg-btn--primary' : 'ktg-btn--ghost') + '" data-kit="' + k.key + '" data-kit-group="' + slug + '">' + (k.p ? 'Заказать боксы' : k.add ? 'Заказать' : 'Посчитать') + '</button></div></div>';
       }).join('') + '</div></div>';
   }
 
   function renderGrid() {
     state.list = currentList();
     var shown = state.list.slice(0, state.limit);
-    var kits = !state.q && state.group === KIT_GROUP ? kitsBlock() : '';
+    var kits = !state.q && KIT_GROUPS[state.group] ? kitsBlock(state.group) : '';
     $('[data-grid]').innerHTML = kits + (shown.length ? shown.map(itemCard).join('') : '<div class="ktg-empty" style="grid-column:1/-1">Ничего не нашли. Напишите менеджеру — приготовим и то, чего нет в меню.</div>');
     var grp = DATA.filter(function (g) { return g.slug === state.group; })[0];
     $('[data-count]').textContent = state.q ? 'Найдено: ' + state.list.length : (grp ? grp.name + ' — ' + grp.sub.toLowerCase() : '');
@@ -275,8 +285,9 @@
   function renderDrawer() {
     var f = FORMATS[state.fmt];
     var wants = ADDS.filter(function (x) { return x.group && state.wants[x.group] && !(x.group === STATION && state.fmt === 'furshet'); }).map(function (x) { return x.name; });
-    if (state.box) {
-      $('[data-drawer-list]').innerHTML = '<div class="ktg-dl ktg-dl--calc"><div><b>Фуршетные боксы, ' + state.guests + ' гостей · 250 г на гостя</b><span>от ' + rub(900 * state.guests) + ' · без обслуживания и напитков</span></div></div>';
+    if (state.kit) {
+      var k = state.kit, note = k.p ? ' · без обслуживания и напитков' : k.add ? ' · с новогодним оформлением' : '';
+      $('[data-drawer-list]').innerHTML = '<div class="ktg-dl ktg-dl--calc"><div><b>' + (k.p ? k.name : (k.add ? 'Новогодний фуршет «' : 'Фуршет «') + k.name + '»') + ', ' + state.guests + ' гостей · ' + (k.out || FORMATS.furshet.levels[k.key][1]) + ' на гостя</b><span>от ' + rub(kitPrice(k) * state.guests) + note + '</span></div></div>';
       return;
     }
     var calc = '<div class="ktg-dl ktg-dl--calc"><div><b>Расчёт: ' + calcTitle() + ', ' + state.guests + ' гостей' + (wants.length ? ' + ' + wants.join(', ').toLowerCase() : '') + '</b><span>от ' + $('[data-sum-total]').textContent + '</span></div></div>';
@@ -321,9 +332,9 @@
       $('[data-dd-label]').textContent = t.textContent; dd.classList.remove('is-open'); renderGrid(); return;
     }
     if (t.matches('[data-kit]')) {
-      var kk = t.dataset.kit;
-      if (kk === 'box') { state.box = true; renderDrawer(); open($('[data-drawer]')); return; }
-      state.lvl = kk; state.welcome = false; goCalc('furshet'); return;
+      var kk = KIT_GROUPS[t.dataset.kitGroup].kits.filter(function (x) { return x.key === t.dataset.kit; })[0];
+      if (kk.p || kk.add) { state.kit = kk; renderDrawer(); open($('[data-drawer]')); return; }
+      state.lvl = kk.key; state.welcome = false; goCalc('furshet'); return;
     }
     if (t.matches('[data-set-pick]')) { toggleSet(+t.closest('[data-set]').dataset.set); return; }
     if (t.matches('[data-set-more]')) { var sc = t.closest('.ktg-set'); sc.classList.toggle('is-full'); t.textContent = sc.classList.contains('is-full') ? 'Свернуть' : 'Ещё ' + (SETS[+sc.dataset.set].rows.length - 3); return; }
@@ -336,7 +347,7 @@
     if (t.matches('[data-qv-prev]') && qvIndex > 0) { openQv(state.list[qvIndex - 1].id); return; }
     if (t.matches('[data-qv-next]') && qvIndex < state.list.length - 1) { openQv(state.list[qvIndex + 1].id); return; }
     if (t.matches('[data-unpick]')) { togglePick(+t.closest('[data-id]').dataset.id); return; }
-    if (t.matches('[data-open-drawer]')) { state.box = false; renderDrawer(); open($('[data-drawer]')); return; }
+    if (t.matches('[data-open-drawer]')) { state.kit = null; renderDrawer(); open($('[data-drawer]')); return; }
     if (t.matches('[data-close]')) { closeAll(); return; }
   });
   overlay.addEventListener('click', closeAll);
