@@ -1,0 +1,581 @@
+/* Шапка 2026 для макета главной. Префикс hdr26-, токены — из hm26.css (брендбук).
+   Три уровня: «Актуальное» (уходит при прокрутке), логотип с поиском, навигация по группам.
+   Контейнер 1297 + 15 px по краям, как .hm26-container. */
+
+:root {
+  --hdr26-q: 40px;
+  /* Клиренс под шапкой — сумма её уровней: 40 «Актуальное» + 66 логотип со
+     строкой поиска + 42 навигация. js/hdr26.js потом уточнит по факту, но
+     совпасть должно сразу: иначе при загрузке страница прыгает на разницу.
+     «Актуальное» печатается только когда есть поводы — отсюда два значения. */
+  --hdr26-h: 108px;
+}
+:root:has(.hdr26__q) { --hdr26-h: 148px; }
+
+/* Клиренс под фикс-шапкой: перебивает main {margin-top:calc(91px + …)} из header-2025.css */
+main { margin-top: calc(var(--hdr26-h) + 24px) !important; }
+
+.hdr26 {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 40;
+  background: var(--hm26-white, #fff);
+  font-family: Inter, -apple-system, "Segoe UI", sans-serif;
+  color: var(--hm26-text, #272F3D);
+  /* зеркало тени нижней панели: на всех ширинах и независимо от прокрутки */
+  box-shadow: 0 2px 14px rgba(49, 45, 43, .10);
+}
+/* Открытое меню каталога (z-index 16777002) закрашивало тень шапки своим белым
+   полотном — на время показа поднимаем шапку над ним. */
+body.mobile-menu-open .hdr26 { z-index: 16777004; }
+.hdr26 * { box-sizing: border-box; }
+.hdr26 :where(a) { color: inherit; text-decoration: none; }
+.hdr26 :where(button) { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+.hdr26 svg.hdr26-i { width: 18px; height: 18px; flex: 0 0 auto; display: block; }
+.hdr26 svg.hdr26-cv { width: 13px; height: 13px; flex: 0 0 auto; display: block; }
+.hdr26__c {
+  max-width: 1327px; margin: 0 auto; padding: 0 15px;
+  display: flex; align-items: center; gap: 12px;
+}
+
+/* ——— уровень 1: «Актуальное» ——— */
+.hdr26__q {
+  height: var(--hdr26-q); overflow: hidden;
+  border-bottom: 1px solid var(--hm26-line, rgba(49, 45, 43, .1));
+  transition: height .26s cubic-bezier(.4, 0, .2, 1), opacity .16s linear, border-color .26s;
+}
+.hdr26.is-compact .hdr26__q { height: 0; opacity: 0; border-bottom-color: transparent; }
+.hdr26__q .hdr26__c { height: var(--hdr26-q); gap: 14px; transition: transform .26s cubic-bezier(.4, 0, .2, 1); }
+.hdr26.is-compact .hdr26__q .hdr26__c { transform: translateY(-8px); }
+
+.hdr26 .hdr26-tick { position: relative; width: 326px; height: 22px; flex: 0 0 auto; font-size: 13px; }
+.hdr26 .hdr26-tick__s {
+  position: absolute; inset: 0; display: flex; align-items: center; gap: 7px; white-space: nowrap;
+  opacity: 0; transform: translateY(6px); pointer-events: none;
+  transition: opacity .3s ease, transform .3s ease;
+}
+.hdr26 .hdr26-tick__s.is-on { opacity: 1; transform: none; pointer-events: auto; }
+.hdr26 .hdr26-tick__s b { font-weight: 500; }
+.hdr26 .hdr26-tick__s small { font-size: 12px; color: var(--hm26-muted, rgba(49, 45, 43, .5)); }
+.hdr26 .hdr26-tick__cd {
+  font-size: 11px; color: var(--hm26-accent, #FE5D26); background: var(--hm26-peach, #FFEFEA);
+  padding: 2px 8px; border-radius: 999px;
+}
+.hdr26 .hdr26-dots { display: flex; align-items: center; gap: 4px; flex: 0 0 auto; }
+.hdr26 .hdr26-dots button {
+  width: 5px; height: 5px; border-radius: 999px; background: var(--hm26-faint, rgba(49, 45, 43, .2));
+  transition: width .25s cubic-bezier(.4, 0, .2, 1), background .25s;
+}
+.hdr26 .hdr26-dots button.is-on { width: 15px; background: var(--hm26-accent, #FE5D26); }
+.hdr26 .hdr26-vr { width: 1px; height: 16px; background: var(--hm26-line, rgba(49, 45, 43, .1)); flex: 0 0 auto; }
+.hdr26 .hdr26-vr--n { margin: 0 8px; }
+
+@property --hdr26-fl { syntax: "<length>"; inherits: false; initial-value: 0px; }
+@property --hdr26-fr { syntax: "<length>"; inherits: false; initial-value: 0px; }
+.hdr26 .hdr26-lane {
+  display: flex; align-items: center; gap: 2px; flex: 1; min-width: 0; overflow: hidden;
+  cursor: grab; user-select: none; -webkit-user-select: none; touch-action: pan-y;
+  --hdr26-fl: 0px; --hdr26-fr: 0px;
+  transition: --hdr26-fl .2s linear, --hdr26-fr .2s linear;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 var(--hdr26-fl), #000 calc(100% - var(--hdr26-fr)), transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 var(--hdr26-fl), #000 calc(100% - var(--hdr26-fr)), transparent 100%);
+}
+.hdr26 .hdr26-lane.is-drag { cursor: grabbing; }
+.hdr26 .hdr26-lane__i {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 13px; color: var(--hm26-muted, rgba(49, 45, 43, .5));
+  padding: 4px 9px; border-radius: 8px; white-space: nowrap; transition: color .18s, background .18s;
+}
+.hdr26 .hdr26-lane__i svg { width: 14px; height: 14px; opacity: .55; }
+.hdr26 .hdr26-lane__i:hover svg { opacity: 1; }
+.hdr26 .hdr26-lane__i:hover { background: rgba(49, 45, 43, .05); color: var(--hm26-ink, #312D2B); }
+.hdr26 .hdr26-lane-nx {
+  display: flex; align-items: center; justify-content: center; flex: 0 0 auto;
+  width: 24px; height: 24px; margin-left: -10px; border-radius: 999px;
+  color: var(--hm26-accent, #FE5D26); background: var(--hm26-peach, #FFEFEA);
+  cursor: pointer; transition: opacity .2s, background .18s, color .18s;
+  animation: hdr26-nudge 1.4s ease-in-out 1s 3;
+}
+.hdr26 .hdr26-lane-nx svg { width: 14px; height: 14px; }
+.hdr26 .hdr26-lane-nx:hover { background: var(--hm26-accent, #FE5D26); color: #fff; }
+.hdr26 .hdr26-lane-nx.is-off { opacity: 0; pointer-events: none; }
+@keyframes hdr26-nudge { 0%, 60%, 100% { transform: none; } 30% { transform: translateX(3px); } }
+
+/* ——— уровень 2 ——— */
+.hdr26__m .hdr26__c { padding-top: 11px; padding-bottom: 11px; transition: padding .26s cubic-bezier(.4, 0, .2, 1); }
+.hdr26.is-compact .hdr26__m .hdr26__c { padding-top: 7px; padding-bottom: 7px; }
+.hdr26 .hdr26-logo { flex: 0 0 auto; transform-origin: left center; transition: transform .26s cubic-bezier(.4, 0, .2, 1); }
+.hdr26 .hdr26-logo svg { width: 104px; height: 37px; display: block; }
+.hdr26 .hdr26-search {
+  flex: 1; min-width: 120px; display: flex; align-items: center; gap: 9px; text-align: left;
+  border: 1px solid rgba(49, 45, 43, .18); border-radius: 12px; padding: 12px 14px;
+  font-size: 14px; color: var(--hm26-muted, rgba(49, 45, 43, .5));
+  transition: border-color .2s, box-shadow .2s;
+}
+.hdr26 .hdr26-search:hover { border-color: rgba(254, 93, 38, .5); box-shadow: 0 0 0 3px rgba(254, 93, 38, .08); }
+.hdr26 .hdr26-search__ic { display: flex; opacity: .45; }
+.hdr26 .hdr26-rb {
+  width: 36px; height: 36px; border-radius: 50%; background: rgba(49, 45, 43, .06);
+  display: flex; align-items: center; justify-content: center; flex: 0 0 auto; position: relative;
+  color: var(--hm26-ink, #312D2B); transition: background .2s;
+}
+.hdr26 .hdr26-rb:hover { background: rgba(49, 45, 43, .11); }
+.hdr26 .hdr26-rb svg { opacity: .65; }
+/* Подсказка у иконок мессенджеров: по одному значку не видно, куда он ведёт.
+   Только на десктопе — на мобилке сами иконки скрыты. */
+.hdr26 .hdr26-rb[data-tip]::after {
+  content: attr(data-tip);
+  position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+  padding: 6px 10px; border-radius: 8px; z-index: 3;
+  background: var(--hm26-ink, #312D2B); color: #fff;
+  font-size: 12px; line-height: 16px; white-space: nowrap;
+  opacity: 0; pointer-events: none; transition: opacity .15s ease;
+}
+.hdr26 .hdr26-rb[data-tip]:hover::after,
+.hdr26 .hdr26-rb[data-tip]:focus-visible::after { opacity: 1; }
+.hdr26 .hdr26-rb b {
+  position: absolute; top: -2px; right: -2px; min-width: 16px; height: 16px; padding: 0 4px;
+  border-radius: 999px; background: var(--hm26-accent, #FE5D26); color: #fff;
+  font-size: 10px; font-weight: 500; display: flex; align-items: center; justify-content: center;
+}
+.hdr26 .hdr26-tel { position: relative; flex: 0 0 auto; }
+.hdr26 .hdr26-tel__b {
+  display: flex; align-items: center; gap: 8px; background: var(--hm26-accent, #FE5D26); color: #fff;
+  border-radius: 999px; padding: 11px 18px; font-size: 15px; font-weight: 500; white-space: nowrap;
+  transition: background .2s, padding .26s, font-size .26s;
+}
+.hdr26 .hdr26-tel__b:hover { background: var(--hm26-accent-hover, #D95427); }
+.hdr26 .hdr26-tel__ic { display: none; }
+.hdr26 .hdr26-cu { display: none; }
+.hdr26.is-compact .hdr26-tel__b { padding: 9px 15px; font-size: 14px; }
+.hdr26 .hdr26-tel__d {
+  position: absolute; top: calc(100% + 8px); right: 0; min-width: 240px; background: #fff;
+  border-radius: 16px; box-shadow: 0 8px 24px rgba(49, 45, 43, .16); padding: 8px; z-index: 3;
+  opacity: 0; visibility: hidden; transform: translateY(-6px);
+  transition: opacity .18s ease, transform .2s cubic-bezier(.4, 0, .2, 1), visibility .2s;
+}
+.hdr26 .hdr26-tel.is-open .hdr26-tel__d { opacity: 1; visibility: visible; transform: none; }
+/* Мостик через зазор между пилюлей и выпадашкой: без него курсор "проваливается"
+   мимо, и раскрытая по наведению выпадашка закрывается на полпути. */
+.hdr26 .hdr26-tel__d::before { content: ""; position: absolute; left: 0; right: 0; top: -10px; height: 10px; }
+.hdr26 .hdr26-tel__d a {
+  display: flex; align-items: center; gap: 10px; padding: 9px 12px; border-radius: 10px; font-size: 14px;
+  transition: background .15s;
+}
+.hdr26 .hdr26-tel__d a:hover { background: rgba(49, 45, 43, .05); }
+.hdr26 .hdr26-tel__d svg { opacity: .5; }
+.hdr26 .hdr26-burger { display: none; width: 40px; height: 40px; align-items: center; justify-content: center; flex: 0 0 auto; }
+
+/* ——— уровень 3 ——— */
+.hdr26__n .hdr26__c::before {
+  content: ""; position: absolute; left: 15px; right: 15px; top: 0; height: 1px;
+  background: var(--hm26-line, rgba(49, 45, 43, .1));
+}
+.hdr26__n .hdr26__c { position: relative; gap: 2px; padding-bottom: 6px; flex-wrap: nowrap; overflow: hidden; }
+.hdr26 .hdr26-ink {
+  position: absolute; bottom: 2px; left: 15px; height: 2px; width: 0;
+  background: var(--hm26-accent, #FE5D26); border-radius: 2px; opacity: 0;
+  transition: transform .24s cubic-bezier(.4, 0, .2, 1), width .24s cubic-bezier(.4, 0, .2, 1), opacity .18s;
+}
+.hdr26 .hdr26-nv {
+  display: flex; align-items: center; gap: 5px; padding: 11px 10px; border-radius: 10px;
+  font-size: 14px; color: var(--hm26-text, #272F3D); white-space: nowrap;
+  transition: color .18s, background .18s;
+}
+/* без подложки: состояние показывают подчёркивание и шеврон */
+.hdr26-nv:hover, .hdr26 .hdr26-nv.is-on { color: var(--hm26-ink, #312D2B); }
+.hdr26 .hdr26-nv .hdr26-cv { opacity: .3; transition: transform .22s, opacity .18s; }
+.hdr26 .hdr26-nv.is-on .hdr26-cv { opacity: 1; transform: rotate(180deg); }
+/* Текст первого пункта и последней служебной ссылки выравниваем по сетке контейнера, а не по краю их подложек — иначе строка визуально уезжает вправо относительно логотипа. */
+.hdr26__n .hdr26-nv:first-of-type { margin-left: -10px; }
+.hdr26 .hdr26-svc a:last-child { margin-right: -8px; }
+.hdr26 .hdr26-sp { margin-left: auto; }
+.hdr26 .hdr26-promo {
+  flex: 0 0 auto; margin-right: 10px; padding: 6px 13px; border-radius: 999px;
+  background: var(--hm26-accent, #FE5D26); color: #fff; font-size: 13px; font-weight: 500;
+  white-space: nowrap; transition: filter .2s;
+}
+.hdr26 .hdr26-promo:hover { filter: brightness(.93); }
+@media (max-width: 1180px) { .hdr26 .hdr26-promo { padding: 6px 10px; font-size: 12px; } }
+.hdr26 .hdr26-chip { display: flex; align-items: center; max-width: 0; overflow: hidden; opacity: 0; transform: translateX(10px);
+  transition: opacity .24s ease, transform .24s cubic-bezier(.4, 0, .2, 1), max-width .26s cubic-bezier(.4, 0, .2, 1); }
+.hdr26.is-compact .hdr26-chip { max-width: 200px; opacity: 1; transform: none; }
+.hdr26 .hdr26-chip button {
+  font-size: 13px; color: var(--hm26-muted, rgba(49, 45, 43, .5)); background: rgba(49, 45, 43, .06);
+  border-radius: 999px; padding: 6px 12px; white-space: nowrap; transition: background .18s, color .18s;
+}
+.hdr26 .hdr26-chip button:hover { background: rgba(49, 45, 43, .11); color: var(--hm26-ink, #312D2B); }
+.hdr26 .hdr26-chip b { color: var(--hm26-accent, #FE5D26); font-weight: 500; }
+.hdr26 .hdr26-svc { display: flex; align-items: center; gap: 1px; flex: 0 0 auto; }
+.hdr26 .hdr26-svc a {
+  font-size: 13px; color: var(--hm26-muted, rgba(49, 45, 43, .5)); padding: 8px 8px; border-radius: 8px;
+  white-space: nowrap; transition: color .18s, background .18s;
+}
+.hdr26 .hdr26-svc a:hover { background: rgba(49, 45, 43, .05); color: var(--hm26-ink, #312D2B); }
+.hdr26 .hdr26-svc a.is-acc { color: var(--hm26-accent, #FE5D26); }
+
+/* ——— выпадашки ——— */
+/* Все панели — по содержимому и привязаны к своему пункту: ширину задаёт data-mw, положение считает hdr26.js и прижимает к сетке контейнера. */
+.hdr26-dd {
+  position: absolute; top: 100%; background: #fff;
+  border-radius: 0 0 var(--hm26-radius-img, 16px) var(--hm26-radius-img, 16px);
+  box-shadow: 0 20px 40px rgba(49, 45, 43, .14); padding: 24px 28px 26px; z-index: 3;
+  max-height: 470px; overflow-y: auto;
+  opacity: 0; visibility: hidden; transform: translateY(-8px); pointer-events: none;
+  transition: opacity .18s ease, transform .2s cubic-bezier(.4, 0, .2, 1), visibility .2s;
+}
+.hdr26 .hdr26-dd.is-open { opacity: 1; visibility: visible; transform: none; pointer-events: auto; }
+.hdr26 .hdr26-dd__grid { display: grid; grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr)); gap: 24px; }
+.hdr26 .hdr26-dd__col { display: flex; flex-direction: column; gap: 1px; opacity: 0; transform: translateY(6px); }
+.hdr26 .hdr26-dd.is-open .hdr26-dd__col, .hdr26 .hdr26-dd.is-open .hdr26-dd__card, .hdr26 .hdr26-dd.is-open .hdr26-occ__c {
+  animation: hdr26rise .34s cubic-bezier(.2, .7, .3, 1) var(--d, 0ms) forwards;
+}
+@keyframes hdr26rise { to { opacity: 1; transform: none; } }
+.hdr26 .hdr26-dd__h {
+  display: flex; align-items: center; gap: 8px; padding: 2px 0 8px;
+  font-size: 14px; font-weight: 500; color: var(--hm26-ink, #312D2B);
+}
+.hdr26 .hdr26-dd__h svg { color: var(--hm26-accent, #FE5D26); }
+.hdr26 .hdr26-dd__hi { display: flex; }
+.hdr26 .hdr26-soon {
+  margin-left: auto; font-style: normal; font-size: 10px; letter-spacing: .04em; text-transform: uppercase;
+  color: var(--hm26-muted, rgba(49, 45, 43, .5)); background: rgba(49, 45, 43, .06);
+  padding: 3px 7px; border-radius: 999px;
+}
+.hdr26 .hdr26-dd__h:hover span { color: var(--hm26-accent, #FE5D26); }
+/* Заголовок колонки — и есть переход в раздел: на наведении подсказываем стрелкой */
+.hdr26 a.hdr26-dd__h::after {
+  content: "→"; margin-left: 6px; font-size: 14px; color: var(--hm26-accent, #FE5D26);
+  opacity: 0; transform: translateX(-4px); transition: opacity .15s, transform .15s;
+}
+.hdr26 a.hdr26-dd__h:hover::after { opacity: 1; transform: none; }
+.hdr26 .hdr26-dd__l {
+  display: flex; align-items: center; gap: 9px; padding: 7px 9px; margin-left: -9px; border-radius: 9px;
+  font-size: 14px; color: var(--hm26-text, #272F3D); transition: background .15s, color .15s;
+}
+.hdr26 .hdr26-dd__l:hover { background: rgba(49, 45, 43, .05); color: var(--hm26-ink, #312D2B); }
+.hdr26 .hdr26-dd__l svg { opacity: .45; }
+.hdr26 .hdr26-dd__l i { margin-left: auto; font-style: normal; font-size: 11px; color: var(--hm26-faint, rgba(49, 45, 43, .2)); }
+.hdr26 .hdr26-dd__l.is-acc { color: var(--hm26-accent, #FE5D26); }
+/* У оранжевых ссылок серая плашка на наведении смотрится грязно — темним сам цвет,
+   как у остальных фирменных элементов. */
+.hdr26 .hdr26-dd__l.is-acc:hover { background: none; color: var(--hm26-accent-hover, #D95427); }
+/* «ещё N» — не ссылка, а раскрывашка: пунктир, как в карточках праздников */
+.hdr26 .hdr26-dd__more { display: flex; flex-direction: column; }
+.hdr26 .hdr26-dd__more[hidden] { display: none; }
+.hdr26 .hdr26-dd__btn {
+  align-self: flex-start; margin: 2px 0 2px 0; font-size: 13px; line-height: 1.3;
+  color: var(--hm26-accent, #FE5D26); border-bottom: 1px dashed rgba(254, 93, 38, .45);
+}
+.hdr26 .hdr26-dd__btn:hover { border-bottom-color: var(--hm26-accent, #FE5D26); }
+.hdr26 .hdr26-dd__card {
+  border-radius: var(--hm26-radius-img, 16px); padding: 16px 18px; background: var(--hm26-ink, #312D2B); color: #fff;
+  display: flex; flex-direction: column; gap: 6px; opacity: 0; transform: translateY(6px);
+}
+.hdr26 .hdr26-dd__card b { font-size: 17px; font-weight: 500; }
+.hdr26 .hdr26-dd__card span { font-size: 13px; line-height: 19px; opacity: .75; }
+/* Кнопка карточки — только прямая ссылка. Раньше правило ловило и MAX с Telegram
+   внутри текста, и они разваливали фразу белыми пилюлями. */
+.hdr26 .hdr26-dd__card > a {
+  margin-top: 6px; align-self: flex-start; background: #fff; color: var(--hm26-ink, #312D2B);
+  border-radius: 999px; padding: 8px 16px; font-size: 13px; font-weight: 500;
+}
+.hdr26 .hdr26-dd__card span a { color: #fff; border-bottom: 1px solid rgba(255, 255, 255, .45); }
+.hdr26 .hdr26-dd__card span a:hover { border-bottom-color: #fff; }
+/* Карточка своей площадки живёт внутри колонки, а не отдельным столбцом панели */
+.hdr26 .hdr26-dd__col .hdr26-dd__card { margin-top: 12px; }
+.hdr26 .hdr26-dd__foot { margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--hm26-line, rgba(49, 45, 43, .1)); }
+.hdr26 .hdr26-dd__foot a { font-size: 14px; color: var(--hm26-accent, #FE5D26); }
+.hdr26 .hdr26-dd__foot span { font-size: 13px; color: var(--hm26-muted, rgba(49, 45, 43, .5)); }
+.hdr26 .hdr26-dd__note { margin: 12px 0 0; font-size: 13px; color: var(--hm26-muted, rgba(49, 45, 43, .5)); }
+
+.hdr26 .hdr26-occ { display: grid; grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr)); gap: 12px; }
+.hdr26 .hdr26-occ__c {
+  display: flex; align-items: center; gap: 10px; padding: 15px 16px;
+  border: 1px solid var(--hm26-line, rgba(49, 45, 43, .1)); border-radius: var(--hm26-radius-img, 16px);
+  font-size: 15px; font-weight: 500; color: var(--hm26-ink, #312D2B);
+  opacity: 0; transform: translateY(6px);
+  transition: border-color .18s, background .18s, box-shadow .18s, color .18s;
+}
+.hdr26 .hdr26-occ__c:hover {
+  border-color: rgba(254, 93, 38, .45); background: rgba(254, 93, 38, .03);
+  box-shadow: var(--hm26-shadow, 0 1px 4px rgba(49, 45, 43, .08)); color: var(--hm26-accent, #FE5D26);
+}
+.hdr26 .hdr26-occ__c svg { flex: none; color: var(--hm26-accent, #FE5D26); }
+.hdr26 .hdr26-occ__c em {
+  font-style: normal; font-size: 11px; font-weight: 400; color: var(--hm26-accent, #FE5D26);
+  background: var(--hm26-peach, #FFEFEA); padding: 3px 8px; border-radius: 999px; white-space: nowrap;
+}
+
+.hdr26 .hdr26-scrim {
+  position: fixed; top: var(--hdr26-hnow, var(--hdr26-h)); left: 0; right: 0; bottom: 0; background: rgba(49, 45, 43, .28);
+  z-index: 2; opacity: 0; visibility: hidden; transition: opacity .22s ease, visibility .22s;
+}
+.hdr26 .hdr26-scrim.is-open { opacity: 1; visibility: visible; }
+
+/* ——— мобильное меню ——— */
+.hdr26-mob {
+  position: fixed; top: var(--hdr26-h); left: 0; right: 0; bottom: 0; background: #fff; z-index: 4;
+  overflow-y: auto; display: none;
+}
+.hdr26 .hdr26-mob.is-open { display: block; }
+.hdr26 .hdr26-mob__g { border-bottom: 1px solid var(--hm26-line, rgba(49, 45, 43, .1)); }
+.hdr26 .hdr26-mob__h {
+  display: flex; align-items: center; gap: 12px; width: 100%; padding: 15px;
+  font-size: 16px; color: var(--hm26-text, #272F3D);
+}
+.hdr26 .hdr26-mob__h svg:first-child { opacity: .5; }
+.hdr26 .hdr26-mob__h .hdr26-cv { margin-left: auto; opacity: .3; transition: transform .22s; }
+.hdr26 .hdr26-mob__h.is-on { color: var(--hm26-accent, #FE5D26); }
+.hdr26 .hdr26-mob__h.is-on svg:first-child { opacity: 1; }
+.hdr26 .hdr26-mob__h.is-on .hdr26-cv { transform: rotate(180deg); opacity: 1; }
+.hdr26 .hdr26-mob__b { display: flex; flex-direction: column; gap: 2px; padding: 0 15px 12px 47px; }
+/* парный [hidden]: display:flex перебивает браузерное скрытие, как и в карточке повода */
+.hdr26 .hdr26-mob__b[hidden] { display: none; }
+
+/* ——— нижняя панель (мобилка) ——— */
+.hdr26-bar { display: none; }
+@media (max-width: 1024px) {
+  .hdr26-bar {
+    /* Над кнопкой Comagic (у неё z-index 16777001), иначе виджет накрывает и панель,
+       и раскрывашку контактов. */
+    display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 16777003;
+    background: var(--hm26-white, #fff); box-shadow: 0 -2px 14px rgba(49, 45, 43, .10);
+    padding: 6px 4px calc(6px + env(safe-area-inset-bottom, 0px));
+  }
+  .hdr26-bar .hdr26-bar__i {
+    flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 3px;
+    padding: 4px 2px; font-size: 11px; line-height: 13px; color: var(--hm26-ink, #312D2B);
+    text-align: center; position: relative;
+  }
+  .hdr26-bar .hdr26-bar__i span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+  .hdr26-bar .hdr26-bar__i svg { width: 22px; height: 22px; opacity: .75; }
+  .hdr26-bar .hdr26-bar__i.is-loading { opacity: .45; }
+  .hdr26-bar .hdr26-bar__i:active svg, .hdr26-bar .hdr26-bar__c.is-open .hdr26-bar__i svg { opacity: 1; color: var(--hm26-accent, #FE5D26); }
+  .hdr26-bar .hdr26-bar__c { flex: 1 1 0; min-width: 0; position: relative; display: flex; }
+  /* Сумма корзины в панель не влезает — считаем достаточно бейджа с количеством */
+  .hdr26-bar .favorite-count { display: none !important; }
+  /* Бейдж — маленькой точкой на верхнем правом углу иконки, а не кругом поверх неё.
+     Общий стиль в header-2025.css рассчитан на крупную кнопку корзины в старой шапке. */
+  .hdr26-bar .cart-qty-badge {
+    top: -3px; right: 50%; margin-right: -20px;
+    min-width: 16px; height: 16px; padding: 0 4px;
+    font-size: 10px; line-height: 16px; font-weight: 600;
+  }
+  .hdr26-bar .hdr26-bar__d {
+    position: absolute; right: 0; bottom: calc(100% + 10px); min-width: 232px; background: #fff;
+    border-radius: 16px; box-shadow: 0 8px 24px rgba(49, 45, 43, .18); padding: 8px; z-index: 3;
+    opacity: 0; visibility: hidden; transform: translateY(6px);
+    transition: opacity .18s ease, transform .2s cubic-bezier(.4, 0, .2, 1), visibility .2s;
+  }
+  .hdr26-bar .hdr26-bar__c.is-open .hdr26-bar__d { opacity: 1; visibility: visible; transform: none; }
+  .hdr26-bar .hdr26-bar__d a {
+    display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px;
+    font-size: 14px; color: var(--hm26-ink, #312D2B);
+  }
+  .hdr26-bar .hdr26-bar__d svg { width: 18px; height: 18px; opacity: .5; }
+  /* Старая тёмная пилюля больше не нужна, как и запас под неё */
+  .hdr26-host .header-box-mobile { display: none !important; }
+  /* Вкладки, дописанные в старое мобильное меню, лежат ВНЕ .hdr26 — размер иконки
+     там задаётся отдельно, иначе svg растягивается во весь экран. */
+  .mobile-menu .hdr26-i { width: 20px; height: 20px; flex: 0 0 auto; }
+  .mobile-menu .menu-frame__back-btn .hdr26-i { width: 22px; height: 22px; }
+  body:has(#hdr26) { padding-bottom: 64px; }
+  /* Кнопка Comagic висит в 50px от низа и налезала на панель и её раскрывашку */
+  body:has(#hdr26) .comagic-c-buttons { bottom: 76px !important; }
+}
+.hdr26 .hdr26-mob__b a { padding: 8px 0; font-size: 15px; color: var(--hm26-muted, rgba(49, 45, 43, .5)); }
+.hdr26 .hdr26-mob__foot { padding: 18px 15px 40px; }
+.hdr26 .hdr26-mob__tel {
+  display: block; text-align: center; background: var(--hm26-accent, #FE5D26); color: #fff;
+  border-radius: 999px; padding: 14px; font-size: 16px; font-weight: 500;
+}
+
+/* ——— адаптив ——— */
+@media (max-width: 1180px) {
+.hdr26 .hdr26-svc a { padding: 8px 5px; font-size: 12px; }
+.hdr26 .hdr26-nv { padding: 11px 7px; font-size: 13.5px; }
+.hdr26__n .hdr26-nv:first-of-type { margin-left: -7px; }
+.hdr26 .hdr26-vr--n { margin: 0 5px; }
+}
+@media (max-width: 1024px) {
+  /* навигации нет, остаются 62 логотип-строка и 40 «Актуальное» */
+  :root { --hdr26-h: 62px; }
+  :root:has(.hdr26__q) { --hdr26-h: 102px; }
+.hdr26__n { display: none; }
+  /* Каталог и корзина уехали в нижнюю панель. Сверху — «Связаться» с выпадашкой:
+     старая мобильная «Связаться» была самой кликаемой кнопкой мобильной шапки. */
+.hdr26 .hdr26-rb, .hdr26 .hdr26-tel, .hdr26 .hdr26-burger { display: none; }
+.hdr26 .hdr26-cu { display: block; position: relative; flex: 0 0 auto; }
+.hdr26 .hdr26-cu__b {
+  height: 40px; padding: 0 14px; border-radius: 12px; color: #fff;
+  background: var(--hm26-accent, #FE5D26); font-size: 13px; font-weight: 600; white-space: nowrap;
+}
+.hdr26 .hdr26-cu.is-open .hdr26-cu__b { background: var(--hm26-accent-hover, #D95427); }
+.hdr26 .hdr26-cu__d {
+  position: absolute; right: 0; top: calc(100% + 8px); min-width: 232px; background: #fff;
+  border-radius: 16px; box-shadow: 0 8px 24px rgba(49, 45, 43, .18); padding: 8px; z-index: 3;
+  display: grid; gap: 2px;
+  opacity: 0; visibility: hidden; transform: translateY(-6px);
+  transition: opacity .18s ease, transform .2s cubic-bezier(.4, 0, .2, 1), visibility .2s;
+}
+.hdr26 .hdr26-cu.is-open .hdr26-cu__d { opacity: 1; visibility: visible; transform: none; }
+.hdr26 .hdr26-cu__d a {
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px;
+  font-size: 14px; color: var(--hm26-ink, #312D2B);
+}
+.hdr26 .hdr26-cu__d svg { width: 18px; height: 18px; opacity: .5; }
+.hdr26 .hdr26-cu__d .hdr26-cu__call { background: var(--hm26-accent, #FE5D26); color: #fff; font-weight: 600; }
+.hdr26 .hdr26-cu__d .hdr26-cu__call svg { opacity: 1; }
+.hdr26 .hdr26-tick { width: 200px; }
+.hdr26 .hdr26-tick__s small { display: none; }
+.hdr26 .hdr26-dots, .hdr26 .hdr26-vr { display: none; }
+.hdr26__q .hdr26__c { gap: 10px; }
+.hdr26 .hdr26-search { padding: 10px 12px; font-size: 13px; }
+.hdr26 .hdr26-logo svg { width: 88px; height: 31px; }
+}
+@media (max-width: 560px) {
+.hdr26 .hdr26-tick { width: 92px; overflow: hidden; transition: width .25s ease, margin .25s ease; }
+.hdr26 .is-lane-on .hdr26-tick { width: 0; margin-right: -10px; }
+  /* Праздник — значком с отсчётом, строку отдаём быстрому меню. */
+.hdr26 .hdr26-tick__s b { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+.hdr26, .hdr26 * { transition: none !important; animation: none !important; }
+}
+
+/* ============================================================
+   Интеграция на боевой (2026-09-10)
+   Шапка живёт внутри старого <header class="header hdr26-host">: там же остались
+   мобильная нижняя панель, попапы поиска и мобильное меню — их сознательно не переносим.
+   Сама обёртка коробки больше не рисует (display:contents), а её десктопные блоки
+   (строка «Актуальное», логотип с поиском, контакты, мега-меню) скрыты.
+   ============================================================ */
+/* position:static обязателен: у позиционированного элемента display:contents
+   блокифицируется обратно в block, и старая .header снова рисует свою полосу. */
+.hdr26-host { display: contents; position: static; }
+
+/* Клиренс под шапкой. Старый header-2025.css на ≤991 возвращает свой
+   main:not(.main-page25){margin-top:91px!important} (под старую шапку в ~88px), а cart.css
+   переносит клиренс в padding — оба с !important. Соседством не обойтись: на кейсах,
+   контактах, блоге и корзине main завёрнут в свой div (.csl-root, .cnt-root, …).
+   Цепляемся к самой шапке — id в :has() поднимает специфичность выше любого из них. */
+body:has(#hdr26) main { margin-top: calc(var(--hdr26-h) + 24px) !important; }
+body:has(#hdr26) main.cart-page { margin-top: 0 !important; padding-top: calc(var(--hdr26-h) + 24px) !important; }
+/* Главная: герой во всю ширину начинается сразу под шапкой — воздух между ними
+   читается как неровный низ шапки, а не как отступ. */
+body:has(#hdr26) main.main-page25,
+body:has(#hdr26) main.hm26 { margin-top: var(--hdr26-h) !important; }
+/* Площадка «Атриум»: герой-видео тоже во всю ширину и начинается сразу под
+   шапкой — воздух над ним читается белой полосой, а не отступом. */
+body:has(#hdr26) .atr-root main { margin-top: var(--hdr26-h) !important; }
+/* Голый лендинг (шаблон landing_raw): своя вёрстка вместо сайтового main,
+   клиренс несёт обёртка .lp-raw из modules/landing.php. Высота шапки без
+   добавки, как у главной — первый экран во всю ширину. Внутренний main, если
+   он есть в чужой вёрстке, обнуляем: иначе отступ ложится дважды и над хиро
+   висит белая полоса. */
+body:has(#hdr26) .lp-raw { padding-top: var(--hdr26-h); }
+body:has(#hdr26) .lp-raw main { margin-top: 0 !important; }
+@media (max-width: 991px) {
+  /* .header{display:block!important} из того же файла возвращает обёртке коробку */
+  .hdr26-host { display: contents !important; }
+  body:has(#hdr26) main { margin-top: calc(var(--hdr26-h) + 16px) !important; }
+  body:has(#hdr26) main.hm26 { margin-top: var(--hdr26-h) !important; }
+  body:has(#hdr26) main.cart-page { padding-top: calc(var(--hdr26-h) + 16px) !important; }
+  /* Служебные страницы: отступ под шапкой давали трое — клиренс main, свой
+     padding первой секции и ещё 40px у крошек (компенсация под старую шапку,
+     add2024.css). Оставляем только страничный padding, тогда на всех
+     служебных крошки встают одинаково. */
+  body:has(#hdr26) .bc,
+  body:has(#hdr26) .cs-breadcrumbs { margin-top: 0; }
+  body:has(#hdr26):has(.bc) main,
+  body:has(#hdr26):has(.cs-breadcrumbs) main { margin-top: var(--hdr26-h) !important; }
+  /* Мобильное меню каталога осталось прежним, но оно fixed от самого верха: под новой
+     шапкой его первая строка (крестик, «44-ФЗ», «О нас», «Меню») пряталась за ней.
+     Опускаем панель под шапку — заодно бургер остаётся доступен, чтобы закрыть. */
+  /* Меню каталога живёт между шапкой и нижней панелью: панель должна оставаться
+     видимой и нажимаемой — ею же меню и закрывается. */
+  body:has(#hdr26) .mobile-menu {
+    top: var(--hdr26-hnow, var(--hdr26-h)) !important;
+    bottom: calc(58px + env(safe-area-inset-bottom, 0px)) !important;
+    height: auto !important; z-index: 16777002 !important;
+  }
+
+  /* Меню каталога больше не попап: заливка во всё свободное место между шапкой
+     и нижней панелью, без затемнения и скруглённой карточки. */
+  body:has(#hdr26) .mobile-menu {
+    padding: 0 !important;
+    background: #fff !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+  }
+  body:has(#hdr26) .mobile-menu .mobile-menu__inner {
+    height: 100% !important;
+    border-radius: 0;
+    padding: 10px 15px;
+  }
+  body:has(#hdr26) .mobile-menu .mobile-menu__close { top: 8px; right: 12px; }
+  /* Первая строка — ссылки, а не пилюли; справа запас под крестик.
+     На 360px «Все меню» уезжало вниз, поэтому ряд не переносим, а прокручиваем. */
+  body:has(#hdr26) .mobile-menu__nav {
+    gap: 12px;
+    padding: 8px 46px 12px 6px;
+    margin-bottom: 12px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  body:has(#hdr26) .mobile-menu__nav::-webkit-scrollbar { display: none; }
+  body:has(#hdr26) .mobile-menu__nav > * { flex: 0 0 auto; white-space: nowrap; }
+  /* цвет и размер были только у первых двух ссылок — «Контакты» выпадали чёрным */
+  body:has(#hdr26) .mobile-menu__nav a {
+    padding: 0; border-radius: 0; background: none;
+    color: rgba(0, 0, 0, .5); font-size: 14px; line-height: 20px;
+  }
+  body:has(#hdr26) .mobile-menu__nav button { padding-left: 0; }
+  body:has(#hdr26) .mobile-menu__title { font-size: 16px; line-height: 22px; margin-bottom: 4px; }
+  body:has(#hdr26) .mobile-tab img { border-radius: 8px; }
+}
+.hdr26-host .header__inner > *:not(.header-box-mobile) { display: none !important; }
+.hdr26-host .header__inner { padding: 0 !important; min-height: 0 !important; background: none !important; }
+.hdr26-host > .menu { display: none !important; }
+
+/* Поиск — настоящее поле виджета search-api.ru, а не заглушка макета.
+   Селекторы с .hdr26 впереди: у header-2025.css свои правила на .search-input, и они не должны перебить поле в новой шапке. */
+.hdr26 .hdr26-search input {
+  flex: 1; min-width: 0; width: auto; height: auto; border: 0; background: none; padding: 0;
+  outline: none; box-shadow: none; font: inherit; color: var(--hm26-ink, #312D2B);
+}
+.hdr26 .hdr26-search input::placeholder { color: var(--hm26-muted, rgba(49, 45, 43, .5)); opacity: 1; }
+.hdr26 .hdr26-search:focus-within { border-color: rgba(254, 93, 38, .5); box-shadow: 0 0 0 3px rgba(254, 93, 38, .08); }
+.hdr26 .hdr26-search__b {
+  flex: 0 0 auto; border-radius: 8px; padding: 7px 15px; font-size: 13px; font-weight: 500;
+  background: var(--hm26-accent, #FE5D26); color: #fff; transition: background .2s;
+}
+.hdr26 .hdr26-search__b:hover { background: var(--hm26-accent-hover, #D95427); }
+
+/* Логотип на боевом — файл, а не инлайн-SVG */
+/* Логотип на боевом — картинки, а не инлайн-SVG. Развёрнутая шапка показывает полный,
+   свёрнутая — квадратный знак; правило на img задаёт display, поэтому переключение
+   пишем тем же весом (класс + класс + класс у is-compact), иначе видно оба сразу. */
+.hdr26 .hdr26-logo img { width: 104px; height: auto; }
+.hdr26 .hdr26-logo .hdr26-logo__full { display: block; }
+.hdr26 .hdr26-logo .hdr26-logo__mini { display: none; width: 36px; height: 36px; }
+/* На мобилке всегда знак вместо логотипа: строка тесная, место нужно поиску и «Связаться».
+   На десктопе логотип полный и в свёрнутой шапке. */
+@media (max-width: 1024px) {
+  .hdr26 .hdr26-logo .hdr26-logo__full { display: none; }
+  .hdr26 .hdr26-logo .hdr26-logo__mini { display: block; width: 32px; height: 32px; }
+}
+
+/* Корзина: когда в ней что-то есть, круглая кнопка становится пилюлей с суммой.
+   Сумму (#cart_top_count) кладёт общий JS с инлайновым display, поэтому !important; пустая корзина = пустая строка. */
+.hdr26 .hdr26-rb .favorite-count { display: block !important; font-size: 13px; font-weight: 600; white-space: nowrap; }
+.hdr26 .hdr26-rb .favorite-count:empty { display: none !important; }
+.hdr26 .hdr26-rb:has(.favorite-count:not(:empty)) { width: auto; padding: 0 14px 0 10px; gap: 6px; border-radius: 999px; }
+/* Бейдж количества: общий стиль из header-2025.css (24px) на круглой кнопке 36px
+   выглядит как заплатка — уменьшаем до размера бейджа из макета. */
+.hdr26 .hdr26-rb .cart-qty-badge {
+  top: -2px; right: -2px; min-width: 16px; height: 16px; padding: 0 4px;
+  font-size: 10px; line-height: 16px; font-weight: 600;
+}

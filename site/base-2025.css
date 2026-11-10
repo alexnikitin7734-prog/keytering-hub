@@ -1,0 +1,111 @@
+/* base-2025.css — общая база редизайна. ЗАСКОУПЛЕНО под .header/.footer/.main-page25,
+   чтобы НЕ течь на тело старых страниц (сайт использует старый style.css со своим ресетом). */
+
+:root {
+  --accent: #FE5D26;
+  --hover-transition: .25s ease;
+  --black: #312D2B;
+  --hover-accent: #D95427;
+}
+
+*,
+*::after,
+*::before {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+html.fixed {
+  overflow: hidden;
+}
+
+/* Шрифт/цвет — только шапка и футер (не трогаем body старых страниц) */
+.header,
+.footer,
+.main-page25 {
+  font-family: "Inter", sans-serif;
+  color: #272F3D;
+}
+
+/* Ресеты — заскоуплены под редизайн-шапку/футер/главную (.main-page25) */
+.header ul,
+.menu ul,
+.footer ul,
+.main-page25 ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.header button,
+.footer button,
+.main-page25 button {
+  cursor: pointer;
+  padding: 0;
+  border: none;
+  background-color: transparent;
+  font-family: inherit;
+  color: inherit;
+}
+
+.header a,
+.footer a,
+.main-page25 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.header p,
+.footer p,
+.main-page25 p {
+  margin: 0;
+}
+
+/* Контейнер редизайна (1297) — только в редизайн-контекстах */
+.header .container,
+.menu .container,
+.footer .container,
+.main-page25 .container {
+  max-width: 1297px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+@media screen and (max-width: 768px) {
+  .header .container,
+  .menu .container,
+  .footer .container,
+  .main-page25 .container {
+    overflow: hidden;
+  }
+}
+
+@-webkit-keyframes move {
+  0% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+  100% {
+    -webkit-transform: translateX(-139%);
+    transform: translateX(-139%);
+  }
+}
+
+@keyframes move {
+  0% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+  }
+  100% {
+    -webkit-transform: translateX(-139%);
+    transform: translateX(-139%);
+  }
+}
+
+/* Шапка и футер: контент ровно 1297 (без боковых паддингов контейнера; сам max-width 1297 выше).
+   Прямой потомок > — чтобы не задеть контейнер мега-меню (.header .menu .container). */
+.header > .container,
+.footer > .container {
+  padding-left: 0;
+  padding-right: 0;
+}

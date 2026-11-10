@@ -1,0 +1,2039 @@
+/* header-2025.css: header, mega-menu, search, mobile menu — redesign 2025. Auto-split from style.css. */.header {
+  padding: 16px 0;
+  position: fixed;
+  z-index: 20;
+  top: 0;
+  left: 0;
+  right: 0;
+}@media screen and (max-width: 768px) {.header {
+    padding-top: 0;
+    top: 16px;
+  }.header .container {
+    overflow: visible !important;
+  }}.header .main-box.active .header__input-box {
+  gap: 8px;
+}.header .main-box.active .header__input-box input {
+  width: 100%;
+  max-width: initial !important;
+}.header .menu__list {
+  padding-bottom: 15px;
+}.header .big-icon {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+}.header .sales-link {
+  padding: 0 25px;
+  height: 52px;
+  white-space: nowrap;
+  margin-right: 8px;
+  border-radius: 999px;
+  -webkit-backdrop-filter: blur(64px);
+  backdrop-filter: blur(64px);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  background-color: var(--accent);
+  position: relative;
+  z-index: 20;
+}@media (max-width: 768px) {.header .sales-link {
+    display: none;
+  }}.header .sales-link span {
+  color: var(--White-100, #FFF);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px; /* 125% */
+}.header .sales-link:hover {
+  background-color: var(--hover-accent);
+}.header *::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}.header *::-webkit-scrollbar-track {
+  background: transparent;
+}.header *::-webkit-scrollbar-thumb {
+  width: 6px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.04);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+}.header__inner {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}.header__box {
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.5);
+  -webkit-backdrop-filter: blur(64px);
+  backdrop-filter: blur(64px);
+  padding: 4px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 4px;
+  max-height: 52px;
+}.header .main-box {
+  margin-left: auto;
+  margin-right: 10px;
+  position: relative;
+  z-index: 21;
+}.header .contacts-box {
+  max-width: 333px;
+  width: 100%;
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  justify-content: end;
+  background-color: transparent !important;
+  margin-left: 50px;
+  position: relative;
+  z-index: 20;
+  padding: 0 !important;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+  height: 44px;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}.header .contacts-box:hover {
+  background-color: var(--hover-accent);
+}@media (max-width: 768px) {.header .contacts-box {
+    max-width: initial;
+    width: initial;
+    height: 52px;
+  }}.header__logo {
+  display: block;
+  max-width: 107px;
+  padding: 9px 16px;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+  border-radius: 999px;
+}.header__logo:hover {
+  background: rgba(255, 255, 255, 0.12);
+}.header__menu-btn {
+  padding: 12px 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  border-radius: 999px;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  min-width: 130px;
+  max-width: 130px;
+}.header__menu-btn svg {
+  -webkit-transition: 0.15s;
+  transition: 0.15s;
+}.header__menu-btn svg path {
+  stroke: #fff;
+}.header__menu-btn .active-icon {
+  width: 0;
+  height: 0;
+  -webkit-transform: scale(0);
+  -ms-transform: scale(0);
+  transform: scale(0);
+  overflow: hidden;
+  min-width: 0;
+}.header__menu-btn.active .active-icon {
+  width: 20px;
+  height: 13px;
+  -webkit-transform: scale(1);
+  -ms-transform: scale(1);
+  transform: scale(1);
+  min-width: initial;
+}.header__menu-btn.active .default-icon {
+  width: 0;
+  height: 0;
+  -webkit-transform: scale(0);
+  -ms-transform: scale(0);
+  transform: scale(0);
+  overflow: hidden;
+  min-width: 0;
+}.header__menu-btn span {
+  margin-left: 8px;
+}.header__menu-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}.header__menu-btn.active {
+  background: #fff;
+}.header__menu-btn.active span {
+  color: #000;
+}.header__menu-btn.active svg path {
+  stroke: #000;
+}.header__menu-btn span {
+  color: #FFF;
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px; /* 125% */
+}.header__menu-btn svg {
+  display: block;
+  min-width: 20px;
+}.header__input-wrapper {
+  -webkit-transition: 0s ease;
+  transition: 0s ease;
+}.header__input-box {
+  border-radius: 999px;
+  padding: 12px 12px 12px 12px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  max-width: 52px;
+  min-width: 52px;
+  width: 100%;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-flex: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  max-height: 44px;
+}@media (max-width: 768px) {.header__input-box {
+    max-width: 113px;
+    width: 100%;
+    -webkit-box-pack: initial;
+    -ms-flex-pack: initial;
+    justify-content: initial;
+    gap: 8px;
+    height: 44px;
+  }}.header__input-wrapper {
+  width: 100%;
+  max-width: 113px;
+}.header__input-box:hover {
+  background: rgba(255, 255, 255, 0.24);
+}.header__input-box svg {
+  display: block;
+  max-width: 20px;
+  -webkit-box-flex: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  min-width: 20px;
+}.header__input-box input {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  width: 0;
+  max-width: 0;
+  -webkit-box-flex: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 0;
+}.header__input-box input::-webkit-input-placeholder {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+}.header__input-box input::-moz-placeholder {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+}.header__input-box input:-ms-input-placeholder {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+}.header__input-box input::-ms-input-placeholder {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+}.header__input-box input::placeholder {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+}.header__favorite-link {
+  padding: 5px 10px;
+  height: 44px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  border-radius: 999px;
+  position: relative;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}.header__favorite-link .favorite-count {
+  color: var(--White-100, #FFF);
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: var(--Static-Label-Medium-Line-Height, 16px);
+}@media (max-width: 768px) {.header__favorite-link .favorite-count {
+    display: none;
+  }}.header__favorite-link:hover {
+  background: rgba(255, 255, 255, 0.12);
+}.header__favorite-link svg {
+  display: block;
+}.header__phone-link {
+  padding: 12px 20px;
+  color: #FFF;
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  text-decoration: none;
+  line-height: 20px; /* 125% */
+}.header__phone-link {
+  padding: 12px 20px;
+  color: #FFF;
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px; /* 125% */
+  text-decoration: none;
+  -webkit-transition: 0.25s;
+  transition: 0.25s;
+  border-radius: 999px;
+}.header__phone-link:hover {
+  background: rgba(255, 255, 255, 0.12);
+}.header__drop {
+  position: relative;
+}.header__drop-head {
+  padding: 12px 20px;
+  height: 52px;
+  border-radius: 999px;
+  background-color: var(--accent);
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  gap: 13px;
+  -webkit-transition: var(--hover-transition);
+  transition: var(--hover-transition);
+  cursor: pointer;
+}@media screen and (max-width: 768px) {.header__drop-head {
+    height: 100%;
+  }}.header__drop-head.show svg {
+  -webkit-transform: rotate(0);
+  -ms-transform: rotate(0);
+  transform: rotate(0);
+}.header__drop-head:hover {
+  background: #D95427;
+}.header__drop-head:active {
+  background: #D95427;
+}.header__drop-head span {
+  -webkit-transition: var(--hover-transition);
+  transition: var(--hover-transition);
+  color: #fff;
+}.header__drop-head svg {
+  -webkit-transition: var(--hover-transition);
+  transition: var(--hover-transition);
+  display: block;
+  -webkit-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  transform: rotate(180deg);
+}.header__drop-content {
+  position: absolute;
+  right: 0;
+  top: 56px;
+  z-index: 5;
+  border-radius: 20px;
+  background-color: #fff;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px;
+  -webkit-transition: var(--hover-transition);
+  transition: var(--hover-transition);
+  width: 290px; /* влезает «Служба контроля проектов» — у ссылок white-space: nowrap */
+  opacity: 0;
+  visibility: hidden;
+}.header__drop-content.show {
+  opacity: 1;
+  visibility: visible;
+}.header .drop-content__link {
+  padding: 12px 20px 12px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  background: #FFF;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}.header .drop-content__link:hover {
+  background: rgba(0, 0, 0, 0.04);
+}.header .drop-content__link .icon {
+  max-width: 20px;
+  height: 20px;
+  min-width: 20px;
+  -webkit-box-flex: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}.header .drop-content__link svg {
+  display: block;
+}.header .drop-content__link span {
+  color: #000;
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px; /* 125% */
+  white-space: nowrap;
+}.header .menu {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 19;
+  background: rgba(0, 0, 0, 0.5);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  visibility: hidden;
+  /* Закрытое меню невидимо (opacity:0), но панели .links.show форсят visibility:visible →
+     оставались невидимые кликабельные ссылки. Гасим клики по всему закрытому оверлею. */
+  pointer-events: none;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+}.header .menu.show {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}.header .menu__inner {
+  background: #fff;
+  border-radius: 0 0 20px 20px;
+  padding-top: 100px;
+}.header .menu__list {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  overflow-x: auto;
+}.header .menu__link {
+  text-decoration: none;
+  margin-left: 22px;
+  color: rgba(0, 0, 0, 0.5);
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  white-space: nowrap;
+  line-height: 18px; /* 128.571% */
+  display: inline-block;
+}.header .menu__link:hover {
+  color: #000;
+}.header .menu__link--one {
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.5);
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px; /* 128.571% */
+  padding: 8px 16px;
+  margin-right: 8px;
+  margin-left: 0;
+}.header .menu__link--two {
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.08);
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px; /* 128.571% */
+  padding: 8px 16px;
+  margin-right: 16px;
+  color: rgba(0, 0, 0, 0.5019607843);
+  margin-left: 0;
+}
+/* Пилюля для произвольного служебного пункта меню — только форма; фон и цвет текста
+   приходят инлайн из полей страницы (MenuPillColor/MenuTextColor, admin/content_edit.php). */
+.header .menu__link--pill {
+  border-radius: 999px;
+  padding: 8px 16px;
+}.header .menu__columns {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}.header .menu__column {
+  max-height: 532px;
+  min-height: 532px;
+}.header .column-lvl1 {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  padding-right: 12px;
+  max-width: 342px;
+  -webkit-box-flex: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  overflow: auto;
+  padding-bottom: 20px;
+}.header .menu__tab {
+  padding: 10px 12px;
+  border-radius: 10px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 8px;
+  cursor: pointer;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}.header .menu__tab img {
+  display: block;
+  -webkit-box-flex: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  max-width: 20px;
+  height: 20px;
+}.header .menu__tab span {
+  -webkit-box-flex: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  margin-right: auto;
+  color: rgba(0, 0, 0, 0.5);
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px; /* 142.857% */
+  white-space: normal; /* длинные названия переносим на 2 строки, а не обрезаем */
+  overflow-wrap: break-word;
+}.header .menu__tab svg {
+  min-width: 20px;
+  min-height: 16px;
+  opacity: 0.25;
+  display: block;
+}.header .tab-active {
+  background: rgba(0, 0, 0, 0.04);
+}.header .tab-active span {
+  color: #000;
+}.header .tab-active svg {
+  opacity: 1;
+}.header .tab-active svg path {
+  stroke: #FE5D26;
+}.header .top-link {
+  color: #FE5D26;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px; /* 142.857% */
+  padding: 10px 12px;
+  display: inline-block;
+  text-decoration: none;
+  border-radius: 10px;
+}.header .top-link:hover {
+  color: var(--hover-accent);
+}.header .column-lvl2 {
+  padding-top: 16px;
+  -webkit-box-flex: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  max-width: 282px;
+  position: relative;
+  padding-left: 16px;
+}.header .column-lvl3 {
+  padding-top: 16px;
+  -webkit-box-flex: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
+  max-width: 282px;
+  position: relative;
+  padding-left: 16px;
+}.header .links {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  position: absolute;
+  top: 8px;
+  left: 16px;
+  right: 0;
+  opacity: 0;
+  visibility: hidden;
+  -webkit-transform: translateX(-30px);
+  -ms-transform: translateX(-30px);
+  transform: translateX(-30px);
+}.header .links.show {
+  opacity: 1;
+  -webkit-transition: 0.35s ease;
+  transition: 0.35s ease;
+  visibility: visible;
+  -webkit-transform: translateX(0px);
+  -ms-transform: translateX(0px);
+  transform: translateX(0px);
+}.header .tab-lvl4:hover {
+  background: rgba(0, 0, 0, 0.04);
+}.header .tab-lvl4:hover span {
+  color: #000;
+}.header .tab-lvl4:hover svg {
+  opacity: 1;
+}.header .tab-lvl4:hover svg path {
+  stroke: #FE5D26;
+}.header .menu__banner {
+  position: absolute;
+  top: 16px;
+  border-radius: 20px;
+  overflow: hidden;
+  width: 90%;
+  right: 0;
+  opacity: 0;
+  visibility: hidden;
+  -webkit-transform: translateX(-50px);
+  -ms-transform: translateX(-50px);
+  transform: translateX(-50px);
+}.header .menu__banner:hover .menu__banner-icon {
+  opacity: 1;
+}.header .menu__banner.show {
+  opacity: 1;
+  visibility: visible;
+  -webkit-transform: translateX(0px);
+  -ms-transform: translateX(0px);
+  transform: translateX(0px);
+  -webkit-transition: 0.35s ease;
+  transition: 0.35s ease;
+}.header .search__card {
+  position: relative;
+}.header .search__card .menu__banner-icon {
+  width: 32px !important;
+  height: 32px;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  -webkit-transition: 0.25s ease;
+  transition: 0.25s ease;
+  opacity: 0;
+  z-index: 2;
+}.header .search__card:hover .menu__banner-icon {
+  opacity: 1;
+}.header .menu__banner-img {
+  width: 100%;
+  display: block;
+}.header .menu__banner-icon {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  -webkit-transition: 0.25s ease;
+  transition: 0.25s ease;
+  opacity: 0;
+}.header .menu__banner-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px;
+  background: -webkit-gradient(linear, left top, left bottom, from(rgba(37, 37, 41, 0)), color-stop(25%, rgba(37, 37, 41, 0.5)), to(rgba(37, 37, 41, 0.75)));
+  background: linear-gradient(180deg, rgba(37, 37, 41, 0) 0%, rgba(37, 37, 41, 0.5) 25%, rgba(37, 37, 41, 0.75) 100%);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+}.header .menu__banner-content .title {
+  color: #FFF;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px; /* 150% */
+  margin-bottom: 10px;
+  text-align: left; /* старый style.css .title{text-align:center} центрировал — возвращаем влево */
+}.header .menu__banner-content .text {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px; /* 142.857% */
+}.header .main-box.active {
+  background: #FFF;
+  -webkit-backdrop-filter: blur(64px);
+  backdrop-filter: blur(64px);
+  margin-right: 0;
+}.header__box {
+  -webkit-transition: 0.15s;
+  transition: 0.15s;
+}.header .main-box.active + .header__box {
+  width: 0;
+  overflow: hidden;
+  padding: 0;
+}.header .main-box.active .header__input-box {
+  max-width: initial;
+}.header .main-box.active svg path {
+  stroke: rgba(0, 0, 0, 0.5019607843);
+}.header .main-box.active input {
+  color: rgba(0, 0, 0, 0.5019607843);
+}.header .main-box.active input::-webkit-input-placeholder {
+  color: rgba(0, 0, 0, 0.5019607843);
+}.header .main-box.active input::-moz-placeholder {
+  color: rgba(0, 0, 0, 0.5019607843);
+}.header .main-box.active input:-ms-input-placeholder {
+  color: rgba(0, 0, 0, 0.5019607843);
+}.header .main-box.active input::-ms-input-placeholder {
+  color: rgba(0, 0, 0, 0.5019607843);
+}.header .main-box.active input::placeholder {
+  color: rgba(0, 0, 0, 0.5019607843);
+}.header .search-popup-popular {
+  position: fixed;
+  z-index: 20;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.5);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  padding-top: 76px;
+  opacity: 0;
+  visibility: hidden;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+}.header .search-popup-popular.show {
+  opacity: 1;
+  visibility: visible;
+}.header .search-popup-popular__inner {
+  border-radius: 20px;
+  background: #FFF;
+  max-width: 434px;
+  margin: 0 auto;
+  padding: 16px 10px 10px;
+}.header .search-popup-popular__inner .title {
+  color: #828282;
+  margin-bottom: 8px;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px; /* 150% */
+  padding-left: 10px;
+}.header .search-popup-popular__links {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}.header .search-popup-popular__links a {
+  padding: 8px 10px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #000;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px; /* 142.857% */
+}.header .search-popup-popular__links a:hover {
+  background: rgba(0, 0, 0, 0.04);
+}.header .search {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  opacity: 0;
+  visibility: hidden;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+}.header .search.show {
+  opacity: 1;
+  visibility: visible;
+  background: rgba(0, 0, 0, 0.5);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}.header .search__inner {
+  background: #fff;
+  border-radius: 0 0 20px 20px;
+  -webkit-backdrop-filter: blur(32px);
+  backdrop-filter: blur(32px);
+  padding-top: 84px;
+  position: relative;
+}.header .search__desk-show-all {
+  padding: 12px 16px;
+  color: #fff;
+  border-radius: 999px;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+  background: #FE5D26;
+  font-family: "Inter", sans-serif;
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  z-index: 3;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
+  text-decoration: none;
+}.header .search__desk-show-all:hover {
+  background: #FE6D3B;
+}.header .search-container {
+  max-width: 1440px;
+  margin: 0 auto;
+}.header .search__categories {
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}.header .search__categories .title {
+  color: #828282;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px; /* 142.857% */
+  margin-bottom: 16px;
+}.header .search__categories-items {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  gap: 8px;
+}.header .search__category {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  text-decoration: none;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  font-size: 14px;
+}.header .search__category:hover {
+  background: rgba(0, 0, 0, 0.04);
+}.header .search__category .text {
+  color: #000;
+}.header .search__category .count {
+  color: rgba(0, 0, 0, 0.5);
+}.header .search__items {
+  padding-top: 16px;
+  max-height: 476px;
+  overflow: auto;
+}.header .search__items .title {
+  color: #828282;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px; /* 142.857% */
+  margin-bottom: 16px;
+}.header .search__items-cards {
+  display: -ms-grid;
+  display: grid;
+  gap: 16px;
+  padding-bottom: 80px;
+  -ms-grid-columns: 1fr [6];
+  grid-template-columns: repeat(6, 1fr);
+  padding-right: 7px;
+}.header .search__card {
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+}.header .search__card img {
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  display: block;
+}.header .search__card-content {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  padding: 16px;
+  background: -webkit-gradient(linear, left top, left bottom, from(rgba(37, 37, 41, 0.01)), color-stop(20%, rgba(37, 37, 41, 0.33)), to(rgba(37, 37, 41, 0.66)));
+  background: linear-gradient(180deg, rgba(37, 37, 41, 0.01) 0%, rgba(37, 37, 41, 0.33) 20%, rgba(37, 37, 41, 0.66) 100%);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+}.header .search__card .title {
+  font-size: 14px;
+  margin-bottom: 6px;
+  font-weight: 400;
+  line-height: 18px; /* 128.571% */
+  color: #fff;
+}.header .search__card .price {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 14px;
+  line-height: 20px;
+}.header .main-box.searching {
+  background: rgba(0, 0, 0, 0.5);
+  -webkit-backdrop-filter: blur(64px);
+  backdrop-filter: blur(64px);
+}.header .main-box.searching input::-webkit-input-placeholder {
+  color: #fff;
+}.header .main-box.searching input::-moz-placeholder {
+  color: #fff;
+}.header .main-box.searching input:-ms-input-placeholder {
+  color: #fff;
+}.header .main-box.searching input::-ms-input-placeholder {
+  color: #fff;
+}.header .main-box.searching input,
+.header .main-box.searching input::placeholder {
+  color: #fff;
+}.header .main-box.searching svg path {
+  stroke: #c5c5c5;
+}.header__btn-search {
+  display: none;
+}.header .main-box.active .header__btn-search {
+  padding: 12px 16px;
+  color: #fff;
+  border-radius: 999px;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px; /* 125% */
+  background: #FE5D26;
+  font-family: "Inter", sans-serif;
+  display: none;
+}.header .main-box.active .header__btn-search:hover {
+  background: #FE6D3B;
+}.header .main-box.active .header__input-wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  gap: 4px;
+}.header-box-mobile {
+  display: none;
+}.header .search-mobile {
+  display: none;
+}.header .mobile-menu {
+  display: none;
+}.header .search-clear {
+  display: none;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}.header .search-clear svg path {
+  stroke: #c5c5c5;
+}@media (max-width: 1024px) {.header .main-box .header__menu-btn {
+    display: none;
+  }.header .main-box .header__input-wrapper {
+    display: none;
+  }.header .favorite-link-box {
+    display: none;
+  }.header__phone-link {
+    display: none;
+  }.header .main-box, .header .contacts-box {
+    margin-left: initial;
+  }.header__inner {
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+  }.header-box-mobile {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    transform: translateX(-50%);
+    min-width: 311px;
+    z-index: 22;
+  }.header-box-mobile .header__input-box span {
+    color: #fff;
+  }.header__favorite-link {
+    background-color: rgba(255, 255, 255, 0.1215686275);
+    border-radius: 999px;
+    position: relative;
+  }.header__input-box.active {
+    background-color: #fff;
+  }.header__input-box.active span {
+    color: #000;
+  }.header .search-mobile {
+    display: none;
+    position: fixed;
+    z-index: 21;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    background: rgba(0, 0, 0, 0.5);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    padding: 16px;
+  }.header .search-mobile.show {
+    display: block;
+  }.header .search-mobile__head {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    gap: 8px;
+    padding: 4px;
+    border-radius: 999px;
+    background-color: #fff;
+    height: 52px;
+    margin-bottom: 8px;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+  }.header .search-mobile__box {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 0 12px 16px;
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+  }.header .search-mobile__box input {
+    border: none;
+    outline: none;
+    padding: 0;
+    margin: 0;
+    display: block;
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    color: #000;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    width: 100%;
+    line-height: 20px; /* 125% */
+  }.header .search-mobile__box input::-webkit-input-placeholder {
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px; /* 125% */
+  }.header .search-mobile__box input::-moz-placeholder {
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px; /* 125% */
+  }.header .search-mobile__box input:-ms-input-placeholder {
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px; /* 125% */
+  }.header .search-mobile__box input::-ms-input-placeholder {
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px; /* 125% */
+  }.header .search-mobile__box input::placeholder {
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px; /* 125% */
+  }.header .search-mobile__content {
+    padding: 16px 0px 10px;
+    border-radius: 20px;
+    background-color: #fff;
+  }.header .search-mobile__content-title {
+    color: #828282;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px; /* 142.857% */
+    padding-left: 16px;
+    margin-bottom: 8px;
+  }.header .search-mobile__links {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    padding: 0 10px;
+  }.header .search-mobile__links a {
+    padding: 8px 10px;
+    border-radius: 8px;
+    color: #000;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    text-decoration: none;
+    line-height: 20px; /* 142.857% */
+  }.header .search-mobile__links a:hover {
+    background: rgba(0, 0, 0, 0.04);
+  }.header .search-mobile-clear {
+    display: none;
+    width: 20px;
+    height: 20px;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+  }.header .search-mobile .header__btn-search {
+    color: #fff;
+    border-radius: 999px;
+    padding: 12px 20px;
+    background-color: #FE5D26;
+    display: block;
+  }.header .search-mobile__categories {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    gap: 8px;
+    padding: 8px 16px 16px;
+    margin-bottom: 16px;
+    overflow-x: auto;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  }.header .search-mobile__categories a {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    gap: 4px;
+    font-size: 14px;
+    text-decoration: none;
+    color: #000;
+    white-space: nowrap;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+  }.header .search-mobile__categories a:hover {
+    background: rgba(0, 0, 0, 0.04);
+  }.header .search-mobile__results-items {
+    padding: 0 6px;
+    max-height: 58vh;
+    overflow-x: auto;
+    margin-right: 10px;
+  }.header .results-item {
+    border-radius: 8px;
+    padding: 8px 10px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    text-decoration: none;
+  }.header .results-item:hover {
+    background: rgba(0, 0, 0, 0.04);
+  }.header .results-item .content {
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+  }.header .results-item .title {
+    font-size: 14px;
+    color: #000;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px; /* 142.857% */
+  }.header .results-item .price {
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.5019607843);
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px; /* 142.857% */
+  }.header .results-item img {
+    max-width: 40px;
+    border-radius: 8px;
+    min-width: 40px;
+  }.header .search-mobile__show-all {
+    padding: 8px 10px;
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px; /* 142.857% */
+    margin-left: 6px;
+    display: block;
+    text-decoration: none;
+  }.header .search-mobile__results {
+    display: none;
+  }.header__btn-search {
+    font-size: 16px;
+  }.header .mobile-menu {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 21;
+    background: rgba(0, 0, 0, 0.5);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    padding: 16px 16px 0;
+    display: none;
+  }.header .mobile-menu.show {
+    display: block;
+  }.header .mobile-menu__inner {
+    padding: 16px 10px 10px;
+    border-radius: 20px;
+    background-color: #fff;
+    height: calc(100vh - 116px);
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+  }.header .mobile-menu__title {
+    padding-left: 6px;
+    padding-bottom: 6px;
+    color: #000;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px; /* 133.333% */
+    margin-bottom: 10px;
+  }.header .mobile-menu__nav {
+    padding: 16px 6px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    margin-bottom: 16px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    gap: 8px;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+  }.header .mobile-menu__nav a:nth-child(1), .header .mobile-menu__nav a:nth-child(2) {
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.04);
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px; /* 142.857% */
+  }.header .mobile-menu__nav a:nth-child(1):hover, .header .mobile-menu__nav a:nth-child(2):hover {
+    background: rgba(0, 0, 0, 0.08);
+    color: #000;
+  }.header .mobile-menu__nav button {
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 18px; /* 128.571% */
+    padding-left: 8px;
+  }.header .mobile-menu__wrapper {
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    overflow: auto;
+  }.header .menu-frame {
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+  }.header .menu-frame-lvl2 {
+    display: none;
+  }.header .mobile-frame-show {
+    display: -webkit-box !important;
+    display: -ms-flexbox !important;
+    display: flex !important;
+  }.header .mobile-tab {
+    padding: 8px 12px 8px 4px;
+    border-radius: 10px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    gap: 8px;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+  }.header .mobile-tab:hover {
+    background: rgba(0, 0, 0, 0.04);
+  }.header .mobile-tab:hover svg path {
+    stroke: var(--accent);
+    stroke-opacity: 1;
+  }.header .mobile-tab span {
+    margin-right: auto;
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+  }.header .menu-frame-lvl1 {
+    display: none;
+  }.header .menu-frame__back-btn {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    gap: 8px;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+  }.header .menu-frame__back-btn span {
+    font-size: 18px;
+    color: #000;
+  }.header .mobile-menu-link {
+    display: block;
+    padding: 10px 0px;
+    text-decoration: none;
+    color: #FE5D26;
+    font-size: 14px;
+    border-radius: 10px;
+  }.header .mobile-menu-link:hover {
+    background: rgba(0, 0, 0, 0.04);
+  }.header .mobile-burger.active {
+    background-color: #fff;
+  }.header .mobile-burger.active span {
+    color: #000;
+  }}@media (max-height: 830px) {.header .search-mobile__results-items {
+    max-height: 51vh;
+  }}@media (max-height: 670px) {.header .search-mobile__results-items {
+    max-height: 44vh;
+  }}.header .with-img {
+  padding: 4px 12px 4px 4px;
+}.header-box-mobile .header__favorite-link {
+  width: 65px;
+}.header .mobile-menu #menu .menu-frame__back-btn {
+  padding-bottom: 16px;
+  margin-bottom: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}.header .mobile-menu #menu .mobile-menu__wrapper {
+  padding: 10px 0;
+}.header .mobile-menu #menu .mobile-tab {
+  padding: 10px;
+}.header .mobile-menu #menu .mobile-tab svg {
+  display: none;
+}
+/* Нейтрализация свойств старого style.css, протекающих на ОБЩИЕ классы мега-меню
+   (.menu/.menu__inner/.menu__column/.menu .container) — у редизайна этих свойств нет. */
+.header .menu__inner { display: block; }
+.header .menu__column { padding-top: 0; }
+.header .menu .container { height: auto; }
+
+/* Иконка категории lvl1: .menu__tab img (20px) перебивал .big-icon (40x40) → сплющивало. Возвращаем квадрат. */
+.header .menu__tab img.big-icon {
+  width: 40px;
+  height: 40px;
+  max-width: 40px;
+  -o-object-fit: contain;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+/* Логотип: SVG без размеров рендерился в натуральную величину до реф-лоу (при клике перерисовывался). Задаём явный размер. */
+.header .header__logo img {
+  display: block;
+  height: 26px;
+  width: auto;
+}
+
+/* Убрать блок «Часто ищут» из поиска (десктоп + мобилка). JS оставляем — элементы есть, просто скрыты. */
+.header .search-popup-popular__inner,
+.header .search-mobile__popular {
+  display: none !important;
+}
+
+/* Центрирование серого блока (main-box + корзина) в шапке: фланги promo(слева)/contacts(справа)
+   на flex:1 (равные) → середина строго по центру, не зависит от ширины флангов. */
+.header .header__promo {
+  -webkit-box-flex: 1;
+  -ms-flex: 1 1 0px;
+  flex: 1 1 0;
+  min-width: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+.header .contacts-box {
+  -webkit-box-flex: 1;
+  -ms-flex: 1 1 0px;
+  flex: 1 1 0;
+  max-width: none;
+  margin-left: 0;
+}
+.header .main-box {
+  margin-left: 0;
+}
+
+/* Кнопка корзины: не сплющивается без товаров/цены; min-width на самой кнопке —
+   чтобы иконка и ховер-подсветка были по центру, а не прижаты влево. */
+.header .favorite-link-box .header__favorite-link {
+  min-width: 55px;
+}
+
+/* Обёртки телефона на 52px, чтобы drop-head (52) стоял ровно в ряд с sales-link/main-box (не съезжал вниз на 4px). */
+.header .contacts-box,
+.header .header__drop {
+  height: 52px;
+}
+
+/* #2 Скролл панелей lvl2/lvl3/lvl4: колонка меню = 532px, а .links (position:absolute)
+   не ограничена по высоте → длинные списки вываливались за пределы меню. */
+.header .links {
+  max-height: 516px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 6px;
+}
+/* Скроллбар .links = как у колонки lvl1. Старый style.css стилизует lvl1 отдельным правилом
+   `.menu__column:nth-child(1)::-webkit-scrollbar` (4px, светлый трек, серый бегунок), под которое
+   .links НЕ попадает → брал глобальный (6px, прозрачный). Приводим к тем же значениям. */
+.header .links::-webkit-scrollbar {
+  width: 4px;
+}
+.header .links::-webkit-scrollbar-track {
+  background: rgb(246, 244, 244);
+  border-radius: 4px;
+}
+.header .links::-webkit-scrollbar-thumb {
+  background: rgb(218, 218, 218);
+}
+
+/* #3 Старый style.css форсит `.menu span { color:#979797 !important }` — гасил чёрный текст
+   активного/выбранного пункта. Перебиваем с !important (спец. выше: .header .menu__tab span). */
+.header .menu__tab span {
+  color: rgba(0, 0, 0, 0.5) !important;
+}
+.header .tab-active span,
+.header .tab-lvl4:hover span {
+  color: #000 !important;
+}
+
+/* Баннер мега-меню: жёсткий квадрат (исходник 200×200) — фото обрезаем по контейнеру.
+   .menu a из старого style.css даёт padding:4px 0 → фото садилось ниже на 8px, сверху зазор. */
+.header .menu__banner {
+  aspect-ratio: 1 / 1;
+  padding: 0;
+  z-index: 1;
+}
+.header .menu__banner.show {
+  z-index: 2; /* входящий баннер поверх уходящего при кроссфейде смены категории */
+}
+.header .menu__banner-img {
+  height: 100%;
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+
+/* Корзина в шапке должна оставаться НАД затемняющим оверлеем мега-меню (.menu.show —
+   fixed-скрим, z-index:19), как .main-box (21) и .contacts-box (20). Без этого при
+   открытии каталога корзину накрывал скрим и она «пропадала». */
+.header .favorite-link-box {
+  position: relative;
+  z-index: 20;
+}
+
+/* Тост из шапки (копирование почты из контактов). Самодостаточный — header-2025.css
+   грузится на всех страницах. z-index выше шапки (20) и оверлея меню (19). */
+.hdr-toast {
+  position: fixed;
+  top: 24px;
+  left: 50%;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: calc(100vw - 32px);
+  padding: 14px 18px;
+  background: #fff;
+  border: 1px solid rgba(49, 45, 43, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(49, 45, 43, 0.18);
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 20px;
+  color: #312D2B;
+  opacity: 0;
+  transform: translate(-50%, -16px);
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.hdr-toast--show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+.hdr-toast__icon {
+  display: flex;
+  flex-shrink: 0;
+}
+
+/* МОБИЛКА: старый style.css прячет .header на @media(max-width:991px){display:none}
+   (у него отдельный .header-mobile). Редизайн держит мобильную шапку (.header-box-mobile —
+   плавающая нижняя панель + .mobile-menu) ВНУТРИ .header → возвращаем видимость. */
+@media (max-width: 991px) {
+  .header {
+    display: block !important;
+  }
+  /* Фикс-хедер (top-бар лого+тел) перекрывал контент: старый style.css на ≤991 занулял
+     main{margin-top:0}. Возвращаем отступ как на десктопе (хедер ~88px).
+     Исключаем главную (.main-page25): там hero full-bleed в край, хедер плавает поверх. */
+  main:not(.main-page25) {
+    margin-top: 91px !important;
+  }
+}
+
+/* МОБИЛКА (≤768): верхний бар = лого слева + телефон справа, по 16px от краёв.
+   Десктопные центрирующие фланги (.header__promo/.contacts-box flex:1) на мобилке
+   зажимали лого по центру, а телефон переносился в 3 строки — снимаем. */
+@media (max-width: 768px) {
+  .header .header__inner {
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .header .header__promo {
+    display: none; /* пусто на мобилке (sales-link скрыты), не должно смещать логотип */
+  }
+  .header .header__box.main-box,
+  .header .contacts-box {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto; /* убрать flex:1 — фланги не растягиваются, телефон не сжимается */
+    max-width: none;
+  }
+  .header .header__drop-head span {
+    white-space: nowrap; /* номер телефона в 1 строку */
+  }
+}
+
+/* Иконка категории в мобильном меню: правила .mobile-tab img не было → getImagePath(Icon)
+   рендерился в натуральный (огромный) размер и распирал пункт. Фиксируем 40×40. */
+.header .mobile-tab img {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  -o-object-fit: contain;
+  object-fit: contain;
+  -webkit-box-flex: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+}
+
+/* Скролл внутри мобильного фрейма: .mobile-menu__wrapper уже overflow:auto, но флекс-цепочка
+   (inner фикс-высота → menu-frame flex-grow → wrapper flex-grow) с дефолтным min-height:auto
+   распирала фрейм по контенту → список вываливался за панель. min-height:0 включает скролл.
+   Скроллбар — как на десктопе (.links): 4px, светлый трек, серый бегунок. */
+.header .menu-frame {
+  min-height: 0;
+}
+.header .mobile-menu__wrapper {
+  min-height: 0;
+  overscroll-behavior: contain;
+}
+.header .mobile-menu__wrapper::-webkit-scrollbar {
+  width: 4px;
+}
+.header .mobile-menu__wrapper::-webkit-scrollbar-track {
+  background: rgb(246, 244, 244);
+  border-radius: 4px;
+}
+.header .mobile-menu__wrapper::-webkit-scrollbar-thumb {
+  background: rgb(218, 218, 218);
+}
+
+/* Крестик закрытия каталог-меню — абсолютом в углу белой панели, поэтому виден
+   на всех фреймах: и на первом (чипы), и на вложенных (строка «назад»).
+   Первой строке даём отступ справа, чтобы она не уезжала под крестик. */
+.header .mobile-menu__inner {
+  position: relative;
+}
+.header .mobile-menu__close {
+  position: absolute;
+  top: 16px;
+  right: 10px;
+  z-index: 1;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+}
+.header .mobile-menu__nav,
+.header .menu-frame__back-btn {
+  padding-right: 46px;
+}
+
+/* Пока каталог-меню открыто, страница под ним не должна ехать: без блокировки палец,
+   дойдя до края списка, перехватывал скролл документа и меню «отваливалось». */
+@media (max-width: 1024px) {
+  body.mobile-menu-open {
+    overflow: hidden;
+  }
+}
+
+/* Корзина в шапке: сумма (₽) текстом + оранжевый бейдж-счётчик товаров в углу кнопки. */
+.header .cart-qty-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 6px;
+  box-sizing: border-box;
+  border-radius: 999px;
+  background: #FE5D26;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 24px;
+  text-align: center;
+  z-index: 3;
+  pointer-events: none;
+}
+.header .cart-qty-badge:empty {
+  display: none;
+}
+/* Мобилка: сумма корзины 11px, в 1 строку, всегда видна (перебиваем ≤768 display:none). */
+@media (max-width: 768px) {
+  .header-box-mobile .header__favorite-link .favorite-count {
+    display: block;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+}
+
+/* Comagic-виджет (плавающая кнопка чата, мобильный) наезжал на корзину в нижней панели.
+   Поднимаем на 40px через transform — их скрипт ставит top инлайном (динамически), поэтому
+   top переопределять бесполезно, а transform не конфликтует. !important бьёт инлайн-стиль. */
+.comagic-c-buttons[c-wtype="custom_button_mobile"] {
+  -webkit-transform: translateY(-40px) !important;
+  -ms-transform: translateY(-40px) !important;
+  transform: translateY(-40px) !important;
+  /* На мобильном виджете фон — на самом контейнере (десктопных __main-button тут нет). */
+  background-color: #FE5D26 !important;
+}
+
+/* Перекрашиваем Comagic-виджет в наш рыжий #FE5D26 (дефолт у них #FF926C).
+   Десктоп — фон на __main-button/__action-button/__pulse; мобилка — на контейнере (выше). */
+.comagic-c-buttons__main-button,
+.comagic-c-buttons__action-button,
+.comagic-c-buttons__pulse {
+  background-color: #FE5D26 !important;
+}
+
+/* Мобильный поиск: полный интерфейс рисует виджет search-api.ru (по data-open-search на кнопке).
+   Свои редизайн-всплывашки поиска (.search-mobile, .search-popup-popular) на мобилке убираем. */
+@media (max-width: 1024px) {
+  .header .search-mobile,
+  .header .search-popup-popular {
+    display: none !important;
+  }
+}
+
+/* Каталог-меню на мобилке: старый style.css задаёт .mobile-menu{height:calc(100vh - 50px); top:50px}
+   (старое меню было под 50px-хедером). Редизайн ставит top:0/bottom:0, но height перебивал →
+   серая подложка не доходила до низа на 50px. height:auto — растягиваем на весь экран. */
+.header .mobile-menu {
+  height: auto;
+}
+
+/* ===================== Строка «Горячее» (вторая строка шапки) =====================
+   Разметку отдаёт {{HeaderSalesLinks}} (includes/_menu.php) соседом .header__promo, поэтому
+   .header__inner переводим в wrap: сама строка шириной 100% и order:9 уезжает под первую.
+   Верхняя строка (акции/лого/каталог/поиск/контакты) при этом не меняется.
+   Только десктоп: на мобилке строки нет, а wrap уносил телефон на вторую строку. */
+@media (min-width: 769px) {
+  .header .header__inner {
+    flex-wrap: wrap;
+  }
+}
+
+.header .header__hot {
+  order: 9;
+  width: 100%;
+  margin-top: 8px;
+  overflow: hidden;
+  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s, margin-top 0.35s;
+  max-height: 52px;
+}
+
+/* Клиренс под фикс-шапкой: базовый main{margin-top:91px} из style.css плюс высота строки.
+   --hot-h ставит PHP инлайном рядом с разметкой; нет строки — нет и переменной, клиренс прежний. */
+main {
+  margin-top: calc(91px + var(--hot-h, 0px));
+}
+
+main.cart-page {
+  padding-top: calc(91px + var(--hot-h, 0px));
+}
+
+.header .hot-line {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.5);
+  -webkit-backdrop-filter: blur(64px);
+  backdrop-filter: blur(64px);
+}
+
+/* Все слайды лежат в одной ячейке грида: ширина = ширина самого длинного повода,
+   капсула не прыгает при смене. */
+.header .hot-line__stage {
+  display: grid;
+  justify-items: start;
+  align-items: center;
+  flex: 0 0 auto;
+  height: 44px;
+  overflow: hidden;
+}
+
+.header .hot-line__slide {
+  grid-area: 1 / 1;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.45s;
+}
+
+.header .hot-line__slide.is-on {
+  transform: none;
+  opacity: 1;
+}
+
+.header .hot-line__slide.is-out {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+.header .hot-line__link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 44px;
+  padding: 0 16px;
+  border-radius: 999px;
+  color: #fff;
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 20px;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.header .hot-line__link:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.header .hot-line__link small {
+  margin-left: -4px;
+  font-size: 14px;
+  font-weight: 400;
+  opacity: 0.6;
+}
+
+.header .hot-line__ico {
+  display: block;
+  flex-shrink: 0;
+}
+
+.header .hot-line__cd {
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.header .hot-line__dots {
+  display: flex;
+  gap: 5px;
+  padding: 0 10px;
+  flex-shrink: 0;
+}
+
+.header .hot-line__dots button {
+  width: 6px;
+  height: 6px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.header .hot-line__dots button:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.header .hot-line__dots button.is-on {
+  width: 18px;
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+.header .hot-line__sep {
+  width: 1px;
+  height: 22px;
+  margin: 0 6px;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+/* Популярное — одной лентой внутри той же капсулы: тянется мышью, лишнее уходит в затухание. */
+.header .hot-line__flow {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  cursor: grab;
+}
+
+.header .hot-line__flow::-webkit-scrollbar {
+  height: 0;
+}
+
+.header .hot-line__flow.is-over {
+  -webkit-mask-image: linear-gradient(90deg, #000 86%, transparent 100%);
+  mask-image: linear-gradient(90deg, #000 86%, transparent 100%);
+}
+
+.header .hot-line__flow.is-drag {
+  cursor: grabbing;
+}
+
+.header .hot-line__flow a {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  height: 44px;
+  padding: 0 16px;
+  border-radius: 999px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.header .hot-line__flow a:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Схлопнутое состояние: строка сворачивается, в первой строке проявляется пилюля
+   со счётчиком — из прозрачности сверху, как сама строка. */
+.header .hot-mini {
+  position: relative;
+  z-index: 20;
+  width: 118px;
+  height: 52px;
+  margin-left: 8px;
+  padding: 0;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.5);
+  -webkit-backdrop-filter: blur(64px);
+  backdrop-filter: blur(64px);
+  color: #fff;
+  font-family: "Inter", sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s;
+}
+
+/* Счётчик — той же геометрии, что бейдж корзины (.cart-qty-badge). */
+.header .hot-mini b {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 6px;
+  box-sizing: border-box;
+  border-radius: 999px;
+  background: #FE5D26;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 24px;
+  text-align: center;
+}
+
+.header.is-hot-mini .hot-mini {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.header.is-hot-mini .hot-mini:hover {
+  background: rgba(0, 0, 0, 0.68);
+}
+
+.header.is-hot-mini .header__hot {
+  max-height: 0;
+  margin-top: 0;
+  opacity: 0;
+}
+
+/* Мобилка: строка «Горячее» — отдельная задача со своей раскладкой, пока не показываем.
+   Заодно гасим --hot-h, иначе клиренс под шапкой добавит высоту невидимой строки. */
+@media (max-width: 768px) {
+  :root {
+    --hot-h: 0px;
+  }
+
+  .header .header__hot,
+  .header .hot-mini {
+    display: none;
+  }
+}
+
+/* Строка «Горячее» держится над скримом мега-меню (.menu, z-index:19) — как .main-box/.contacts-box,
+   иначе белая панель каталога/поиска накрывает её сверху. */
+.header .header__hot {
+  position: relative;
+  z-index: 20;
+}
+
+/* Панели каталога и поиска выезжают из-под шапки: их верхний клиренс растёт вместе с ней. */
+.header .menu__inner {
+  padding-top: calc(100px + var(--hot-h, 0px));
+}
+
+.header .search__inner {
+  padding-top: calc(84px + var(--hot-h, 0px));
+}
+
+/* Выпадашка телефона живёт внутри .contacts-box (z-index 20). Строка «Горячее» — flex-элемент
+   с order:9, а flex-элементы рисуются в порядке order, поэтому при равном z-index строка
+   ложилась поверх выпадашки. Поднимаем контакты над строкой.
+   Только десктоп: на мобилке строки нет, а 22 перебивал 21 у .mobile-menu — оранжевая
+   пилюля телефона торчала поверх открытого каталог-меню. */
+@media (min-width: 769px) {
+  .header .contacts-box {
+    z-index: 22;
+  }
+}
+
+/* Строка схлопнута — шапка снова обычной высоты, иначе под ней остаётся пустая полоса. */
+.header.is-hot-mini .menu__inner {
+  padding-top: 100px;
+}
+
+.header.is-hot-mini .search__inner {
+  padding-top: 84px;
+}
+
+/* ===================== MAX и Telegram рядом с телефоном =====================
+   Вынесены из выпадашки телефона в отдельную капсулу шапки: она живёт внутри
+   .contacts-box (правый фланг) слева от оранжевой пилюли телефона, поэтому
+   центрирование серого блока не съезжает. В выпадашке те же два пункта остаются
+   для мобилки, где капсулы нет. */
+.header .msg-box {
+  margin-right: 4px; /* +4px от gap .header__box = 8px до телефона */
+  flex-shrink: 0;
+}
+
+.header .msg-link {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  color: #fff;
+  transition: 0.2s;
+}
+
+.header .msg-link:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.header .msg-link svg {
+  display: block;
+}
+
+/* В покое шапка остаётся монохромной, брендовый цвет проявляется на ховере.
+   У MAX это градиент из выпадашки — заливка переключается на его же <defs>. */
+.header .msg-link--max:hover svg path {
+  fill: url(#hdr-max-grad);
+}
+
+.header .msg-link--tg:hover {
+  color: #29A9EB;
+}
+
+@media (min-width: 769px) {
+  .header .drop-content__link--msg {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .header .msg-box {
+    display: none;
+  }
+}
