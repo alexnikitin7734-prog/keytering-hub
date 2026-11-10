@@ -45,7 +45,10 @@
   }
   burger.addEventListener('click', function (e) { e.stopPropagation(); toggle(!panel.classList.contains('is-open')); });
   panel.addEventListener('mouseover', function (e) { var b = e.target.closest('[data-ktgnav-sec]'); if (b) showSec(b.dataset.ktgnavSec); });
-  panel.addEventListener('click', function (e) { var b = e.target.closest('[data-ktgnav-sec]'); if (b) showSec(b.dataset.ktgnavSec); });
+  panel.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-ktgnav-sec]');
+    if (b) showSec(b.dataset.ktgnavSec); else if (!e.target.closest('a,button')) toggle(false);
+  });
   document.addEventListener('click', function (e) { if (!panel.contains(e.target)) toggle(false); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') toggle(false); });
 
