@@ -13,14 +13,29 @@
   var WAITER = 7500, BARMAN = 7500;
   var FORMATS = {
     furshet: { name: 'Фуршет', icon: 'ik-furshet', waiterPer: 20, levels: { mini: [1800, '400 г'], midi: [3400, '500 г · 300 мл'], maxi: [4200, '600 г · 650 мл'] } },
-    welcome: { name: 'Фуршет и велком', icon: 'ik-welcome', waiterPer: 20, levels: { mini: [2500, '500 г'], midi: [3600, '600 г · 360 мл'], maxi: [4400, '700 г · 520 мл'] } },
-    stancia: { name: 'Фуршет, велком и станция', icon: 'ik-stancii', waiterPer: 20, levels: { mini: [2900, '600 г'], midi: [4200, '700 г · 360 мл'], maxi: [5500, '800 г · 520 мл'] } },
     banket: { name: 'Банкет', icon: 'ik-vip', waiterPer: 10, barmanPer: 50, levels: { mini: [3200, '700 г · 400 мл'], midi: [4500, '950 г · 600 мл'], maxi: [6000, '1200 г · 850 мл'] } },
     kofe: { name: 'Кофе-брейк', icon: 'ik-kofe', waiterPer: 40, levels: { mini: [400, '100 г · 350 мл'], midi: [800, '200 г · 500 мл'], maxi: [1400, '400 г · 750 мл'] } }
   };
+  // Фуршет с допами — цены пакетов /furshet-i-velkom/ и /furshet-velkom-i-animacionnye-stancii/ (станция идёт вместе с велкомом).
+  var FURSHET_PLUS = {
+    welcome: { mini: [2500, '500 г'], midi: [3600, '600 г · 360 мл'], maxi: [4400, '700 г · 520 мл'] },
+    stancia: { mini: [2900, '600 г'], midi: [4200, '700 г · 360 мл'], maxi: [5500, '800 г · 520 мл'] }
+  };
+  var STATION = 'animacionnye-stancii';
+  function curLevels() {
+    if (state.fmt !== 'furshet') return FORMATS[state.fmt].levels;
+    if (state.wants[STATION]) return FURSHET_PLUS.stancia;
+    return state.welcome ? FURSHET_PLUS.welcome : FORMATS.furshet.levels;
+  }
+  function calcTitle() {
+    var t = FORMATS[state.fmt].name;
+    if (state.fmt === 'furshet' && (state.welcome || state.wants[STATION])) t += state.wants[STATION] ? ' + велком + станция' : ' + велком';
+    return t + ' · ' + LEVELS[state.lvl];
+  }
   var LEVELS = { mini: 'Мини', midi: 'Миди', maxi: 'Макси' };
   var ADDS = [
-    { key: 'staff', name: 'Официанты', icon: 'ik-ofitsianty', note: '' },
+    { key: 'staff', name: 'Официанты', icon: 'ik-ofitsianty' },
+    { key: 'welcome', name: 'Велком-зона', icon: 'ik-welcome', only: 'furshet' },
     { group: 'animacionnye-stancii', name: 'Гастростанция', icon: 'ik-stancii' },
     { group: 'vyezdnoy-bar', name: 'Выездной бар', icon: 'ik-bar' },
     { group: 'kendi-bar', name: 'Кэнди-бар', icon: 'ik-kendi' }
@@ -35,7 +50,7 @@
   var store = { get: function (k, d) { try { var v = localStorage.getItem('ktg_' + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
                 set: function (k, v) { try { localStorage.setItem('ktg_' + k, JSON.stringify(v)); } catch (e) {} } };
 
-  var state = { fmt: 'furshet', lvl: 'mini', guests: 50, staff: true, wants: {}, picks: store.get('picks', []).filter(function (id) { return byId[id]; }),
+  var state = { fmt: 'furshet', lvl: 'mini', guests: 50, staff: true, welcome: false, wants: {}, picks: store.get('picks', []).filter(function (id) { return byId[id]; }),
                 group: DATA[0] ? DATA[0].slug : '', q: '', sort: 'pop', limit: 12, list: [] };
 
   function savePicks() { store.set('picks', state.picks); }
@@ -52,28 +67,34 @@
     $('[data-fmt-seg]').innerHTML = Object.keys(FORMATS).map(function (k) {
       return '<button type="button" data-fmt-set="' + k + '" class="' + (k === state.fmt ? 'is-on' : '') + '"><img src="' + ICON + FORMATS[k].icon + '.webp" alt="">' + FORMATS[k].name + '</button>';
     }).join('');
-    var f = FORMATS[state.fmt];
+    var f = FORMATS[state.fmt], L = curLevels();
     $('[data-tiers]').innerHTML = Object.keys(LEVELS).map(function (l) {
       return '<button type="button" class="ktg-tier' + (l === state.lvl ? ' is-on' : '') + '" data-lvl="' + l + '"><span class="ktg-tier__tick">' + TICK + '</span><b>' + LEVELS[l] + '</b>' +
-        '<div class="ktg-tier__price">' + rub(f.levels[l][0]) + ' <small>/ гость</small></div><div class="ktg-tier__out">' + f.levels[l][1] + ' на гостя</div></button>';
+        '<div class="ktg-tier__price">' + rub(L[l][0]) + ' <small>/ гость</small></div><div class="ktg-tier__out">' + L[l][1] + ' на гостя</div></button>';
     }).join('');
-    $('[data-adds]').innerHTML = ADDS.map(function (a) {
-      if (a.key) return '<div role="button" tabindex="0" class="ktg-add' + (state.staff ? ' is-on' : '') + '" data-add-staff><span class="ktg-tier__tick">' + TICK + '</span><img src="' + ICON + a.icon + '.webp" alt=""><span>' + a.name + '</span><small>1 на ' + f.waiterPer + ' гостей</small></div>';
-      var n = state.picks.filter(function (id) { return byId[id].g.slug === a.group; }).length;
-      var on = !!state.wants[a.group] || n > 0;
-      return '<div role="button" tabindex="0" class="ktg-add' + (on ? ' is-on' : '') + '" data-add-want="' + a.group + '"><span class="ktg-tier__tick">' + TICK + '</span><img src="' + ICON + a.icon + '.webp" alt=""><span>' + a.name + '</span><button type="button" class="ktg-add__link" data-add-group="' + a.group + '">' + (n ? 'выбрано: ' + n : 'выбрать в меню') + '</button></div>';
+    var GO = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg>';
+    $('[data-adds]').innerHTML = ADDS.filter(function (a) { return !a.only || a.only === state.fmt; }).map(function (a) {
+      var on, attr, extra = '';
+      if (a.key === 'staff') { on = state.staff; attr = 'data-add-staff'; }
+      else if (a.key === 'welcome') { on = state.welcome || !!state.wants[STATION]; attr = 'data-add-welcome'; }
+      else {
+        var n = state.picks.filter(function (id) { return byId[id].g.slug === a.group; }).length;
+        on = !!state.wants[a.group]; attr = 'data-add-want="' + a.group + '"';
+        extra = '<button type="button" class="ktg-add__go" data-add-group="' + a.group + '" aria-label="Выбрать в меню">' + (n ? '<i>' + n + '</i>' : '') + GO + '</button>';
+      }
+      return '<div role="button" tabindex="0" class="ktg-add' + (on ? ' is-on' : '') + '" ' + attr + '><img src="' + ICON + a.icon + '.webp" alt="">' + a.name + extra + '</div>';
     }).join('');
   }
 
   function renderSum() {
-    var f = FORMATS[state.fmt], lv = f.levels[state.lvl], g = state.guests;
+    var f = FORMATS[state.fmt], lv = curLevels()[state.lvl], g = state.guests;
     var menu = lv[0] * g, rows = [['Меню «' + LEVELS[state.lvl] + '», ' + g + ' гостей', rub(menu)]], total = menu;
     if (state.staff) {
       var w = Math.max(1, Math.ceil(g / f.waiterPer)); rows.push(['Официанты: ' + w + ' × смена 6 ч', rub(w * WAITER)]); total += w * WAITER;
       if (f.barmanPer) { var b = Math.max(1, Math.ceil(g / f.barmanPer)); rows.push(['Бармены: ' + b + ' × смена 6 ч', rub(b * BARMAN)]); total += b * BARMAN; }
     }
-    ADDS.forEach(function (a) { if (a.group && state.wants[a.group]) rows.push([a.name, 'подберём']); });
-    $('[data-sum-title]').textContent = f.name + ' · ' + LEVELS[state.lvl];
+    ADDS.forEach(function (a) { if (a.group && state.wants[a.group] && !(a.group === STATION && state.fmt === 'furshet')) rows.push([a.name, 'подберём']); });
+    $('[data-sum-title]').textContent = calcTitle();
     $('[data-sum-rows]').innerHTML = rows.map(function (r) { return '<div class="ktg-sum__row"><span>' + r[0] + '</span><b>' + r[1] + '</b></div>'; }).join('');
     $('[data-sum-total]').textContent = rub(total);
     $('[data-sum-pp]').innerHTML = '<span>≈ ' + rub(total / g) + ' на гостя</span><span>' + lv[1] + ' на гостя</span>';
@@ -93,7 +114,8 @@
   }
 
   function goCalc(fmt) {
-    if (FORMATS[fmt]) { state.fmt = fmt; }
+    if (fmt === 'welcome') { state.fmt = 'furshet'; state.welcome = true; }
+    else if (FORMATS[fmt]) { state.fmt = fmt; }
     renderFormats(); renderSum();
     $('#calc').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
@@ -205,8 +227,8 @@
   /* ---------- подборка ---------- */
   function renderDrawer() {
     var f = FORMATS[state.fmt];
-    var wants = ADDS.filter(function (x) { return x.group && state.wants[x.group]; }).map(function (x) { return x.name; });
-    var calc = '<div class="ktg-dl ktg-dl--calc"><div><b>Расчёт: ' + f.name + ' · ' + LEVELS[state.lvl] + ', ' + state.guests + ' гостей' + (wants.length ? ' + ' + wants.join(', ').toLowerCase() : '') + '</b><span>от ' + $('[data-sum-total]').textContent + '</span></div></div>';
+    var wants = ADDS.filter(function (x) { return x.group && state.wants[x.group] && !(x.group === STATION && state.fmt === 'furshet'); }).map(function (x) { return x.name; });
+    var calc = '<div class="ktg-dl ktg-dl--calc"><div><b>Расчёт: ' + calcTitle() + ', ' + state.guests + ' гостей' + (wants.length ? ' + ' + wants.join(', ').toLowerCase() : '') + '</b><span>от ' + $('[data-sum-total]').textContent + '</span></div></div>';
     $('[data-drawer-list]').innerHTML = calc + (state.picks.length ? state.picks.map(function (id) {
       var it = byId[id].it;
       return '<div class="ktg-dl" data-id="' + id + '"><img src="' + it.i + '" alt=""><div><b>' + it.n + '</b><span>' + it.p + '</span></div><button type="button" data-unpick aria-label="Убрать">' + DEL + '</button></div>';
@@ -228,7 +250,7 @@
 
   /* ---------- события ---------- */
   root.addEventListener('click', function (e) {
-    var t = e.target.closest('button,a,[data-qv-open],[data-qv-go],[data-add-staff],[data-add-want]');
+    var t = e.target.closest('button,a,[data-qv-open],[data-qv-go],[data-add-staff],[data-add-want],[data-add-welcome]');
     var dd = $('[data-dd]');
     if (!e.target.closest('[data-dd]')) dd.classList.remove('is-open');
     if (!t) return;
@@ -238,6 +260,7 @@
     if (t.matches('[data-g]')) { setGuests(state.guests + +t.dataset.g); return; }
     if (t.matches('[data-add-staff]')) { state.staff = !state.staff; renderFormats(); renderSum(); return; }
     if (t.matches('[data-add-group]')) { setGroup(t.dataset.addGroup, true); return; }
+    if (t.matches('[data-add-welcome]')) { if (state.wants[STATION]) state.wants[STATION] = false; else state.welcome = !state.welcome; renderFormats(); renderSum(); return; }
     if (t.matches('[data-add-want]')) { var w = t.dataset.addWant; state.wants[w] = !state.wants[w]; renderFormats(); renderSum(); return; }
     if (t.matches('[data-group]')) { setGroup(t.dataset.group, false); return; }
     if (t.matches('[data-more]')) { state.limit += 12; renderGrid(); return; }
