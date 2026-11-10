@@ -146,7 +146,7 @@
 
   function itemCard(it) {
     return '<div class="ktg-item" data-id="' + it.id + '"><div class="ktg-item__img" data-qv-open><img src="' + it.i + '" alt="" loading="lazy"></div>' +
-      '<div class="ktg-item__body"><div class="ktg-item__name" data-qv-open>' + it.n + '</div>' + (it.st ? '<small class="ktg-item__st">станция с поваром, от 30 порций</small>' : '') + '<div class="ktg-item__row"><span class="ktg-item__price">' + it.p + '</span>' +
+      '<div class="ktg-item__body"><div class="ktg-item__name" data-qv-open>' + it.n + '</div>' + (it.st ? '<small class="ktg-item__st">' + (it.bar ? 'бар с барменом' : 'станция с поваром') + ', от 30 порций</small>' : '') + '<div class="ktg-item__row"><span class="ktg-item__price">' + it.p + '</span>' +
       '<button type="button" class="ktg-pick' + (isPicked(it.id) ? ' is-on' : '') + '" data-pick aria-label="В подборку">' + (isPicked(it.id) ? TICK.replace(/12/g, '18') : PLUS) + '</button></div></div></div>';
   }
 
@@ -231,10 +231,10 @@
     var big = new Image(); big.onload = function () { if (m.dataset.id == id) $('[data-qv-img]').src = it.b; }; big.src = it.b;
     $('[data-qv-group]').textContent = rec.g.name;
     $('[data-qv-name]').textContent = it.n;
-    $('[data-qv-price]').textContent = it.st ? it.p + ' за станцию' : it.p;
+    $('[data-qv-price]').textContent = it.st ? it.p + (it.bar ? ' за бар' : ' за станцию') : it.p;
     var st = $('[data-qv-st]');
     st.hidden = !it.st;
-    if (it.st) { st.dataset.pp = it.st; renderStation(Math.max(STATION_MIN, state.guests)); }
+    if (it.st) { stq = { it: it, g: Math.max(STATION_MIN, state.guests), v: 0 }; renderStation(); }
     $('[data-qv-link]').href = it.u;
     var cd = (window.KTG_CARDS || {})[it.id] || {o: [], s: '', d: ''};
     var esc = function (t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;'); };
@@ -251,15 +251,19 @@
     open(m);
   }
   // Станция: повар и оборудование + порции «готовим на месте», не меньше 30 (docs/build_data.py). Клиенту — одной суммой на 30 гостей + доп. порции (Маша №313).
-  var STATION_FEE = 12000, STATION_MIN = 30, STATION_GUESTS = [30, 50, 100, 150, 200];
-  function renderStation(g) {
-    var st = $('[data-qv-st]'), pp = +st.dataset.pp;
-    var chips = STATION_GUESTS.indexOf(g) === -1 ? STATION_GUESTS.concat(g).sort(function (a, b) { return a - b; }) : STATION_GUESTS;
-    st.innerHTML = '<small>Сколько гостей</small><div class="ktg-qv__chips">' + chips.map(function (n) { return '<button type="button" data-st-g="' + n + '"' + (n === g ? ' class="is-on"' : '') + '>' + n + '</button>'; }).join('') + '</div>' +
-      '<div class="ktg-qv__strow"><span>Станция на ' + STATION_MIN + ' гостей, повар и оборудование включены</span><b>' + rub(STATION_FEE + pp * STATION_MIN) + '</b></div>' +
+  // Несколько начинок (у баров — Б/А и алкогольный) — чипы, от выбранной зависят станция и доп. порция (Маша №323, №327).
+  var STATION_FEE = 12000, STATION_MIN = 30, STATION_GUESTS = [30, 50, 100, 150, 200], stq = null;
+  function renderStation() {
+    var st = $('[data-qv-st]'), it = stq.it, g = stq.g, sv = it.sv, pp = sv ? sv[stq.v][1] : it.st;
+    var chip = function (attr, val, on, label) { return '<button type="button" ' + attr + '="' + val + '"' + (on ? ' class="is-on"' : '') + '>' + label + '</button>'; };
+    var guests = STATION_GUESTS.indexOf(g) === -1 ? STATION_GUESTS.concat(g).sort(function (a, b) { return a - b; }) : STATION_GUESTS;
+    var who = it.bar ? 'Бар на ' + STATION_MIN + ' гостей, бармен и стойка включены' : 'Станция на ' + STATION_MIN + ' гостей, повар и оборудование включены';
+    st.innerHTML = (sv ? '<small>' + (it.bar ? 'Вариант' : 'Начинка') + '</small><div class="ktg-qv__chips">' + sv.map(function (x, k) { return chip('data-st-v', k, k === stq.v, x[0]); }).join('') + '</div>' : '') +
+      '<small>Сколько гостей</small><div class="ktg-qv__chips">' + guests.map(function (n) { return chip('data-st-g', n, n === g, n); }).join('') + '</div>' +
+      '<div class="ktg-qv__strow"><span>' + who + '</span><b>' + rub(STATION_FEE + pp * STATION_MIN) + '</b></div>' +
       (g > STATION_MIN ? '<div class="ktg-qv__strow"><span>+ ' + (g - STATION_MIN) + ' доп. ' + plural(g - STATION_MIN, 'порция', 'порции', 'порций') + ' × ' + rub(pp) + '</span><b>' + rub(pp * (g - STATION_MIN)) + '</b></div>'
         : '<div class="ktg-qv__strow"><span>Доп. порция</span><b>' + rub(pp) + '</b></div>') +
-      '<div class="ktg-qv__strow is-total"><span>Итого за станцию</span><b>' + rub(STATION_FEE + pp * g) + '</b></div>';
+      '<div class="ktg-qv__strow is-total"><span>Итого' + (it.bar ? ' за бар' : ' за станцию') + '</span><b>' + rub(STATION_FEE + pp * g) + '</b></div>';
   }
   function syncQvPick() {
     var m = $('[data-qv]'), id = +m.dataset.id, b = $('[data-qv-pick]');
@@ -325,7 +329,8 @@
     if (t.matches('[data-set-more]')) { var sc = t.closest('.ktg-set'); sc.classList.toggle('is-full'); t.textContent = sc.classList.contains('is-full') ? 'Свернуть' : 'Ещё ' + (SETS[+sc.dataset.set].rows.length - 3); return; }
     if (t.matches('[data-pick]')) { togglePick(+t.closest('[data-id]').dataset.id); return; }
     if (t.matches('[data-qv-open]')) { openQv(+t.closest('[data-id]').dataset.id); return; }
-    if (t.matches('[data-st-g]')) { renderStation(+t.dataset.stG); return; }
+    if (t.matches('[data-st-g]')) { stq.g = +t.dataset.stG; renderStation(); return; }
+    if (t.matches('[data-st-v]')) { stq.v = +t.dataset.stV; renderStation(); return; }
     if (t.matches('[data-qv-photo]')) { $('[data-qv-img]').src = t.dataset.qvPhoto; $$('[data-qv-photo]').forEach(function (x) { x.classList.toggle('is-on', x === t); }); return; }
     if (t.matches('[data-qv-pick]')) { togglePick(+$('[data-qv]').dataset.id); return; }
     if (t.matches('[data-qv-prev]') && qvIndex > 0) { openQv(state.list[qvIndex - 1].id); return; }
