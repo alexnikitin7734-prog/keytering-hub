@@ -125,6 +125,7 @@
     $('[data-groups]').innerHTML = DATA.map(function (g) {
       return '<button type="button" class="ktg-group' + (g.slug === state.group && !state.q ? ' is-on' : '') + '" data-group="' + g.slug + '"><img src="' + ICON + g.icon + '.webp" alt="" loading="lazy"><b>' + g.name + '</b><small>' + g.items.length + ' ' + plural(g.items.length, 'позиция', 'позиции', 'позиций') + '</small></button>';
     }).join('');
+    document.dispatchEvent(new CustomEvent('ktg:group', { detail: state.q ? '' : state.group }));
   }
 
   function currentList() {
@@ -145,14 +146,39 @@
 
   function itemCard(it) {
     return '<div class="ktg-item" data-id="' + it.id + '"><div class="ktg-item__img" data-qv-open><img src="' + it.i + '" alt="" loading="lazy"></div>' +
-      '<div class="ktg-item__body"><div class="ktg-item__name" data-qv-open>' + it.n + '</div><div class="ktg-item__row"><span class="ktg-item__price">' + it.p + '</span>' +
+      '<div class="ktg-item__body"><div class="ktg-item__name" data-qv-open>' + it.n + '</div>' + (it.st ? '<small class="ktg-item__st">станция с поваром, от 30 порций</small>' : '') + '<div class="ktg-item__row"><span class="ktg-item__price">' + it.p + '</span>' +
       '<button type="button" class="ktg-pick' + (isPicked(it.id) ? ' is-on' : '') + '" data-pick aria-label="В подборку">' + (isPicked(it.id) ? TICK.replace(/12/g, '18') : PLUS) + '</button></div></div></div>';
+  }
+
+  // Комплекты выездного фуршета — первым рядом раздела «Фуршетное меню». Мини/Миди/Макси — цены калькулятора, состав — таблица /gotovyj-furshet/.
+  var KITS = [
+    { key: 'box', name: 'Фуршетные боксы', p: 900, out: '250 г', img: 'img/menu/73772.webp',
+      li: ['Канапе, брускетты и рулетики в боксах', 'Привезём к нужному времени', 'Без обслуживания и раздачи', 'Без напитков'] },
+    { key: 'mini', name: 'Мини', img: 'img/menu/99631.webp',
+      li: ['Канапе 2 вида, брускетты 3, рулетики 2', 'Мини-салаты и горячее на шпажках', 'Гарнир, соусы, хлебная корзина'] },
+    { key: 'midi', name: 'Миди', hit: 1, img: 'img/menu/105876.webp',
+      li: ['Канапе 3 вида, брускетты 2, рулетики 2', 'Мини-салаты 3 вида, горячее 2 вида', 'Мясное плато и десерты', 'Чай и морс'] },
+    { key: 'maxi', name: 'Макси', img: 'img/menu/73249.webp',
+      li: ['Канапе 5 видов, брускетты 5, рулетики 3', 'Мини-салаты 3 вида, горячее 3 вида', 'Мясное и сырное плато, десерты', 'Кофе, чай, морс, лимонад'] }
+  ];
+  var KIT_GROUP = 'dostavka-fursheta-v-ofis';
+  function kitsBlock() {
+    return '<div class="ktg-kits"><div class="ktg-kits__head"><h3>Выездной фуршет комплектом</h3><p>Цена на гостя — всё приготовим и привезём. Дальше — отдельные позиции, если хочется собрать самим.</p></div><div class="ktg-kits__row">' +
+      KITS.map(function (k) {
+        var lv = FORMATS.furshet.levels[k.key], price = k.p || lv[0], out = k.out || lv[1];
+        return '<div class="ktg-kit' + (k.hit ? ' is-hit' : '') + '">' + (k.hit ? '<span class="ktg-kit__hit">Чаще всего выбирают</span>' : '') +
+          '<div class="ktg-kit__img"><img src="' + k.img + '" alt="" loading="lazy"></div><div class="ktg-kit__body"><b>' + k.name + '</b>' +
+          '<div class="ktg-kit__price">от ' + rub(price) + '</div><small>на гостя</small><span class="ktg-kit__out">' + out + ' на персону</span>' +
+          '<ul>' + k.li.map(function (x) { return '<li>' + TICK + x + '</li>'; }).join('') + '</ul>' +
+          '<button type="button" class="ktg-btn ktg-btn--wide ' + (k.hit ? 'ktg-btn--primary' : 'ktg-btn--ghost') + '" data-kit="' + k.key + '">' + (k.p ? 'Заказать боксы' : 'Посчитать') + '</button></div></div>';
+      }).join('') + '</div></div>';
   }
 
   function renderGrid() {
     state.list = currentList();
     var shown = state.list.slice(0, state.limit);
-    $('[data-grid]').innerHTML = shown.length ? shown.map(itemCard).join('') : '<div class="ktg-empty" style="grid-column:1/-1">Ничего не нашли. Напишите менеджеру — приготовим и то, чего нет в меню.</div>';
+    var kits = !state.q && state.group === KIT_GROUP ? kitsBlock() : '';
+    $('[data-grid]').innerHTML = kits + (shown.length ? shown.map(itemCard).join('') : '<div class="ktg-empty" style="grid-column:1/-1">Ничего не нашли. Напишите менеджеру — приготовим и то, чего нет в меню.</div>');
     var grp = DATA.filter(function (g) { return g.slug === state.group; })[0];
     $('[data-count]').textContent = state.q ? 'Найдено: ' + state.list.length : (grp ? grp.name + ' — ' + grp.sub.toLowerCase() : '');
     $('[data-more]').hidden = state.list.length <= state.limit;
@@ -165,7 +191,7 @@
   function setGroup(slug, scroll) {
     state.group = slug; state.q = ''; state.limit = 12; $('[data-search]').value = '';
     renderGroups(); renderGrid();
-    if (scroll) $('#menu').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (scroll) $('[data-count]').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
 
@@ -181,8 +207,8 @@
       return '<div class="ktg-set" data-set="' + k + '"><div class="ktg-set__pics">' + s.rows.slice(0, 3).map(function (r) { return '<img src="' + r.i + '" alt="" loading="lazy">'; }).join('') + '</div>' +
         '<div class="ktg-set__body"><div class="ktg-set__top"><h3>' + s.name + '</h3><span>на ' + s.guests + ' гостей</span></div><p class="ktg-set__sub">' + s.sub + '</p>' +
         '<div class="ktg-set__meta"><span>' + kg(s.w) + '</span><span>≈ ' + Math.round(s.w / s.guests) + ' г на гостя</span><span>' + s.pcs + ' шт</span></div>' +
-        '<div class="ktg-set__list">' + s.rows.map(function (r, i) { return '<div class="ktg-set__row' + (i > 3 ? ' is-extra' : '') + '"><span>' + setName(r.n) + (r.q > 1 ? ' × ' + r.q : '') + '</span><small>' + r.pcs + ' шт · ' + r.w + ' г</small></div>'; }).join('') + '</div>' +
-        (s.rows.length > 4 ? '<button type="button" class="ktg-set__more" data-set-more>Ещё ' + (s.rows.length - 4) + '</button>' : '') +
+        '<div class="ktg-set__list">' + s.rows.map(function (r, i) { return '<div class="ktg-set__row' + (i > 2 ? ' is-extra' : '') + '"><span>' + setName(r.n) + (r.q > 1 ? ' × ' + r.q : '') + '</span><small>' + r.pcs + ' шт · ' + r.w + ' г</small></div>'; }).join('') + '</div>' +
+        (s.rows.length > 3 ? '<button type="button" class="ktg-set__more" data-set-more>Ещё ' + (s.rows.length - 3) + '</button>' : '') +
         '<div class="ktg-set__price"><b>' + rub(s.p) + '</b><span>≈ ' + rub(s.p / s.guests) + ' на гостя</span></div>' +
         '<button type="button" class="ktg-btn ktg-btn--wide ' + (all ? 'ktg-btn--soft' : 'ktg-btn--primary') + '" data-set-pick>' + (all ? 'В подборке — убрать' : 'Добавить в подборку') + '</button></div></div>';
     }).join('');
@@ -205,18 +231,34 @@
     var big = new Image(); big.onload = function () { if (m.dataset.id == id) $('[data-qv-img]').src = it.b; }; big.src = it.b;
     $('[data-qv-group]').textContent = rec.g.name;
     $('[data-qv-name]').textContent = it.n;
-    $('[data-qv-price]').textContent = it.p;
+    $('[data-qv-price]').textContent = it.st ? it.p + ' за станцию' : it.p;
+    var st = $('[data-qv-st]');
+    st.hidden = !it.st;
+    if (it.st) { st.dataset.pp = it.st; renderStation(Math.max(STATION_MIN, state.guests)); }
     $('[data-qv-link]').href = it.u;
     var cd = (window.KTG_CARDS || {})[it.id] || {o: [], s: '', d: ''};
     var esc = function (t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;'); };
     $('[data-qv-opts]').innerHTML = cd.o.map(function (o) { return '<div class="ktg-qv__opt"><b>' + esc(o.n) + '</b><span>' + esc(o.p) + '</span>' + (o.d ? '<small>' + esc(o.d) + '</small>' : '') + '</div>'; }).join('');
     $('[data-qv-desc]').textContent = cd.s ? 'Состав: ' + cd.s : cd.d;
-    var sim = rec.g.items.filter(function (x) { return x.id !== it.id; }).slice(0, 4);
-    $('[data-qv-sim]').innerHTML = sim.map(function (x) { return '<img src="' + x.i + '" alt="' + x.n.replace(/"/g, '') + '" title="' + x.n.replace(/"/g, '') + '" data-qv-go="' + x.id + '">'; }).join('');
+    // Фото из галереи карточки на проде (docs/fetch_cards.py); первое — наше основное.
+    var SITE = 'https://arenda-attrakcionov.ru', gal = (cd.g || []).map(function (u) { return { i: SITE + u.replace('/images/upload/', '/images/generate/160_160_'), b: SITE + u }; });
+    gal = [{ i: it.i, b: it.b }].concat(gal).slice(0, 5);
+    $('.ktg-qv__sim', m).hidden = gal.length < 2;
+    $('[data-qv-sim]').innerHTML = gal.map(function (x, k) { return '<img src="' + x.i + '" alt="" data-qv-photo="' + x.b + '"' + (k ? '' : ' class="is-on"') + '>'; }).join('');
     $('[data-qv-prev]').disabled = qvIndex <= 0;
     $('[data-qv-next]').disabled = qvIndex === -1 || qvIndex >= state.list.length - 1;
     syncQvPick();
     open(m);
+  }
+  // Станция: повар и оборудование + порции «готовим на месте», не меньше 30 (docs/build_data.py).
+  var STATION_FEE = 12000, STATION_MIN = 30, STATION_GUESTS = [30, 50, 100, 150, 200];
+  function renderStation(g) {
+    var st = $('[data-qv-st]'), pp = +st.dataset.pp;
+    var chips = STATION_GUESTS.indexOf(g) === -1 ? STATION_GUESTS.concat(g).sort(function (a, b) { return a - b; }) : STATION_GUESTS;
+    st.innerHTML = '<small>Сколько гостей</small><div class="ktg-qv__chips">' + chips.map(function (n) { return '<button type="button" data-st-g="' + n + '"' + (n === g ? ' class="is-on"' : '') + '>' + n + '</button>'; }).join('') + '</div>' +
+      '<div class="ktg-qv__strow"><span>Повар и оборудование</span><b>' + rub(STATION_FEE) + '</b></div>' +
+      '<div class="ktg-qv__strow"><span>' + g + ' ' + plural(g, 'порция', 'порции', 'порций') + ' × ' + rub(pp) + ', готовим на месте</span><b>' + rub(pp * g) + '</b></div>' +
+      '<div class="ktg-qv__strow is-total"><span>Итого за станцию</span><b>' + rub(STATION_FEE + pp * g) + '</b></div>';
   }
   function syncQvPick() {
     var m = $('[data-qv]'), id = +m.dataset.id, b = $('[data-qv-pick]');
@@ -228,6 +270,10 @@
   function renderDrawer() {
     var f = FORMATS[state.fmt];
     var wants = ADDS.filter(function (x) { return x.group && state.wants[x.group] && !(x.group === STATION && state.fmt === 'furshet'); }).map(function (x) { return x.name; });
+    if (state.box) {
+      $('[data-drawer-list]').innerHTML = '<div class="ktg-dl ktg-dl--calc"><div><b>Фуршетные боксы, ' + state.guests + ' гостей · 250 г на гостя</b><span>от ' + rub(900 * state.guests) + ' · без обслуживания и напитков</span></div></div>';
+      return;
+    }
     var calc = '<div class="ktg-dl ktg-dl--calc"><div><b>Расчёт: ' + calcTitle() + ', ' + state.guests + ' гостей' + (wants.length ? ' + ' + wants.join(', ').toLowerCase() : '') + '</b><span>от ' + $('[data-sum-total]').textContent + '</span></div></div>';
     $('[data-drawer-list]').innerHTML = calc + (state.picks.length ? state.picks.map(function (id) {
       var it = byId[id].it;
@@ -250,7 +296,7 @@
 
   /* ---------- события ---------- */
   root.addEventListener('click', function (e) {
-    var t = e.target.closest('button,a,[data-qv-open],[data-qv-go],[data-add-staff],[data-add-want],[data-add-welcome]');
+    var t = e.target.closest('button,a,[data-qv-open],[data-qv-photo],[data-add-staff],[data-add-want],[data-add-welcome]');
     var dd = $('[data-dd]');
     if (!e.target.closest('[data-dd]')) dd.classList.remove('is-open');
     if (!t) return;
@@ -262,23 +308,29 @@
     if (t.matches('[data-add-group]')) { setGroup(t.dataset.addGroup, true); return; }
     if (t.matches('[data-add-welcome]')) { if (state.wants[STATION]) state.wants[STATION] = false; else state.welcome = !state.welcome; renderFormats(); renderSum(); return; }
     if (t.matches('[data-add-want]')) { var w = t.dataset.addWant; state.wants[w] = !state.wants[w]; renderFormats(); renderSum(); return; }
-    if (t.matches('[data-group]')) { setGroup(t.dataset.group, false); return; }
+    if (t.matches('[data-group]')) { setGroup(t.dataset.group, true); return; }
     if (t.matches('[data-more]')) { state.limit += 12; renderGrid(); return; }
     if (t.matches('[data-dd-btn]')) { dd.classList.toggle('is-open'); return; }
     if (t.matches('[data-sort]')) {
       state.sort = t.dataset.sort; $$('[data-sort]').forEach(function (b) { b.classList.toggle('is-on', b === t); });
       $('[data-dd-label]').textContent = t.textContent; dd.classList.remove('is-open'); renderGrid(); return;
     }
+    if (t.matches('[data-kit]')) {
+      var kk = t.dataset.kit;
+      if (kk === 'box') { state.box = true; renderDrawer(); open($('[data-drawer]')); return; }
+      state.lvl = kk; state.welcome = false; goCalc('furshet'); return;
+    }
     if (t.matches('[data-set-pick]')) { toggleSet(+t.closest('[data-set]').dataset.set); return; }
-    if (t.matches('[data-set-more]')) { var sc = t.closest('.ktg-set'); sc.classList.toggle('is-full'); t.textContent = sc.classList.contains('is-full') ? 'Свернуть' : 'Ещё ' + (SETS[+sc.dataset.set].rows.length - 4); return; }
+    if (t.matches('[data-set-more]')) { var sc = t.closest('.ktg-set'); sc.classList.toggle('is-full'); t.textContent = sc.classList.contains('is-full') ? 'Свернуть' : 'Ещё ' + (SETS[+sc.dataset.set].rows.length - 3); return; }
     if (t.matches('[data-pick]')) { togglePick(+t.closest('[data-id]').dataset.id); return; }
     if (t.matches('[data-qv-open]')) { openQv(+t.closest('[data-id]').dataset.id); return; }
-    if (t.matches('[data-qv-go]')) { openQv(+t.dataset.qvGo); return; }
+    if (t.matches('[data-st-g]')) { renderStation(+t.dataset.stG); return; }
+    if (t.matches('[data-qv-photo]')) { $('[data-qv-img]').src = t.dataset.qvPhoto; $$('[data-qv-photo]').forEach(function (x) { x.classList.toggle('is-on', x === t); }); return; }
     if (t.matches('[data-qv-pick]')) { togglePick(+$('[data-qv]').dataset.id); return; }
     if (t.matches('[data-qv-prev]') && qvIndex > 0) { openQv(state.list[qvIndex - 1].id); return; }
     if (t.matches('[data-qv-next]') && qvIndex < state.list.length - 1) { openQv(state.list[qvIndex + 1].id); return; }
     if (t.matches('[data-unpick]')) { togglePick(+t.closest('[data-id]').dataset.id); return; }
-    if (t.matches('[data-open-drawer]')) { renderDrawer(); open($('[data-drawer]')); return; }
+    if (t.matches('[data-open-drawer]')) { state.box = false; renderDrawer(); open($('[data-drawer]')); return; }
     if (t.matches('[data-close]')) { closeAll(); return; }
   });
   overlay.addEventListener('click', closeAll);
@@ -289,6 +341,7 @@
     if (e.key === 'ArrowRight' && qvIndex < state.list.length - 1) openQv(state.list[qvIndex + 1].id);
   });
 
+  document.addEventListener('ktg:go', function (e) { closeAll(); setGroup(e.detail, true); });
   $('[data-guests]').addEventListener('change', function () { setGuests(this.value); });
   $('[data-guests-range]').addEventListener('input', function () { setGuests(this.value); });
   var qt;
