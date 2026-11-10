@@ -285,6 +285,7 @@
 .ktg-qv__nav button{flex:1}
 .ktg-qv__st{background:var(--ktg-sunken);border-radius:var(--ktg-r-md);padding:14px 16px;display:flex;flex-direction:column;gap:8px}
 .ktg-qv__st[hidden],.ktg-qv__sim[hidden]{display:none}
+.ktg-qv__desc:empty{display:none}
 .ktg-qv__st>small{font-size:13px;color:var(--ktg-text-2)}
 .ktg-qv__chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px}
 .ktg-qv__chips button{min-width:48px;height:34px;padding:0 12px;border-radius:var(--ktg-r-pill);background:var(--ktg-card);border:1px solid var(--ktg-border);font-size:14px;font-weight:500;transition:border-color var(--ktg-t),background-color var(--ktg-t)}

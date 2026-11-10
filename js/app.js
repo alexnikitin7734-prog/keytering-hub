@@ -249,7 +249,7 @@
     var cd = (window.KTG_CARDS || {})[it.id] || {o: [], s: '', d: ''};
     var esc = function (t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;'); };
     $('[data-qv-opts]').innerHTML = it.st ? '' : cd.o.map(function (o) { return '<div class="ktg-qv__opt"><b>' + esc(o.n) + '</b><span>' + esc(o.p) + '</span>' + (o.d ? '<small>' + esc(o.d) + '</small>' : '') + '</div>'; }).join('');
-    $('[data-qv-desc]').textContent = cd.s ? 'Состав: ' + cd.s : cd.d;
+    $('[data-qv-desc]').textContent = cd.s ? 'Состав: ' + cd.s : '';  // описания с сайта часто обрывками — без них (Маша №337)
     // Фото из галереи карточки на проде (docs/fetch_cards.py); первое — наше основное.
     var SITE = 'https://arenda-attrakcionov.ru', gal = (cd.g || []).map(function (u) { return { i: SITE + u, b: SITE + u }; });
     gal = [{ i: it.i, b: it.b }].concat(gal).slice(0, 5);
