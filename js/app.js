@@ -181,6 +181,10 @@
     $('[data-qv-name]').textContent = it.n;
     $('[data-qv-price]').textContent = it.p;
     $('[data-qv-link]').href = it.u;
+    var cd = (window.KTG_CARDS || {})[it.id] || {o: [], s: '', d: ''};
+    var esc = function (t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;'); };
+    $('[data-qv-opts]').innerHTML = cd.o.map(function (o) { return '<div class="ktg-qv__opt"><b>' + esc(o.n) + '</b><span>' + esc(o.p) + '</span>' + (o.d ? '<small>' + esc(o.d) + '</small>' : '') + '</div>'; }).join('');
+    $('[data-qv-desc]').textContent = cd.s ? 'Состав: ' + cd.s : cd.d;
     var sim = rec.g.items.filter(function (x) { return x.id !== it.id; }).slice(0, 4);
     $('[data-qv-sim]').innerHTML = sim.map(function (x) { return '<img src="' + x.i + '" alt="' + x.n.replace(/"/g, '') + '" title="' + x.n.replace(/"/g, '') + '" data-qv-go="' + x.id + '">'; }).join('');
     $('[data-qv-prev]').disabled = qvIndex <= 0;
