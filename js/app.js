@@ -105,8 +105,8 @@
   function plural(n, a, b, c) { var m = n % 10, h = n % 100; return m === 1 && h !== 11 ? a : m >= 2 && m <= 4 && (h < 12 || h > 14) ? b : c; }
 
   function setGuests(v) {
-    v = parseInt(String(v).replace(/\D/g, ''), 10) || 10;
-    state.guests = Math.min(1000, Math.max(10, v));
+    v = parseInt(String(v).replace(/\D/g, ''), 10) || 30;
+    state.guests = Math.min(1000, Math.max(30, v));  // от 30 гостей — минимальный комплект (Маша №339)
     $('[data-guests]').value = state.guests;
     var r = $('[data-guests-range]'); r.value = Math.min(500, state.guests);
     r.style.setProperty('--p', ((r.value - r.min) / (r.max - r.min) * 100) + '%');
