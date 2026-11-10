@@ -149,13 +149,16 @@
   /* ---------- наборы ---------- */
   var SETS = window.KTG_SETS || [];
   var kg = function (g) { return (g / 1000).toFixed(1).replace('.', ',') + ' кг'; };
+  var SET_NAMES = [[/^Сет брускетт/, 'Брускетты'], [/^Сет капапе|^Сет канапе/, 'Канапе'], [/^Сет блинных рулетиков/, 'Блинные рулетики'], [/^Сет тарталеток/, 'Тарталетки'],
+    [/^Сет моти/, 'Моти'], [/^Сет десертов мусс/, 'Десерты-муссы'], [/^Сет пирожных Макарунс/, 'Макарунс'], [/^Сет ролл/, 'Роллы'], [/^Сет рулетики/, 'Рулетики'], [/^Сет чизкейков/, 'Чизкейки']];
+  function setName(n) { for (var i = 0; i < SET_NAMES.length; i++) if (SET_NAMES[i][0].test(n)) return n.replace(SET_NAMES[i][0], SET_NAMES[i][1]); return n; }
   function renderSets() {
     $('[data-sets]').innerHTML = SETS.map(function (s, k) {
       var all = s.rows.every(function (r) { return isPicked(r.id); });
       return '<div class="ktg-set" data-set="' + k + '"><div class="ktg-set__pics">' + s.rows.slice(0, 3).map(function (r) { return '<img src="' + r.i + '" alt="" loading="lazy">'; }).join('') + '</div>' +
         '<div class="ktg-set__body"><div class="ktg-set__top"><h3>' + s.name + '</h3><span>на ' + s.guests + ' гостей</span></div><p class="ktg-set__sub">' + s.sub + '</p>' +
         '<div class="ktg-set__meta"><span>' + kg(s.w) + '</span><span>≈ ' + Math.round(s.w / s.guests) + ' г на гостя</span><span>' + s.pcs + ' шт</span></div>' +
-        '<div class="ktg-set__list">' + s.rows.map(function (r, i) { return '<div class="ktg-set__row' + (i > 3 ? ' is-extra' : '') + '"><span>' + r.n.replace(/^Сет (\S)/, function (m, c) { return c.toUpperCase(); }) + (r.q > 1 ? ' × ' + r.q : '') + '</span><small>' + r.pcs + ' шт · ' + r.w + ' г</small></div>'; }).join('') + '</div>' +
+        '<div class="ktg-set__list">' + s.rows.map(function (r, i) { return '<div class="ktg-set__row' + (i > 3 ? ' is-extra' : '') + '"><span>' + setName(r.n) + (r.q > 1 ? ' × ' + r.q : '') + '</span><small>' + r.pcs + ' шт · ' + r.w + ' г</small></div>'; }).join('') + '</div>' +
         (s.rows.length > 4 ? '<button type="button" class="ktg-set__more" data-set-more>Ещё ' + (s.rows.length - 4) + '</button>' : '') +
         '<div class="ktg-set__price"><b>' + rub(s.p) + '</b><span>≈ ' + rub(s.p / s.guests) + ' на гостя</span></div>' +
         '<button type="button" class="ktg-btn ktg-btn--wide ' + (all ? 'ktg-btn--soft' : 'ktg-btn--primary') + '" data-set-pick>' + (all ? 'В подборке — убрать' : 'Добавить в подборку') + '</button></div></div>';
