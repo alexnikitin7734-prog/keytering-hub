@@ -35,7 +35,7 @@
   var store = { get: function (k, d) { try { var v = localStorage.getItem('ktg_' + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
                 set: function (k, v) { try { localStorage.setItem('ktg_' + k, JSON.stringify(v)); } catch (e) {} } };
 
-  var state = { fmt: 'furshet', lvl: 'mini', guests: 50, staff: true, picks: store.get('picks', []).filter(function (id) { return byId[id]; }),
+  var state = { fmt: 'furshet', lvl: 'mini', guests: 50, staff: true, wants: {}, picks: store.get('picks', []).filter(function (id) { return byId[id]; }),
                 group: DATA[0] ? DATA[0].slug : '', q: '', sort: 'pop', limit: 12, list: [] };
 
   function savePicks() { store.set('picks', state.picks); }
@@ -58,10 +58,10 @@
         '<div class="ktg-tier__price">' + rub(f.levels[l][0]) + ' <small>/ гость</small></div><div class="ktg-tier__out">' + f.levels[l][1] + ' на гостя</div></button>';
     }).join('');
     $('[data-adds]').innerHTML = ADDS.map(function (a) {
-      var on = a.key === 'staff' ? state.staff : state.picks.some(function (id) { return byId[id].g.slug === a.group; });
-      var note = a.key === 'staff' ? '1 на ' + f.waiterPer + ' гостей' : 'выбрать в меню';
-      if (a.group) { var n = state.picks.filter(function (id) { return byId[id].g.slug === a.group; }).length; if (n) note = 'выбрано: ' + n; }
-      return '<button type="button" class="ktg-add' + (on ? ' is-on' : '') + '" ' + (a.key ? 'data-add-staff' : 'data-add-group="' + a.group + '"') + '><span class="ktg-tier__tick">' + TICK + '</span><img src="' + ICON + a.icon + '.webp" alt=""><span>' + a.name + '</span><small>' + note + '</small></button>';
+      if (a.key) return '<div role="button" tabindex="0" class="ktg-add' + (state.staff ? ' is-on' : '') + '" data-add-staff><span class="ktg-tier__tick">' + TICK + '</span><img src="' + ICON + a.icon + '.webp" alt=""><span>' + a.name + '</span><small>1 на ' + f.waiterPer + ' гостей</small></div>';
+      var n = state.picks.filter(function (id) { return byId[id].g.slug === a.group; }).length;
+      var on = !!state.wants[a.group] || n > 0;
+      return '<div role="button" tabindex="0" class="ktg-add' + (on ? ' is-on' : '') + '" data-add-want="' + a.group + '"><span class="ktg-tier__tick">' + TICK + '</span><img src="' + ICON + a.icon + '.webp" alt=""><span>' + a.name + '</span><button type="button" class="ktg-add__link" data-add-group="' + a.group + '">' + (n ? 'выбрано: ' + n : 'выбрать в меню') + '</button></div>';
     }).join('');
   }
 
@@ -72,6 +72,7 @@
       var w = Math.max(1, Math.ceil(g / f.waiterPer)); rows.push(['Официанты: ' + w + ' × смена 6 ч', rub(w * WAITER)]); total += w * WAITER;
       if (f.barmanPer) { var b = Math.max(1, Math.ceil(g / f.barmanPer)); rows.push(['Бармены: ' + b + ' × смена 6 ч', rub(b * BARMAN)]); total += b * BARMAN; }
     }
+    ADDS.forEach(function (a) { if (a.group && state.wants[a.group]) rows.push([a.name, 'подберём']); });
     $('[data-sum-title]').textContent = f.name + ' · ' + LEVELS[state.lvl];
     $('[data-sum-rows]').innerHTML = rows.map(function (r) { return '<div class="ktg-sum__row"><span>' + r[0] + '</span><b>' + r[1] + '</b></div>'; }).join('');
     $('[data-sum-total]').textContent = rub(total);
@@ -204,7 +205,8 @@
   /* ---------- подборка ---------- */
   function renderDrawer() {
     var f = FORMATS[state.fmt];
-    var calc = '<div class="ktg-dl ktg-dl--calc"><div><b>Расчёт: ' + f.name + ' · ' + LEVELS[state.lvl] + ', ' + state.guests + ' гостей</b><span>от ' + $('[data-sum-total]').textContent + '</span></div></div>';
+    var wants = ADDS.filter(function (x) { return x.group && state.wants[x.group]; }).map(function (x) { return x.name; });
+    var calc = '<div class="ktg-dl ktg-dl--calc"><div><b>Расчёт: ' + f.name + ' · ' + LEVELS[state.lvl] + ', ' + state.guests + ' гостей' + (wants.length ? ' + ' + wants.join(', ').toLowerCase() : '') + '</b><span>от ' + $('[data-sum-total]').textContent + '</span></div></div>';
     $('[data-drawer-list]').innerHTML = calc + (state.picks.length ? state.picks.map(function (id) {
       var it = byId[id].it;
       return '<div class="ktg-dl" data-id="' + id + '"><img src="' + it.i + '" alt=""><div><b>' + it.n + '</b><span>' + it.p + '</span></div><button type="button" data-unpick aria-label="Убрать">' + DEL + '</button></div>';
@@ -226,7 +228,7 @@
 
   /* ---------- события ---------- */
   root.addEventListener('click', function (e) {
-    var t = e.target.closest('button,a,[data-qv-open],[data-qv-go]');
+    var t = e.target.closest('button,a,[data-qv-open],[data-qv-go],[data-add-staff],[data-add-want]');
     var dd = $('[data-dd]');
     if (!e.target.closest('[data-dd]')) dd.classList.remove('is-open');
     if (!t) return;
@@ -236,6 +238,7 @@
     if (t.matches('[data-g]')) { setGuests(state.guests + +t.dataset.g); return; }
     if (t.matches('[data-add-staff]')) { state.staff = !state.staff; renderFormats(); renderSum(); return; }
     if (t.matches('[data-add-group]')) { setGroup(t.dataset.addGroup, true); return; }
+    if (t.matches('[data-add-want]')) { var w = t.dataset.addWant; state.wants[w] = !state.wants[w]; renderFormats(); renderSum(); return; }
     if (t.matches('[data-group]')) { setGroup(t.dataset.group, false); return; }
     if (t.matches('[data-more]')) { state.limit += 12; renderGrid(); return; }
     if (t.matches('[data-dd-btn]')) { dd.classList.toggle('is-open'); return; }

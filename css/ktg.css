@@ -109,6 +109,9 @@
 .ktg-add img{width:84px;height:84px;border-radius:var(--ktg-r-sm);object-fit:contain;background:var(--ktg-icon-bg)}
 .ktg-add span{font-size:14px;line-height:18px;font-weight:500;color:var(--ktg-ink)}
 .ktg-add small{font-size:12px;line-height:16px;color:var(--ktg-text-2)}
+.ktg-add{cursor:pointer}
+.ktg-add__link{font-size:12px;line-height:16px;color:var(--ktg-accent);text-decoration:underline;text-underline-offset:2px}
+.ktg-add__link:hover{color:var(--ktg-accent-hover)}
 .ktg-add:hover{border-color:var(--ktg-accent-soft)}
 .ktg-add.is-on{border-color:var(--ktg-accent);box-shadow:0 0 0 2px rgba(254,93,38,.16)}
 .ktg-add .ktg-tier__tick{top:8px;right:8px}
