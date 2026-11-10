@@ -250,14 +250,15 @@
     syncQvPick();
     open(m);
   }
-  // Станция: повар и оборудование + порции «готовим на месте», не меньше 30 (docs/build_data.py).
+  // Станция: повар и оборудование + порции «готовим на месте», не меньше 30 (docs/build_data.py). Клиенту — одной суммой на 30 гостей + доп. порции (Маша №313).
   var STATION_FEE = 12000, STATION_MIN = 30, STATION_GUESTS = [30, 50, 100, 150, 200];
   function renderStation(g) {
     var st = $('[data-qv-st]'), pp = +st.dataset.pp;
     var chips = STATION_GUESTS.indexOf(g) === -1 ? STATION_GUESTS.concat(g).sort(function (a, b) { return a - b; }) : STATION_GUESTS;
     st.innerHTML = '<small>Сколько гостей</small><div class="ktg-qv__chips">' + chips.map(function (n) { return '<button type="button" data-st-g="' + n + '"' + (n === g ? ' class="is-on"' : '') + '>' + n + '</button>'; }).join('') + '</div>' +
-      '<div class="ktg-qv__strow"><span>Повар и оборудование</span><b>' + rub(STATION_FEE) + '</b></div>' +
-      '<div class="ktg-qv__strow"><span>' + g + ' ' + plural(g, 'порция', 'порции', 'порций') + ' × ' + rub(pp) + ', готовим на месте</span><b>' + rub(pp * g) + '</b></div>' +
+      '<div class="ktg-qv__strow"><span>Станция на ' + STATION_MIN + ' гостей, повар и оборудование включены</span><b>' + rub(STATION_FEE + pp * STATION_MIN) + '</b></div>' +
+      (g > STATION_MIN ? '<div class="ktg-qv__strow"><span>+ ' + (g - STATION_MIN) + ' доп. ' + plural(g - STATION_MIN, 'порция', 'порции', 'порций') + ' × ' + rub(pp) + '</span><b>' + rub(pp * (g - STATION_MIN)) + '</b></div>'
+        : '<div class="ktg-qv__strow"><span>Доп. порция</span><b>' + rub(pp) + '</b></div>') +
       '<div class="ktg-qv__strow is-total"><span>Итого за станцию</span><b>' + rub(STATION_FEE + pp * g) + '</b></div>';
   }
   function syncQvPick() {
