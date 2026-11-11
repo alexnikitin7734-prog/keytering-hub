@@ -244,7 +244,7 @@
     $('[data-qv-price]').textContent = it.st ? it.p + (it.bar ? ' за бар' : ' за станцию') : it.p;
     var st = $('[data-qv-st]');
     st.hidden = !it.st;
-    if (it.st) { stq = { it: it, g: Math.max(STATION_MIN, state.guests), v: 0 }; renderStation(); }
+    if (it.st) { stq = { it: it, g: STATION_MIN, v: 0 }; renderStation(); }
     $('[data-qv-link]').href = it.u;
     var cd = (window.KTG_CARDS || {})[it.id] || {o: [], s: '', d: ''};
     var esc = function (t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;'); };
