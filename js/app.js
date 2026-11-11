@@ -244,6 +244,7 @@
     $('[data-qv-price]').textContent = it.st ? it.p + (it.bar ? ' за бар' : ' за станцию') : it.p;
     var st = $('[data-qv-st]');
     st.hidden = !it.st;
+    $('[data-qv-inc]').hidden = true;
     if (it.st) { stq = { it: it, g: STATION_MIN, v: 0 }; renderStation(); }
     $('[data-qv-link]').href = it.u;
     var cd = (window.KTG_CARDS || {})[it.id] || {o: [], s: '', d: ''};
@@ -286,7 +287,10 @@
         : '<div class="ktg-qv__strow"><span>Доп. порция</span><b>' + rub(pp) + '</b></div>') +
       '<div class="ktg-qv__strow is-total"><span>Итого' + (it.bar ? ' за бар' : ' за станцию') + '</span><b>' + rub(fee + pp * g) + '</b></div>' +
       (g >= STATION_STAFF ? '<p class="ktg-qv__stnote">От ' + STATION_STAFF + ' гостей на станцию выходит больше персонала — посчитаем его в смете отдельно.</p>' : '') +
-      (it.bar ? '' : '<small>В станцию включено</small><div class="ktg-qv__inc">' + STATION_INC.map(function (x) { return '<div>' + x[0] + '<b>' + x[1] + '</b><span>' + x[2] + '</span></div>'; }).join('') + '</div>');
+      '';
+    var inc = $('[data-qv-inc]');
+    inc.hidden = !!it.bar;
+    inc.innerHTML = it.bar ? '' : '<small>В станцию включено</small><div class="ktg-qv__inc">' + STATION_INC.map(function (x) { return '<div>' + x[0] + '<b>' + x[1] + '</b><span>' + x[2] + '</span></div>'; }).join('') + '</div>';
   }
   function syncQvPick() {
     var m = $('[data-qv]'), id = +m.dataset.id, b = $('[data-qv-pick]');
