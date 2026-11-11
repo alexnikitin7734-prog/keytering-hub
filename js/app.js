@@ -146,7 +146,7 @@
 
   function itemCard(it) {
     return '<div class="ktg-item" data-id="' + it.id + '"><div class="ktg-item__img" data-qv-open><img src="' + it.i + '" alt="" loading="lazy"></div>' +
-      '<div class="ktg-item__body"><div class="ktg-item__name" data-qv-open>' + it.n + '</div>' + (it.st ? '<small class="ktg-item__st">' + (it.bar ? 'бар с барменом' : 'станция с поваром') + ', от 30 порций</small>' : '') + '<div class="ktg-item__row"><span class="ktg-item__price">' + it.p + '</span>' +
+      '<div class="ktg-item__body"><div class="ktg-item__name" data-qv-open>' + it.n + '</div>' + (it.st ? '<small class="ktg-item__st">' + (it.bar ? 'бар с барменом' : 'станция с поваром и доставкой') + ', от 30 порций</small>' : '') + '<div class="ktg-item__row"><span class="ktg-item__price">' + it.p + '</span>' +
       '<button type="button" class="ktg-pick' + (isPicked(it.id) ? ' is-on' : '') + '" data-pick aria-label="В подборку">' + (isPicked(it.id) ? TICK.replace(/12/g, '18') : PLUS) + '</button></div></div></div>';
   }
 
@@ -262,18 +262,31 @@
   }
   // Станция: повар и оборудование + порции «готовим на месте», не меньше 30 (docs/build_data.py). Клиенту — одной суммой на 30 гостей + доп. порции (Маша №313).
   // Несколько начинок (у баров — Б/А и алкогольный) — чипы, от выбранной зависят станция и доп. порция (Маша №323, №327).
-  var STATION_FEE = 12000, STATION_MIN = 30, STATION_GUESTS = [30, 50, 100, 150, 200], stq = null;
+  var STATION_FEE = 12000, STATION_DELIVERY = 5000, STATION_STAFF = 100, STATION_MIN = 30, STATION_GUESTS = [30, 50, 100, 150, 200], stq = null;
+  // «В станцию включено» — подача как у Министерства (Маша №363).
+  var STI = function (d) { return '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">' + d + '</svg>'; };
+  var STATION_INC = [
+    [STI('<path d="M3 10h18M5 10v10M19 10v10M8 10V6h8v4M10 6V4h4v2"/>'), 'Оборудование', 'Своё, всё для готовки'],
+    [STI('<path d="M7 10a3 3 0 1 1 2-5.2A3 3 0 0 1 15 4.8 3 3 0 1 1 17 10v3H7z"/><path d="M7 13v2a5 5 0 0 0 10 0v-2"/><path d="M9 21h6"/>'), 'Повар', 'Готовит при гостях'],
+    [STI('<path d="M4 20c0-6 4-11 12-14-1 8-5 13-12 14z"/><path d="M4 20l7-7"/>'), 'Продукты', 'На утверждённое меню'],
+    [STI('<path d="M3 9h18v3H3zM6 12v8M18 12v8"/><path d="M8 9V6a4 4 0 0 1 8 0v3"/>'), 'Стол и декор', 'Стойка и декор станции'],
+    [STI('<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.4-.6-.6-2.4z"/>'), 'Монтаж', 'До и после гостей'],
+    [STI('<path d="M2 7h11v9H2zM13 10h4l3 3v3h-7z"/><circle cx="6" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>'), 'Доставка', 'Бесплатно по МКАД']
+  ];
   function renderStation() {
     var st = $('[data-qv-st]'), it = stq.it, g = stq.g, sv = it.sv, pp = sv ? sv[stq.v][1] : it.st;
     var chip = function (attr, val, on, label) { return '<button type="button" ' + attr + '="' + val + '"' + (on ? ' class="is-on"' : '') + '>' + label + '</button>'; };
     var guests = STATION_GUESTS.indexOf(g) === -1 ? STATION_GUESTS.concat(g).sort(function (a, b) { return a - b; }) : STATION_GUESTS;
-    var who = it.bar ? 'Бар на ' + STATION_MIN + ' гостей, бармен и стойка включены' : 'Станция на ' + STATION_MIN + ' гостей, повар и оборудование включены';
+    var fee = STATION_FEE + (it.bar ? 0 : STATION_DELIVERY);
+    var who = it.bar ? 'Бар на ' + STATION_MIN + ' гостей, бармен и стойка включены' : 'Станция на ' + STATION_MIN + ' гостей, повар, оборудование и доставка включены';
     st.innerHTML = (sv ? '<small>' + (it.bar ? 'Вариант' : 'Начинка') + '</small><div class="ktg-qv__chips">' + sv.map(function (x, k) { return chip('data-st-v', k, k === stq.v, x[0]); }).join('') + '</div>' : '') +
       '<small>Сколько гостей</small><div class="ktg-qv__chips">' + guests.map(function (n) { return chip('data-st-g', n, n === g, n); }).join('') + '</div>' +
-      '<div class="ktg-qv__strow"><span>' + who + '</span><b>' + rub(STATION_FEE + pp * STATION_MIN) + '</b></div>' +
+      '<div class="ktg-qv__strow"><span>' + who + '</span><b>' + rub(fee + pp * STATION_MIN) + '</b></div>' +
       (g > STATION_MIN ? '<div class="ktg-qv__strow"><span>+ ' + (g - STATION_MIN) + ' доп. ' + plural(g - STATION_MIN, 'порция', 'порции', 'порций') + ' × ' + rub(pp) + '</span><b>' + rub(pp * (g - STATION_MIN)) + '</b></div>'
         : '<div class="ktg-qv__strow"><span>Доп. порция</span><b>' + rub(pp) + '</b></div>') +
-      '<div class="ktg-qv__strow is-total"><span>Итого' + (it.bar ? ' за бар' : ' за станцию') + '</span><b>' + rub(STATION_FEE + pp * g) + '</b></div>';
+      '<div class="ktg-qv__strow is-total"><span>Итого' + (it.bar ? ' за бар' : ' за станцию') + '</span><b>' + rub(fee + pp * g) + '</b></div>' +
+      (g >= STATION_STAFF ? '<p class="ktg-qv__stnote">От ' + STATION_STAFF + ' гостей на станцию выходит больше персонала — посчитаем его в смете отдельно.</p>' : '') +
+      (it.bar ? '' : '<small>В станцию включено</small><div class="ktg-qv__inc">' + STATION_INC.map(function (x) { return '<div>' + x[0] + '<b>' + x[1] + '</b><span>' + x[2] + '</span></div>'; }).join('') + '</div>');
   }
   function syncQvPick() {
     var m = $('[data-qv]'), id = +m.dataset.id, b = $('[data-qv-pick]');
