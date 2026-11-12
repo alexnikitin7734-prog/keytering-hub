@@ -252,7 +252,7 @@
     $('[data-qv-opts]').innerHTML = it.st ? '' : cd.o.map(function (o) { return '<div class="ktg-qv__opt"><b>' + esc(o.n) + '</b><span>' + esc(o.p) + '</span>' + (o.d ? '<small>' + esc(o.d) + '</small>' : '') + '</div>'; }).join('');
     $('[data-qv-desc]').textContent = cd.s ? 'Состав: ' + cd.s : '';  // описания с сайта часто обрывками — без них (Маша №337)
     // Фото из галереи карточки на проде (docs/fetch_cards.py); первое — наше основное.
-    var SITE = 'https://arenda-attrakcionov.ru', gal = (cd.g || []).map(function (u) { return { i: SITE + u, b: SITE + u }; });
+    var SITE = 'https://arenda-attrakcionov.ru', gal = cd.lg ? cd.lg.map(function (u) { return { i: u, b: u }; }) : (cd.g || []).map(function (u) { return { i: SITE + u, b: SITE + u }; });  // lg — новые кадры вместо плохих (№440)
     gal = [{ i: it.i, b: it.b }].concat(gal).slice(0, 5);
     $('.ktg-qv__sim', m).hidden = gal.length < 2;
     $('[data-qv-sim]').innerHTML = gal.map(function (x, k) { return '<img src="' + x.i + '" alt="" data-qv-photo="' + x.b + '"' + (k ? '' : ' class="is-on"') + '>'; }).join('');
