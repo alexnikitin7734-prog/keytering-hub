@@ -266,22 +266,24 @@
   var STATION_FEE = 12000, STATION_DELIVERY = 5000, STATION_STAFF = 100, STATION_MIN = 30, STATION_GUESTS = [30, 50, 100, 150, 200], stq = null;
   // «В станцию включено» — подача как у Министерства (Маша №363).
   var STI = function (d) { return '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">' + d + '</svg>'; };
+  // Доставка первой и с переливом — Стас (Маша №427).
   var STATION_INC = [
+    [STI('<path d="M2 7h11v9H2zM13 10h4l3 3v3h-7z"/><circle cx="6" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>'), 'Доставка', 'Бесплатно в пределах МКАД'],
     [STI('<path d="M3 10h18M5 10v10M19 10v10M8 10V6h8v4M10 6V4h4v2"/>'), 'Оборудование', 'Своё, всё для готовки'],
     [STI('<path d="M7 10a3 3 0 1 1 2-5.2A3 3 0 0 1 15 4.8 3 3 0 1 1 17 10v3H7z"/><path d="M7 13v2a5 5 0 0 0 10 0v-2"/><path d="M9 21h6"/>'), 'Повар', 'Готовит при гостях'],
     [STI('<path d="M4 20c0-6 4-11 12-14-1 8-5 13-12 14z"/><path d="M4 20l7-7"/>'), 'Продукты', 'На утверждённое меню'],
     [STI('<path d="M3 9h18v3H3zM6 12v8M18 12v8"/><path d="M8 9V6a4 4 0 0 1 8 0v3"/>'), 'Стол и декор', 'Стойка и декор станции'],
-    [STI('<path d="M4 9h16l-1.5 11h-13z"/><path d="M3 9h18"/><path d="M9 5c0-1 1-2 3-2s3 1 3 2"/>'), 'Крафтовая посуда', 'Одноразовая, на всех гостей'],
-    [STI('<path d="M2 7h11v9H2zM13 10h4l3 3v3h-7z"/><circle cx="6" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>'), 'Доставка', 'Бесплатно в пределах МКАД']
+    [STI('<path d="M4 9h16l-1.5 11h-13z"/><path d="M3 9h18"/><path d="M9 5c0-1 1-2 3-2s3 1 3 2"/>'), 'Крафтовая посуда', 'Одноразовая, на всех гостей']
   ];
   function renderStation() {
     var st = $('[data-qv-st]'), it = stq.it, g = stq.g, sv = it.sv, pp = sv ? sv[stq.v][1] : it.st;
     var chip = function (attr, val, on, label) { return '<button type="button" ' + attr + '="' + val + '"' + (on ? ' class="is-on"' : '') + '>' + label + '</button>'; };
-    var guests = STATION_GUESTS.indexOf(g) === -1 ? STATION_GUESTS.concat(g).sort(function (a, b) { return a - b; }) : STATION_GUESTS;
+    var own = STATION_GUESTS.indexOf(g) === -1;
     var fee = STATION_FEE + (it.bar ? 0 : STATION_DELIVERY);
     var who = it.bar ? 'Бар на ' + STATION_MIN + ' гостей, бармен и стойка включены' : 'Станция на ' + STATION_MIN + ' гостей, повар, оборудование и доставка включены';
     st.innerHTML = (sv ? '<small>' + (it.bar ? 'Вариант' : 'Начинка') + '</small><div class="ktg-qv__chips">' + sv.map(function (x, k) { return chip('data-st-v', k, k === stq.v, x[0]); }).join('') + '</div>' : '') +
-      '<small>Сколько гостей</small><div class="ktg-qv__chips">' + guests.map(function (n) { return chip('data-st-g', n, n === g, n); }).join('') + '</div>' +
+      '<small>Сколько гостей</small><div class="ktg-qv__chips">' + STATION_GUESTS.map(function (n) { return chip('data-st-g', n, n === g, n); }).join('') +
+        '<input type="text" inputmode="numeric" maxlength="4" placeholder="Своё" aria-label="Своё число гостей" data-st-in' + (own ? ' class="is-on" value="' + g + '"' : '') + '></div>' +
       '<div class="ktg-qv__strow"><span>' + who + '</span><b>' + rub(fee + pp * STATION_MIN) + '</b></div>' +
       (g > STATION_MIN ? '<div class="ktg-qv__strow"><span>+ ' + (g - STATION_MIN) + ' доп. ' + plural(g - STATION_MIN, 'порция', 'порции', 'порций') + ' × ' + rub(pp) + '</span><b>' + rub(pp * (g - STATION_MIN)) + '</b></div>'
         : '<div class="ktg-qv__strow"><span>Доп. порция</span><b>' + rub(pp) + '</b></div>') +
@@ -290,7 +292,7 @@
       '';
     var inc = $('[data-qv-inc]');
     inc.hidden = !!it.bar;
-    inc.innerHTML = it.bar ? '' : '<small>В станцию включено</small><div class="ktg-qv__inc">' + STATION_INC.map(function (x) { return '<div>' + x[0] + '<b>' + x[1] + '</b><span>' + x[2] + '</span></div>'; }).join('') + '</div>';
+    inc.innerHTML = it.bar ? '' : '<small>В станцию включено</small><div class="ktg-qv__inc">' + STATION_INC.map(function (x, k) { return '<div' + (k ? '' : ' class="is-hot"') + '>' + x[0] + '<b>' + x[1] + '</b><span>' + x[2] + '</span></div>'; }).join('') + '</div>';
   }
   function syncQvPick() {
     var m = $('[data-qv]'), id = +m.dataset.id, b = $('[data-qv-pick]');
@@ -376,6 +378,13 @@
   });
 
   document.addEventListener('ktg:go', function (e) { closeAll(); setGroup(e.detail, true); });
+  // Своё число гостей в станции: по Enter или уходу из поля, не меньше 30.
+  root.addEventListener('change', function (e) {
+    if (!e.target.matches('[data-st-in]') || !stq) return;
+    var v = parseInt(e.target.value.replace(/\D/g, ''), 10);
+    if (v) { stq.g = Math.max(STATION_MIN, v); renderStation(); }
+  });
+  root.addEventListener('keydown', function (e) { if (e.key === 'Enter' && e.target.matches('[data-st-in]')) e.target.blur(); });
   $('[data-guests]').addEventListener('change', function () { setGuests(this.value); });
   $('[data-guests-range]').addEventListener('input', function () { setGuests(this.value); });
   var qt;

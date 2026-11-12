@@ -32,7 +32,12 @@
 
   var links = document.createElement('div');
   links.className = 'ktgnav-links';
-  links.innerHTML = window.KTG_DATA.map(function (g) { return '<button type="button" data-ktgnav-go="' + g.slug + '">' + (SHORT[g.name] || g.name) + '</button>'; }).join('');
+  // «Новый год» — рыжий с подарком и ведёт на обычный НГ-каталог; кейтеринг на НГ — из блока меню на странице (Маша №427).
+  var GIFT = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h16v11H4zM4 9l1.6-4h12.8L20 9M12 5v15M8.5 5A2 2 0 0 1 12 5a2 2 0 0 1 3.5 0"/></svg>';
+  links.innerHTML = window.KTG_DATA.map(function (g) {
+    if (g.slug === 'keytering-na-novyy-god') return '<a class="is-hol" href="https://arenda-attrakcionov.ru/attrakciony-na-novyj-god/">' + GIFT + g.name + '</a>';
+    return '<button type="button" data-ktgnav-go="' + g.slug + '">' + (SHORT[g.name] || g.name) + '</button>';
+  }).join('');
 
   row.classList.add('ktgnav-row');
   row.insertBefore(links, row.firstChild);
@@ -57,7 +62,6 @@
     if (b) document.dispatchEvent(new CustomEvent('ktg:go', { detail: b.dataset.ktgnavGo }));
   });
   document.addEventListener('ktg:group', function (e) {
-    [].forEach.call(links.children, function (b) { b.classList.toggle('is-on', b.dataset.ktgnavGo === e.detail); });
+    [].forEach.call(links.querySelectorAll('[data-ktgnav-go]'), function (b) { b.classList.toggle('is-on', b.dataset.ktgnavGo === e.detail); });
   });
-  links.firstChild.classList.add('is-on');
 })();

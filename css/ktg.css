@@ -297,6 +297,10 @@
 .ktg-qv__chips button{min-width:48px;height:34px;padding:0 12px;border-radius:var(--ktg-r-pill);background:var(--ktg-card);border:1px solid var(--ktg-border);font-size:14px;font-weight:500;transition:border-color var(--ktg-t),background-color var(--ktg-t)}
 .ktg-qv__chips button:hover{border-color:var(--ktg-accent)}
 .ktg-qv__chips button.is-on{background:var(--ktg-accent);border-color:var(--ktg-accent);color:#fff}
+.ktg-qv__chips input{width:76px;height:34px;padding:0 12px;border-radius:var(--ktg-r-pill);background:var(--ktg-card);border:1px solid var(--ktg-border);font:inherit;font-size:14px;font-weight:500;text-align:center;color:var(--ktg-ink);outline:0;transition:border-color var(--ktg-t),background-color var(--ktg-t)}
+.ktg-qv__chips input:hover,.ktg-qv__chips input:focus{border-color:var(--ktg-accent)}
+.ktg-qv__chips input.is-on{background:var(--ktg-accent);border-color:var(--ktg-accent);color:#fff}
+.ktg-qv__chips input.is-on::placeholder{color:#fff}
 .ktg-qv__strow{display:flex;justify-content:space-between;gap:12px;font-size:14px;line-height:20px}
 .ktg-qv__strow span{color:var(--ktg-text-2)}
 .ktg-qv__strow b{font-weight:600;color:var(--ktg-ink);white-space:nowrap}
@@ -311,6 +315,10 @@
 .ktg-qv__inc svg{grid-row:span 2;color:var(--ktg-accent)}
 .ktg-qv__inc b{font-size:14px;line-height:18px;font-weight:600;color:var(--ktg-ink)}
 .ktg-qv__inc span{font-size:13px;line-height:18px;color:var(--ktg-text-2)}
+.ktg-qv__inc .is-hot{background:var(--ktg-accent-tint);border-radius:var(--ktg-r-md);margin:-6px -8px;padding:6px 8px}
+.ktg-qv__inc .is-hot span{font-weight:600;background:linear-gradient(100deg,var(--ktg-accent) 0 40%,#ffc58f 50%,var(--ktg-accent) 60% 100%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:ktg-shine 2.8s linear infinite}
+@keyframes ktg-shine{from{background-position:100% 0}to{background-position:-150% 0}}
+@media (prefers-reduced-motion:reduce){.ktg-qv__inc .is-hot span{animation:none}}
 .ktg-item__st{display:block;font-size:12px;line-height:16px;color:var(--ktg-text-2);margin-top:4px}
 .ktg-qv__sim{border-top:1px solid var(--ktg-border);padding-top:14px}
 .ktg-qv__sim small{display:block;color:var(--ktg-text-2);font-size:13px;margin-bottom:8px}
