@@ -253,7 +253,7 @@
     $('[data-qv-desc]').textContent = cd.s ? 'Состав: ' + cd.s : '';  // описания с сайта часто обрывками — без них (Маша №337)
     // Фото из галереи карточки на проде (docs/fetch_cards.py); первое — наше основное.
     var SITE = 'https://arenda-attrakcionov.ru', gal = cd.lg ? cd.lg.map(function (u) { return { i: u, b: u }; }) : (cd.g || []).map(function (u) { return { i: SITE + u, b: SITE + u }; });  // lg — новые кадры вместо плохих (№440)
-    gal = [{ i: it.i, b: it.b }].concat(gal).slice(0, 5);
+    gal = [{ i: it.i, b: it.b }].concat((cd.lp || []).map(function (u) { return { i: u, b: u }; }), gal).slice(0, 5);  // lp — сгенерённый кадр вторым (№497)
     $('.ktg-qv__sim', m).hidden = gal.length < 2;
     $('[data-qv-sim]').innerHTML = gal.map(function (x, k) { return '<img src="' + x.i + '" alt="" data-qv-photo="' + x.b + '"' + (k ? '' : ' class="is-on"') + '>'; }).join('');
     $('[data-qv-prev]').disabled = qvIndex <= 0;
