@@ -272,8 +272,9 @@
 .ktg-modal.is-open{opacity:1;visibility:visible;transform:translate(-50%,-50%)}
 .ktg-x{position:absolute;top:14px;right:14px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;z-index:2;box-shadow:var(--ktg-shadow);transition:background-color var(--ktg-t)}
 .ktg-x:hover{background:#fff;color:var(--ktg-accent)}
-.ktg-qv{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
-.ktg-qv__img{background:#2a2725;position:relative;min-height:440px}
+.ktg-qv{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);background:#2a2725}
+.ktg-qv__media{position:sticky;top:0;align-self:start;min-width:0}
+.ktg-qv__img{background:#2a2725;position:relative;aspect-ratio:1}
 .ktg-qv__img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .ktg-qv__body{background:var(--ktg-card);padding:40px 32px;display:flex;flex-direction:column;gap:14px;min-width:0}
 .ktg-qv__group{align-self:flex-start;background:var(--ktg-sunken);border-radius:var(--ktg-r-pill);padding:4px 12px;font-size:13px;color:var(--ktg-text-2)}
@@ -320,8 +321,8 @@
 @keyframes ktg-shine{from{background-position:100% 0}to{background-position:-150% 0}}
 @media (prefers-reduced-motion:reduce){.ktg-qv__inc .is-hot span{animation:none}}
 .ktg-item__st{display:block;font-size:12px;line-height:16px;color:var(--ktg-text-2);margin-top:4px}
-.ktg-qv__sim{border-top:1px solid var(--ktg-border);padding-top:14px}
-.ktg-qv__sim small{display:block;color:var(--ktg-text-2);font-size:13px;margin-bottom:8px}
+.ktg-qv__sim{padding:16px}
+.ktg-qv__sim small{display:block;color:rgba(255,255,255,.6);font-size:13px;margin-bottom:8px}
 .ktg-qv__sim div{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
 .ktg-qv__sim img{aspect-ratio:1;object-fit:cover;border-radius:8px;cursor:pointer;transition:opacity var(--ktg-t)}
 .ktg-qv__sim img:hover{opacity:.8}
@@ -409,7 +410,7 @@
   .ktg-final h2{font-size:26px;line-height:32px}
   .ktg-catalog-link{flex-direction:column;align-items:flex-start;padding:20px}
   .ktg-qv{grid-template-columns:1fr}
-  .ktg-qv__img{min-height:0;aspect-ratio:1}
+  .ktg-qv__media{position:static}
   .ktg-qv__body{padding:20px}
   .ktg-qv__body h3{font-size:20px;line-height:26px}
   .ktg-modal{top:auto;bottom:0;left:0;width:100%;max-height:92vh;border-radius:var(--ktg-r-lg) var(--ktg-r-lg) 0 0;transform:translateY(100%)}
