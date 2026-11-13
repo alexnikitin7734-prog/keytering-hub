@@ -256,8 +256,8 @@
     gal = [{ i: it.i, b: it.b }].concat((cd.lp || []).map(function (u) { return { i: u, b: u }; }), gal).slice(0, 5);  // lp — сгенерённый кадр вторым (№497)
     $('.ktg-qv__sim', m).hidden = gal.length < 2;
     $('[data-qv-sim]').innerHTML = gal.map(function (x, k) { return '<img src="' + x.i + '" alt="" data-qv-photo="' + x.b + '"' + (k ? '' : ' class="is-on"') + '>'; }).join('');
-    $('[data-qv-prev]').disabled = qvIndex <= 0;
-    $('[data-qv-next]').disabled = qvIndex === -1 || qvIndex >= state.list.length - 1;
+    $$('[data-qv-prev]').forEach(function (b) { b.disabled = qvIndex <= 0; });  // кнопки на мобилке + стрелки на десктопе (Маша №506)
+    $$('[data-qv-next]').forEach(function (b) { b.disabled = qvIndex === -1 || qvIndex >= state.list.length - 1; });
     syncQvPick();
     open(m);
   }

@@ -327,6 +327,17 @@
 .ktg-qv__sim img{aspect-ratio:1;object-fit:cover;border-radius:8px;cursor:pointer;transition:opacity var(--ktg-t)}
 .ktg-qv__sim img:hover{opacity:.8}
 .ktg-qv__sim img.is-on{outline:2px solid var(--ktg-accent);outline-offset:2px}
+/* Стрелки по бокам окна вместо «Предыдущая / Следующая» — только десктоп (Маша №506) */
+.ktg-qv-arrow{display:none}
+@media (min-width:768px){
+  .ktg-qv__nav{display:none}
+  .ktg-qv-arrow{display:flex;position:fixed;top:50%;z-index:102;width:52px;height:52px;margin-top:-26px;border-radius:50%;background:rgba(255,255,255,.92);color:var(--ktg-ink);align-items:center;justify-content:center;box-shadow:var(--ktg-shadow);opacity:0;visibility:hidden;transition:opacity .25s ease,visibility .25s ease,background-color var(--ktg-t),color var(--ktg-t)}
+  .ktg-qv-arrow--prev{left:max(12px,calc(50% - 460px - 72px))}
+  .ktg-qv-arrow--next{right:max(12px,calc(50% - 460px - 72px))}
+  .ktg-modal.is-open~.ktg-qv-arrow{opacity:1;visibility:visible}
+  .ktg-qv-arrow:hover{background:#fff;color:var(--ktg-accent)}
+  .ktg-qv-arrow:disabled{opacity:0!important;visibility:hidden!important}
+}
 /* Десктоп: под главным фото — мозаика 2×2 до низа окна, чтобы колонка не зияла дыркой (Маша 13.11, вариант А) */
 @media (min-width:768px){
   .ktg-qv__media{display:flex;flex-direction:column}
