@@ -361,6 +361,9 @@
     if (t.matches('[data-qv-open]')) { openQv(+t.closest('[data-id]').dataset.id); return; }
     if (t.matches('[data-st-g]')) { stq.g = +t.dataset.stG; renderStation(); return; }
     if (t.matches('[data-st-v]')) { stq.v = +t.dataset.stV; renderStation(); return; }
+    if (t.matches('[data-qv-photo]') && matchMedia('(min-width:768px)').matches) {  // мозаика: плитка меняется местами с главным фото
+      var main = $('[data-qv-img]'), was = main.src; main.src = t.dataset.qvPhoto; t.src = t.dataset.qvPhoto = was; return;
+    }
     if (t.matches('[data-qv-photo]')) { $('[data-qv-img]').src = t.dataset.qvPhoto; $$('[data-qv-photo]').forEach(function (x) { x.classList.toggle('is-on', x === t); }); return; }
     if (t.matches('[data-qv-pick]')) { togglePick(+$('[data-qv]').dataset.id); return; }
     if (t.matches('[data-qv-prev]') && qvIndex > 0) { openQv(state.list[qvIndex - 1].id); return; }
