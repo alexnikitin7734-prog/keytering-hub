@@ -196,6 +196,17 @@
 .ktg-kit li svg{flex:0 0 auto;margin-top:4px;color:var(--ktg-success)}
 .ktg-kit .ktg-btn{height:44px}
 .ktg-kit__more{align-self:flex-start;margin:-8px 0 14px}
+.ktg-scroll{display:none}
+.ktg-offers__all li.is-new svg{color:var(--ktg-accent)}
+@media (min-width:768px){
+  .ktg-mob{display:none}
+  .ktg-scroll{display:block;flex:1;max-height:176px;overflow-y:auto;margin:10px -6px 16px 0;padding:0 6px 28px 0;scrollbar-width:thin;scrollbar-color:var(--ktg-border) transparent;-webkit-mask-image:linear-gradient(to bottom,#000 72%,transparent);mask-image:linear-gradient(to bottom,#000 72%,transparent)}
+  .ktg-scroll::-webkit-scrollbar{width:4px}
+  .ktg-scroll::-webkit-scrollbar-thumb{background:var(--ktg-border);border-radius:2px}
+  .ktg-scroll ul{flex:none;margin:0}
+  .ktg-scroll .ktg-offers__all small:first-child{margin-top:0}
+  .ktg-kit.is-wide .ktg-scroll{max-height:220px}
+}
 .ktg-sl{position:relative}
 .ktg-sl__track{display:flex;height:100%;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
 .ktg-sl__track::-webkit-scrollbar{display:none}
