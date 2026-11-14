@@ -12,7 +12,7 @@
   // Цены — с карточек сайта и лендингов (furshet-landing, banket-landing, kofe-breyk-landing), «от» за гостя.
   var WAITER = 7500, BARMAN = 7500;
   var FORMATS = {
-    furshet: { name: 'Фуршет', icon: 'ik-furshet', waiterPer: 20, levels: { mini: [1800, '400 г'], midi: [3400, '500 г · 300 мл'], maxi: [4200, '600 г · 650 мл'] } },
+    furshet: { name: 'Фуршет', icon: 'ik-furshet', waiterPer: 20, levels: { mini: [2900, '400 г · 200 мл'], midi: [3800, '600 г · 300 мл'], maxi: [4900, '750 г · 500 мл'] } },  // как калькулятор /gotovyj-furshet/ с 08.09 (сверка с Колей, «Связь» т.3 №536)
     banket: { name: 'Банкет', icon: 'ik-vip', waiterPer: 10, barmanPer: 50, levels: { mini: [3200, '700 г · 400 мл'], midi: [4500, '950 г · 600 мл'], maxi: [6000, '1200 г · 850 мл'] } },
     kofe: { name: 'Кофе-брейк', icon: 'ik-kofe', waiterPer: 40, levels: { mini: [400, '100 г · 350 мл'], midi: [800, '200 г · 500 мл'], maxi: [1400, '400 г · 750 мл'] } }
   };
@@ -24,8 +24,10 @@
   var STATION = 'animacionnye-stancii';
   function curLevels() {
     if (state.fmt !== 'furshet') return FORMATS[state.fmt].levels;
-    if (state.wants[STATION]) return FURSHET_PLUS.stancia;
-    return state.welcome ? FURSHET_PLUS.welcome : FORMATS.furshet.levels;
+    var P = state.wants[STATION] ? FURSHET_PLUS.stancia : state.welcome ? FURSHET_PLUS.welcome : null, B = FORMATS.furshet.levels;
+    if (!P) return B;
+    // Карточки велкома на сайте дешевле простого фуршета (№536) — пока их не поправили, с велкомом не дешевле, чем без.
+    var L = {}; Object.keys(B).forEach(function (l) { L[l] = P[l][0] < B[l][0] ? [B[l][0], P[l][1]] : P[l]; }); return L;
   }
   function calcTitle() {
     var t = FORMATS[state.fmt].name;
