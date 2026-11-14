@@ -195,6 +195,7 @@
 .ktg-kit li{display:flex;gap:8px;font-size:14px;line-height:20px}
 .ktg-kit li svg{flex:0 0 auto;margin-top:4px;color:var(--ktg-success)}
 .ktg-kit .ktg-btn{height:44px}
+.ktg-kit__more{align-self:flex-start;margin:-8px 0 14px}
 .ktg-sl{position:relative}
 .ktg-sl__track{display:flex;height:100%;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
 .ktg-sl__track::-webkit-scrollbar{display:none}

@@ -279,7 +279,8 @@
         return '<div class="ktg-kit' + (k.hit ? ' is-hit' : '') + '">' + (k.hit ? '<span class="ktg-kit__hit">Чаще всего выбирают</span>' : '') +
           '<div class="ktg-kit__img"><img src="' + k.img + '" alt="" loading="lazy"></div><div class="ktg-kit__body"><b>' + k.name + '</b>' +
           '<div class="ktg-kit__price">от ' + rub(kitPrice(k)) + '</div><small>на гостя</small><span class="ktg-kit__out">' + out + ' на персону</span>' +
-          '<ul>' + k.li.map(function (x) { return '<li>' + TICK + x + '</li>'; }).join('') + '</ul>' +
+          '<ul>' + k.li.slice(0, ofs.open['kit' + k.key] ? 99 : 3).map(function (x) { return '<li>' + TICK + x + '</li>'; }).join('') + '</ul>' +  // 3 пункта, остальное под «Весь состав» (Маша №572)
+          (k.li.length > 3 ? '<button type="button" class="ktg-set__more ktg-kit__more" data-of-all="kit' + k.key + '">' + (ofs.open['kit' + k.key] ? 'Свернуть' : 'Весь состав') + '</button>' : '') +
           '<button type="button" class="ktg-btn ktg-btn--wide ' + (k.hit ? 'ktg-btn--primary' : 'ktg-btn--ghost') + '" data-kit="' + k.key + '" data-kit-group="' + slug + '">' + (k.p ? 'Заказать боксы' : k.add ? 'Заказать' : 'Посчитать') + '</button></div></div>';
       }).join('') + '</div></div>';
   }
