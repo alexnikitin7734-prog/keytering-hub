@@ -245,7 +245,7 @@
         var full = '<div class="ktg-offers__all">' + t.cats.map(function (c) { return '<small>' + c[0] + '</small><ul>' + c[1].map(function (x) { return '<li>' + TICK + x + '</li>'; }).join('') + '</ul>'; }).join('') + '</div>';
         var short = t.li ? '<ul>' + t.li.map(function (x) { return '<li>' + TICK + x + '</li>'; }).join('') + '</ul>'
           : t.plus ? '<small class="ktg-offers__lbl">К прошлому уровню добавили</small><ul>' + t.plus.map(function (x) { return '<li>' + PLUS.replace(/18/g, '12') + x + '</li>'; }).join('') + '</ul>'
-          : t.cats.length === 1 ? '<ul>' + t.cats[0][1].slice(0, 4).map(function (x) { return '<li>' + TICK + x + '</li>'; }).join('') + '</ul><small class="ktg-offers__lbl">и ещё ' + (t.cats[0][1].length - 4) + '</small>'
+          : t.cats.length === 1 ? '<ul>' + t.cats[0][1].slice(0, 4).map(function (x) { return '<li>' + TICK + x + '</li>'; }).join('') + '</ul>'
           : '<ul>' + t.cats.map(function (c) {
               var n = c[1].filter(function (x) { return x !== 'Ассорти соусов'; }).length;
               return '<li>' + TICK + c[0] + ': ' + (c[0] === 'Напитки' ? c[1].join(', ').replace(/«|»/g, '') : n + (n < c[1].length ? ' + соусы' : '')) + '</li>';
@@ -254,7 +254,7 @@
           '<div class="ktg-kit__img"><img src="' + t.img + '" alt="" loading="lazy"></div><div class="ktg-kit__body"><b>' + t.name + '</b><span class="ktg-offers__n">' + count(t) + ' ' + plural(count(t), 'позиция', 'позиции', 'позиций') + '</span>' +
           '<div class="ktg-kit__price">' + rub(sum) + '</div><small>на ' + g + ' ' + plural(g, 'гостя', 'гостей', 'гостей') + ' · ≈ ' + rub(sum / g) + ' на гостя</small>' +
           '<div class="ktg-offers__tags"><span class="ktg-kit__out">' + t.out + ' на гостя</span>' + (sum >= FREE_DELIVERY ? '<span class="ktg-kit__out is-free">Доставка бесплатно</span>' : '') + '</div>' +
-          short + (ofs.open[id] ? full : '') + '<button type="button" class="ktg-set__more" data-of-all="' + id + '">' + (ofs.open[id] ? 'Свернуть' : 'Весь состав') + '</button>' +
+          (ofs.open[id] ? full : short) + '<button type="button" class="ktg-set__more" data-of-all="' + id + '">' + (ofs.open[id] ? 'Свернуть' : 'Весь состав') + '</button>' +
           '<button type="button" class="ktg-btn ktg-btn--wide ' + (t.hit || o.tiers.length === 1 ? 'ktg-btn--primary' : 'ktg-btn--ghost') + '" data-of-order="' + k + '">Заказать</button></div></div>';
       }).join('') + '</div></div>';
   }
