@@ -181,32 +181,32 @@
   var P3 = ['Профитроли с муссом крем-чиз и с/с сёмгой'];
   var OFFERS = [
     { key: 'box', name: 'Фуршетные боксы', note: 'Готовый набор холодных закусок и салатов в боксах. Привезём к нужному времени — накрывать и обслуживать не нужно.',
-      guests: [20, 30, 50, 100], own: 1, tiers: [{ name: 'Фуршетные боксы', pp: 19245 / 20, out: '121 г', img: 'img/offers/box.webp',
+      guests: [20, 30, 50, 100], own: 1, tiers: [{ name: 'Фуршетные боксы', pp: 19245 / 20, out: '121 г', gal: ['img/offers/1404.webp', 'img/offers/1410.webp', 'img/offers/1419.webp'],
         li: ['13 видов закусок и салатов', 'Холодное, без горячего и напитков', 'Состав не меняется — просто выберите гостей'],
         cats: [['Закуски', ['Канапе «Капрезе»', 'Канапе с лососевым риетом и красной икрой', 'Канапе с ростбифом и печёным перцем', 'Рулетики из баклажан', 'Рулетики с сыром и ветчиной',
           'Профитроли с муссом крем-чиз и с/с сёмгой', 'Брускетта с томатами, моцареллой и песто', 'Брускетта с красной икрой', 'Брускетта с курицей су-вид и томатами черри']],
           ['Салаты', ['Салат с утиной грудкой и пряной грушей', 'Салат «Цезарь» с курицей', 'Салат оливье', 'Салат с ростбифом']]] }] },
     { key: 'plat', name: 'Плеттеры', note: 'Холодные закуски и салаты на подносах под крышкой — полноценная еда для гостей. Уровни — для старта: любую позицию заменим.',
       guests: [20, 30, 50], build: 1, tiers: [
-        { name: 'Классика', t: { 20: 45545, 30: 70695, 50: 116145 }, out: '350 г', img: 'img/offers/plat1.webp', cats: [['Закуски и салаты', P1]] },
-        { name: 'Плюс', hit: 1, t: { 20: 67745, 30: 100595, 50: 166295 }, out: '470 г', img: 'img/offers/plat2.webp', cats: [['Закуски и салаты', P1.concat(P2)]], plus: P2 },
-        { name: 'Премиум', t: { 20: 74345, 30: 110995, 50: 184295 }, out: '495 г', img: 'img/offers/plat3.webp', cats: [['Закуски и салаты', P1.concat(P2, P3)]], plus: P3 }] },
+        { name: 'Классика', t: { 20: 45545, 30: 70695, 50: 116145 }, out: '350 г', gal: ['img/offers/1371.webp', 'img/offers/1398.webp', 'img/offers/1386.webp'], cats: [['Закуски и салаты', P1]] },
+        { name: 'Плюс', hit: 1, t: { 20: 67745, 30: 100595, 50: 166295 }, out: '470 г', gal: ['img/offers/1375.webp', 'img/offers/1384.webp', 'img/offers/1398.webp'], cats: [['Закуски и салаты', P1.concat(P2)]], plus: P2 },
+        { name: 'Премиум', t: { 20: 74345, 30: 110995, 50: 184295 }, out: '495 г', gal: ['img/offers/1384.webp', 'img/offers/1375.webp', 'img/offers/1410.webp'], cats: [['Закуски и салаты', P1.concat(P2, P3)]], plus: P3 }] },
     { key: 'fur', name: 'Фуршет без обслуживания', note: 'Холодное, горячие брошетты и напитки — привезём и расставим. Официантов добавим, если нужны.',
       guests: [30, 50, 100], staff: 1, tiers: [
-        { name: 'Базовый', t: { 30: 81945, 50: 135845, 100: 269745 }, out: '478 г', img: 'img/offers/fur1.webp', cats: [
+        { name: 'Базовый', t: { 30: 81945, 50: 135845, 100: 269745 }, out: '478 г', gal: ['img/offers/1386.webp', 'img/offers/1380.webp', 'img/offers/1419.webp'], cats: [
           ['Холодные закуски', ['Канапе «Капрезе»', 'Канапе с цыплёнком терияки в кунжуте', 'Канапе с голубым сыром и виноградом', 'Рулетики с сыром и ветчиной', 'Профитроли с куриным муссом',
             'Блинный рулетик с лососем, сливочным кремом и тобико', 'Рулетики из баклажан', 'Брускетта с бужениной и огуречным релишем', 'Брускетта с тремя видами томатов']],
           ['Салаты', ['Салат «Цезарь» с курицей', 'Салат оливье']],
           ['Горячее', ['Брошетты из свиной шеи', 'Брошетты куриные', 'Брошетты из картофеля бейби', 'Ассорти соусов']],
           ['Напитки', ['Морс «Лесные ягоды»']]] },
-        { name: 'Сытный', hit: 1, t: { 30: 112270, 50: 185420, 100: 366895 }, out: '648 г', img: 'img/offers/fur2.webp', cats: [
+        { name: 'Сытный', hit: 1, t: { 30: 112270, 50: 185420, 100: 366895 }, out: '648 г', gal: ['img/offers/1380.webp', 'img/offers/1398.webp', 'img/offers/1386.webp'], cats: [
           ['Холодные закуски', ['Блинный рулетик с лососем, сливочным кремом и тобико', 'Веррин с пармской ветчиной, песто и вялеными томатами', 'Канапе «Чоризо и моцарелла»', 'Канапе с сёмгой с/с',
             'Канапе с тигровой креветкой и ананасом', 'Канапе с телячьим языком и свежим огурцом', 'Канапе с голубым сыром и виноградом', 'Ролл «Цезарь» с курицей', 'Рулетики из баклажан',
             'Брускетта с ростбифом и соусом вителло', 'Брускетта с курицей су-вид и томатами черри']],
           ['Салаты', ['Салат с утиной грудкой и пряной грушей', 'Салат «Цезарь» с курицей']],
           ['Горячее', ['Брошетты из свиной шеи', 'Брошетты куриные', 'Брошетты из овощей', 'Брошетты из картофеля бейби', 'Ассорти соусов']],
           ['Напитки', ['Морс «Лесные ягоды»', 'Лимонад «Цитрус»']]] },
-        { name: 'Праздничный', t: { 30: 144520, 50: 238170, 100: 474895 }, out: '685 г', img: 'img/offers/fur3.webp', cats: [
+        { name: 'Праздничный', t: { 30: 144520, 50: 238170, 100: 474895 }, out: '685 г', gal: ['img/offers/1398.webp', 'img/offers/1470.webp', 'img/offers/1410.webp'], cats: [
           ['Холодные закуски', ['Веррин с пармской ветчиной, песто и вялеными томатами', 'Блинный рулетик с лососем, сливочным кремом и тобико', 'Канапе с куриной тефтелькой и чесночным соусом',
             'Канапе с ростбифом и печёным перцем', 'Канапе с телячьим языком и свежим огурцом', 'Канапе с тигровой креветкой и ананасом', 'Канапе с риетом из лосося и щучьей икрой',
             'Брускетта с говяжьим языком и соусом вителло', 'Брускетта с тигровой креветкой и гуакамоле', 'Брускетта с прошутто, соусом ромеско и каперсами', 'Профитроли с муссом крем-чиз и с/с сёмгой']],
@@ -214,7 +214,7 @@
           ['Горячее', ['Брошетты куриные', 'Брошетты из свиной шеи', 'Брошетты из креветок', 'Брошетты из овощей', 'Брошетты из картофеля бейби', 'Брошетты из сёмги', 'Ассорти соусов']],
           ['Десерты', ['Медовик мини', 'Красный бархат мини']],
           ['Напитки', ['Морс «Лесные ягоды»', 'Лимонад «Цитрус»']]] },
-        { name: 'Премиум', t: { 30: 176620, 50: 291220, 100: 584595 }, out: '784 г', img: 'img/offers/fur4.webp', cats: [
+        { name: 'Премиум', t: { 30: 176620, 50: 291220, 100: 584595 }, out: '784 г', gal: ['img/offers/1470.webp', 'img/offers/1384.webp', 'img/offers/1375.webp'], cats: [
           ['Холодные закуски', ['Блинный рулетик с лососем, сливочным кремом и тобико', 'Канапе с лососевым риетом и красной икрой', 'Канапе с ростбифом и печёным перцем', 'Канапе с голубым сыром и виноградом',
             'Канапе с тигровой креветкой и ананасом', 'Веррин с пармской ветчиной, песто и вялеными томатами', 'Канапе с копчёной грудкой', 'Ролл «Цезарь» с курицей', 'Рулетики из баклажан',
             'Профитроли с муссом крем-чиз и с/с сёмгой', 'Брускетта с красной икрой', 'Брускетта с сёмгой и красной икрой', 'Брускетта с тигровой креветкой и гуакамоле',
@@ -227,6 +227,18 @@
   var ofs = { o: 0, g: { box: 20, plat: 20, fur: 30 }, staff: false, open: {} };
   function offerTotal(o, t, g) { return t.pp ? Math.round(t.pp * g) : t.t[g]; }
   function offerStaff(g) { return Math.max(1, Math.ceil(g / FORMATS.furshet.waiterPer)); }
+  // Фото набора — листалка (Маша №560): свайп / стрелки, точки внизу.
+  var ARR = function (d) { return '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="' + d + '"/></svg>'; };
+  function slider(gal) {
+    return '<div class="ktg-kit__img ktg-sl"><div class="ktg-sl__track" data-sl>' + gal.map(function (u) { return '<img src="' + u + '" alt="" loading="lazy">'; }).join('') + '</div>' +
+      '<button type="button" class="ktg-sl__btn is-prev" data-sl-go="-1" aria-label="Назад">' + ARR('M15 5l-7 7 7 7') + '</button><button type="button" class="ktg-sl__btn is-next" data-sl-go="1" aria-label="Дальше">' + ARR('M9 5l7 7-7 7') + '</button>' +
+      '<div class="ktg-sl__dots">' + gal.map(function (u, k) { return '<i' + (k ? '' : ' class="is-on"') + '></i>'; }).join('') + '</div></div>';
+  }
+  root.addEventListener('scroll', function (e) {
+    if (!e.target.matches || !e.target.matches('[data-sl]')) return;
+    var tr = e.target, k = Math.round(tr.scrollLeft / tr.clientWidth);
+    $$('.ktg-sl__dots i', tr.parentNode).forEach(function (d, i) { d.classList.toggle('is-on', i === k); });
+  }, true);
   function offersBlock() {
     var o = OFFERS[ofs.o], g = ofs.g[o.key];
     var chip = function (attr, val, on, label) { return '<button type="button" ' + attr + '="' + val + '"' + (on ? ' class="is-on"' : '') + '>' + label + '</button>'; };
@@ -251,7 +263,7 @@
               return '<li>' + TICK + c[0] + ': ' + (c[0] === 'Напитки' ? c[1].join(', ').replace(/«|»/g, '') : n + (n < c[1].length ? ' + соусы' : '')) + '</li>';
             }).join('') + '</ul>';
         return '<div class="ktg-kit' + (t.hit ? ' is-hit' : '') + (o.tiers.length === 1 ? ' is-wide' : '') + '">' + (t.hit ? '<span class="ktg-kit__hit">Чаще всего выбирают</span>' : '') +
-          '<div class="ktg-kit__img"><img src="' + t.img + '" alt="" loading="lazy"></div><div class="ktg-kit__body"><b>' + t.name + '</b><span class="ktg-offers__n">' + count(t) + ' ' + plural(count(t), 'позиция', 'позиции', 'позиций') + '</span>' +
+          slider(t.gal) + '<div class="ktg-kit__body"><b>' + t.name + '</b><span class="ktg-offers__n">' + count(t) + ' ' + plural(count(t), 'позиция', 'позиции', 'позиций') + '</span>' +
           '<div class="ktg-kit__price">' + rub(sum) + '</div><small>на ' + g + ' ' + plural(g, 'гостя', 'гостей', 'гостей') + ' · ≈ ' + rub(sum / g) + ' на гостя</small>' +
           '<div class="ktg-offers__tags"><span class="ktg-kit__out">' + t.out + ' на гостя</span>' + (sum >= FREE_DELIVERY ? '<span class="ktg-kit__out is-free">Доставка бесплатно</span>' : '') + '</div>' +
           (ofs.open[id] ? full : short) + '<button type="button" class="ktg-set__more" data-of-all="' + id + '">' + (ofs.open[id] ? 'Свернуть' : 'Весь состав') + '</button>' +
@@ -447,6 +459,7 @@
       if (kk.p || kk.add) { state.kit = kk; state.ord = null; renderDrawer(); open($('[data-drawer]')); return; }
       state.lvl = kk.key; state.welcome = false; goCalc('furshet'); return;
     }
+    if (t.matches('[data-sl-go]')) { var tr = $('[data-sl]', t.parentNode); tr.scrollBy({ left: +t.dataset.slGo * tr.clientWidth, behavior: 'smooth' }); return; }
     if (t.matches('[data-of-o]')) { ofs.o = +t.dataset.ofO; renderGrid(); return; }
     if (t.matches('[data-of-g]')) { ofs.g[OFFERS[ofs.o].key] = +t.dataset.ofG; renderGrid(); return; }
     if (t.matches('[data-of-staff]')) { ofs.staff = !ofs.staff; renderGrid(); return; }

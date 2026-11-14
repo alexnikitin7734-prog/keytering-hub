@@ -195,6 +195,17 @@
 .ktg-kit li{display:flex;gap:8px;font-size:14px;line-height:20px}
 .ktg-kit li svg{flex:0 0 auto;margin-top:4px;color:var(--ktg-success)}
 .ktg-kit .ktg-btn{height:44px}
+.ktg-sl{position:relative}
+.ktg-sl__track{display:flex;height:100%;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
+.ktg-sl__track::-webkit-scrollbar{display:none}
+.ktg-sl__track img{flex:0 0 100%;scroll-snap-align:start}
+.ktg-sl__btn{position:absolute;top:50%;width:34px;height:34px;margin-top:-17px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(255,255,255,.92);color:var(--ktg-ink);box-shadow:0 2px 8px rgba(0,0,0,.18);opacity:0;transition:opacity var(--ktg-t)}
+.ktg-sl__btn.is-prev{left:10px}
+.ktg-sl__btn.is-next{right:10px}
+.ktg-sl:hover .ktg-sl__btn{opacity:1}
+.ktg-sl__dots{position:absolute;left:0;right:0;bottom:10px;display:flex;justify-content:center;gap:6px;pointer-events:none}
+.ktg-sl__dots i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.55);transition:background-color var(--ktg-t),width var(--ktg-t)}
+.ktg-sl__dots i.is-on{width:16px;border-radius:3px;background:#fff}
 .ktg-kits__head .ktg-offers__promo{font-size:14px;line-height:20px;font-weight:600;color:var(--ktg-accent)}
 .ktg-offers__tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
 .ktg-offers__tabs button{height:40px;padding:0 18px;border-radius:var(--ktg-r-pill);background:var(--ktg-card);border:1px solid var(--ktg-border);font-size:15px;font-weight:600;transition:border-color var(--ktg-t),background-color var(--ktg-t)}
