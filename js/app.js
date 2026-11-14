@@ -252,7 +252,7 @@
           '<div class="ktg-kit__img"><img src="' + t.img + '" alt="" loading="lazy"></div><div class="ktg-kit__body"><b>' + t.name + '</b><span class="ktg-offers__n">' + count(t) + ' ' + plural(count(t), 'позиция', 'позиции', 'позиций') + '</span>' +
           '<div class="ktg-kit__price">' + rub(sum) + '</div><small>на ' + g + ' ' + plural(g, 'гостя', 'гостей', 'гостей') + ' · ≈ ' + rub(sum / g) + ' на гостя</small>' +
           '<div class="ktg-offers__tags"><span class="ktg-kit__out">' + t.out + ' на гостя</span>' + (sum >= FREE_DELIVERY ? '<span class="ktg-kit__out is-free">Доставка бесплатно</span>' : '') + '</div>' +
-          (o.tiers.length === 1 ? full : short + (ofs.open[id] ? full : '') + '<button type="button" class="ktg-set__more" data-of-all="' + id + '">' + (ofs.open[id] ? 'Свернуть' : 'Весь состав') + '</button>') +
+          short + (ofs.open[id] ? full : '') + '<button type="button" class="ktg-set__more" data-of-all="' + id + '">' + (ofs.open[id] ? 'Свернуть' : 'Весь состав') + '</button>' +
           '<button type="button" class="ktg-btn ktg-btn--wide ' + (t.hit || o.tiers.length === 1 ? 'ktg-btn--primary' : 'ktg-btn--ghost') + '" data-of-order="' + k + '">Заказать</button></div></div>';
       }).join('') + '</div></div>';
   }

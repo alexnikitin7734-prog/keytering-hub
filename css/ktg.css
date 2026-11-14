@@ -209,6 +209,9 @@
 .ktg-offers__row.is-1{grid-template-columns:1fr}
 .ktg-kit.is-wide{flex-direction:row}
 .ktg-kit.is-wide .ktg-kit__img{flex:0 0 42%;aspect-ratio:auto}
+.ktg-kit.is-wide .ktg-offers__all{columns:2;column-gap:24px}
+.ktg-kit.is-wide .ktg-offers__all small{break-after:avoid}
+.ktg-kit.is-wide .ktg-btn{align-self:flex-start;width:280px}
 .ktg-offers__n{font-size:13px;color:var(--ktg-text-2)}
 .ktg-offers__tags{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 4px}
 .ktg-offers__tags .ktg-kit__out{margin:0}
@@ -453,6 +456,8 @@
   .ktg-offers__bar .ktg-btn{margin-left:0;width:100%}
   .ktg-kit.is-wide{flex:0 0 100%;flex-direction:column}
   .ktg-kit.is-wide .ktg-kit__img{flex:none;aspect-ratio:16/10}
+  .ktg-kit.is-wide .ktg-offers__all{columns:1}
+  .ktg-kit.is-wide .ktg-btn{width:100%}
   .ktg-item__body{padding:10px 10px 12px}
   .ktg-item__name{font-size:13px;line-height:18px}
   .ktg-pick{width:36px;height:36px}
