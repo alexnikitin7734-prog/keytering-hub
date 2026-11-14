@@ -152,32 +152,10 @@
       '<button type="button" class="ktg-pick' + (isPicked(it.id) ? ' is-on' : '') + '" data-pick aria-label="В подборку">' + (isPicked(it.id) ? TICK.replace(/12/g, '18') : PLUS) + '</button></div></div></div>';
   }
 
-  // Комплекты выездного фуршета — первым рядом раздела «Фуршетное меню». Мини/Миди/Макси — цены калькулятора, состав — таблица /gotovyj-furshet/.
-  var KITS = [
-    { key: 'box', name: 'Фуршетные боксы', p: 900, out: '250 г', img: 'img/menu/73772.webp',
-      li: ['Канапе, брускетты и рулетики в боксах', 'Привезём к нужному времени', 'Без обслуживания и раздачи', 'Без напитков'] },
-    { key: 'mini', name: 'Мини', img: 'img/menu/99631.webp',
-      li: ['Канапе 2 вида, брускетты 3, рулетики 2', 'Мини-салаты и горячее на шпажках', 'Гарнир, соусы, хлебная корзина'] },
-    { key: 'midi', name: 'Миди', hit: 1, img: 'img/menu/105876.webp',
-      li: ['Канапе 3 вида, брускетты 2, рулетики 2', 'Мини-салаты 3 вида, горячее 2 вида', 'Мясное плато и десерты', 'Чай и морс'] },
-    { key: 'maxi', name: 'Макси', img: 'img/menu/73249.webp',
-      li: ['Канапе 5 видов, брускетты 5, рулетики 3', 'Мини-салаты 3 вида, горячее 3 вида', 'Мясное и сырное плато, десерты', 'Кофе, чай, морс, лимонад'] }
-  ];
-  // «Новый год» — те же комплекты с новогодним оформлением линии: +500 ₽ к Мини/Миди/Макси, боксы без декора (Маша №334); фото — лендинг /novogodniy-furshet/.
-  var NG_DECOR = 500;
-  var KIT_GROUPS = {
-    'keytering-na-novyy-god': { title: 'Новогодний фуршет комплектом', kits: KITS.map(function (k) {
-      var img = { box: 'img/kits/ng-box.webp', mini: 'img/kits/ng-mini.webp', midi: 'img/kits/ng-midi.webp', maxi: 'img/kits/ng-maxi.webp' }[k.key];
-      // Листалка (Маша №585): + 2 кадра с лендинга /novogodniy-furshet/ (галерея), у боксов — живые боксы Коли.
-      var gal = { box: ['img/offers/1407.webp', 'img/offers/1404.webp'], mini: ['img/kits/ng-mini-2.webp', 'img/kits/ng-mini-3.webp'],
-        midi: ['img/kits/ng-midi-2.webp', 'img/kits/ng-midi-3.webp'], maxi: ['img/kits/ng-maxi-2.webp', 'img/kits/ng-maxi-3.webp'] }[k.key];
-      return k.p ? Object.assign({}, k, { img: img, gal: [img].concat(gal) }) : Object.assign({}, k, { img: img, gal: [img].concat(gal), add: NG_DECOR, li: ['Новогоднее оформление линии'].concat(k.li) });
-    }) }
-  };
   // «Фуршетное меню» — наборы Коли (Битрикс 13.11, рекламки в Downloads/ai/furshet-boxy/kolya; «Связь» т.3 №518–529) вместо Мини/Миди/Макси.
   // Боксы — жёсткий состав, гостей сколько угодно; плеттер — конструктор, уровни стартовые; фуршет без обслуживания — официанты отдельно.
   // t — сумма с рекламки по числу гостей; состав фуршета — версия на 30 гостей.
-  var OFFER_GROUP = 'dostavka-fursheta-v-ofis', FREE_DELIVERY = 35000;
+  var OFFER_GROUPS = { 'dostavka-fursheta-v-ofis': 'Фуршет комплектом', 'keytering-na-novyy-god': 'Новогодний фуршет комплектом' }, FREE_DELIVERY = 35000;  // НГ — те же наборы Коли (Маша №590)
   var P1 = ['Канапе «Капрезе»', 'Канапе с цыплёнком терияки в кунжуте', 'Канапе с голубым сыром и виноградом', 'Рулетики с сыром и ветчиной', 'Профитроли с куриным муссом',
     'Блинный рулетик с лососем, сливочным кремом и тобико', 'Рулетики из баклажан', 'Брускетта с бужениной и огуречным релишем', 'Брускетта с тремя видами томатов', 'Салат «Цезарь» с курицей', 'Салат оливье'];
   var P2 = ['Канапе с тигровой креветкой и ананасом', 'Брускетта с ростбифом и соусом вителло', 'Брускетта с лососем и крем-чизом', 'Салат «Руккола» с креветками'];
@@ -247,7 +225,7 @@
     var chip = function (attr, val, on, label) { return '<button type="button" ' + attr + '="' + val + '"' + (on ? ' class="is-on"' : '') + '>' + label + '</button>'; };
     var own = o.own && o.guests.indexOf(g) === -1;
     var count = function (t) { return t.cats.reduce(function (s, c) { return s + c[1].length; }, 0); };
-    return '<div class="ktg-kits ktg-offers"><div class="ktg-kits__head"><h3>Фуршет комплектом</h3>' +
+    return '<div class="ktg-kits ktg-offers"><div class="ktg-kits__head"><h3>' + OFFER_GROUPS[state.group] + '</h3>' +
       '<p class="ktg-offers__promo">Заказ кейтеринга от ' + rub(FREE_DELIVERY) + ' — доставка в пределах МКАД бесплатно</p></div>' +
       '<div class="ktg-offers__tabs">' + OFFERS.map(function (x, k) { return chip('data-of-o', k, k === ofs.o, x.name); }).join('') + '</div>' +
       '<p class="ktg-offers__note">' + o.note + '</p>' +
@@ -275,26 +253,10 @@
           '<button type="button" class="ktg-btn ktg-btn--wide ' + (t.hit || o.tiers.length === 1 ? 'ktg-btn--primary' : 'ktg-btn--ghost') + '" data-of-order="' + k + '">Заказать</button></div></div>';
       }).join('') + '</div></div>';
   }
-  function kitPrice(k) { return k.p || FORMATS.furshet.levels[k.key][0] + (k.add || 0); }
-  function kitsBlock(slug) {
-    var G = KIT_GROUPS[slug];
-    return '<div class="ktg-kits"><div class="ktg-kits__head"><h3>' + G.title + '</h3><p>Цена на гостя — всё приготовим и привезём. Дальше — отдельные позиции, если хочется собрать самим.</p></div><div class="ktg-kits__row">' +
-      G.kits.map(function (k) {
-        var out = k.out || FORMATS.furshet.levels[k.key][1];
-        return '<div class="ktg-kit' + (k.hit ? ' is-hit' : '') + '">' + (k.hit ? '<span class="ktg-kit__hit">Чаще всего выбирают</span>' : '') +
-          (k.gal ? slider(k.gal) : '<div class="ktg-kit__img"><img src="' + k.img + '" alt="" loading="lazy"></div>') + '<div class="ktg-kit__body"><b>' + k.name + '</b>' +
-          '<div class="ktg-kit__price">от ' + rub(kitPrice(k)) + '</div><small>на гостя</small><span class="ktg-kit__out">' + out + ' на персону</span>' +
-          '<div class="ktg-scroll"><ul>' + k.li.map(function (x) { return '<li>' + TICK + x + '</li>'; }).join('') + '</ul></div>' +
-          '<div class="ktg-mob"><ul>' + k.li.slice(0, ofs.open['kit' + k.key] ? 99 : 3).map(function (x) { return '<li>' + TICK + x + '</li>'; }).join('') + '</ul>' +  // мобилка: 3 пункта, остальное по тапу (Маша №572)
-          (k.li.length > 3 ? '<button type="button" class="ktg-set__more ktg-kit__more" data-of-all="kit' + k.key + '">' + (ofs.open['kit' + k.key] ? 'Свернуть' : 'Весь состав') + '</button>' : '') + '</div>' +
-          '<button type="button" class="ktg-btn ktg-btn--wide ' + (k.hit ? 'ktg-btn--primary' : 'ktg-btn--ghost') + '" data-kit="' + k.key + '" data-kit-group="' + slug + '">' + (k.p ? 'Заказать боксы' : k.add ? 'Заказать' : 'Посчитать') + '</button></div></div>';
-      }).join('') + '</div></div>';
-  }
-
   function renderGrid() {
     state.list = currentList();
     var shown = state.list.slice(0, state.limit);
-    var kits = state.q ? '' : state.group === OFFER_GROUP ? offersBlock() : KIT_GROUPS[state.group] ? kitsBlock(state.group) : '';
+    var kits = !state.q && OFFER_GROUPS[state.group] ? offersBlock() : '';
     $('[data-grid]').innerHTML = kits + (shown.length ? shown.map(itemCard).join('') : '<div class="ktg-empty" style="grid-column:1/-1">Ничего не нашли. Напишите менеджеру — приготовим и то, чего нет в меню.</div>');
     var grp = DATA.filter(function (g) { return g.slug === state.group; })[0];
     $('[data-count]').textContent = state.q ? 'Найдено: ' + state.list.length : (grp ? grp.name + ' — ' + grp.sub.toLowerCase() : '');
@@ -415,11 +377,6 @@
       $('[data-drawer-list]').innerHTML = '<div class="ktg-dl ktg-dl--calc"><div><b>' + state.ord[0] + '</b><span>' + state.ord[1] + '</span></div></div>';
       return;
     }
-    if (state.kit) {
-      var k = state.kit, note = k.p ? ' · без обслуживания и напитков' : k.add ? ' · с новогодним оформлением' : '';
-      $('[data-drawer-list]').innerHTML = '<div class="ktg-dl ktg-dl--calc"><div><b>' + (k.p ? k.name : (k.add ? 'Новогодний фуршет «' : 'Фуршет «') + k.name + '»') + ', ' + state.guests + ' гостей · ' + (k.out || FORMATS.furshet.levels[k.key][1]) + ' на гостя</b><span>от ' + rub(kitPrice(k) * state.guests) + note + '</span></div></div>';
-      return;
-    }
     var calc = '<div class="ktg-dl ktg-dl--calc"><div><b>Расчёт: ' + calcTitle() + ', ' + state.guests + ' гостей' + (wants.length ? ' + ' + wants.join(', ').toLowerCase() : '') + '</b><span>от ' + $('[data-sum-total]').textContent + '</span></div></div>';
     $('[data-drawer-list]').innerHTML = calc + (state.picks.length ? state.picks.map(function (id) {
       var it = byId[id].it;
@@ -461,11 +418,6 @@
       state.sort = t.dataset.sort; $$('[data-sort]').forEach(function (b) { b.classList.toggle('is-on', b === t); });
       $('[data-dd-label]').textContent = t.textContent; dd.classList.remove('is-open'); renderGrid(); return;
     }
-    if (t.matches('[data-kit]')) {
-      var kk = KIT_GROUPS[t.dataset.kitGroup].kits.filter(function (x) { return x.key === t.dataset.kit; })[0];
-      if (kk.p || kk.add) { state.kit = kk; state.ord = null; renderDrawer(); open($('[data-drawer]')); return; }
-      state.lvl = kk.key; state.welcome = false; goCalc('furshet'); return;
-    }
     if (t.matches('[data-sl-go]')) { var tr = $('[data-sl]', t.parentNode); tr.scrollBy({ left: +t.dataset.slGo * tr.clientWidth, behavior: 'smooth' }); return; }
     if (t.matches('[data-of-o]')) { ofs.o = +t.dataset.ofO; renderGrid(); return; }
     if (t.matches('[data-of-g]')) { ofs.g[OFFERS[ofs.o].key] = +t.dataset.ofG; renderGrid(); return; }
@@ -476,7 +428,7 @@
       var oo = OFFERS[ofs.o], ot = oo.tiers[+t.dataset.ofOrder], og = ofs.g[oo.key], st = oo.staff && ofs.staff ? offerStaff(og) : 0, osum = offerTotal(oo, ot, og) + st * WAITER;
       state.ord = [(oo.tiers.length > 1 ? oo.name + ' «' + ot.name + '»' : oo.name) + ', ' + og + ' ' + plural(og, 'гость', 'гостя', 'гостей') + (st ? ' + официанты: ' + st : '') + ' · ' + ot.out + ' на гостя',
         rub(osum) + (osum >= FREE_DELIVERY ? ' · доставка в пределах МКАД бесплатно' : ' · доставку посчитаем в смете')];
-      state.kit = null; renderDrawer(); open($('[data-drawer]')); return;
+      renderDrawer(); open($('[data-drawer]')); return;
     }
     if (t.matches('[data-set-pick]')) { toggleSet(+t.closest('[data-set]').dataset.set); return; }
     if (t.matches('[data-set-more]')) { var sc = t.closest('.ktg-set'); sc.classList.toggle('is-full'); t.textContent = sc.classList.contains('is-full') ? 'Свернуть' : 'Ещё ' + (SETS[+sc.dataset.set].rows.length - 3); return; }
@@ -492,7 +444,7 @@
     if (t.matches('[data-qv-prev]') && qvIndex > 0) { openQv(state.list[qvIndex - 1].id); return; }
     if (t.matches('[data-qv-next]') && qvIndex < state.list.length - 1) { openQv(state.list[qvIndex + 1].id); return; }
     if (t.matches('[data-unpick]')) { togglePick(+t.closest('[data-id]').dataset.id); return; }
-    if (t.matches('[data-open-drawer]')) { state.kit = null; state.ord = null; renderDrawer(); open($('[data-drawer]')); return; }
+    if (t.matches('[data-open-drawer]')) { state.ord = null; renderDrawer(); open($('[data-drawer]')); return; }
     if (t.matches('[data-close]')) { closeAll(); return; }
   });
   overlay.addEventListener('click', closeAll);

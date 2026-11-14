@@ -195,7 +195,6 @@
 .ktg-kit li{display:flex;gap:8px;font-size:14px;line-height:20px}
 .ktg-kit li svg{flex:0 0 auto;margin-top:4px;color:var(--ktg-success)}
 .ktg-kit .ktg-btn{height:44px}
-.ktg-kit__more{align-self:flex-start;margin:-8px 0 14px}
 .ktg-scroll{display:none}
 .ktg-offers__all li.is-new svg{color:var(--ktg-accent)}
 @media (min-width:768px){
@@ -206,7 +205,6 @@
   .ktg-scroll ul{flex:none;margin:0}
   .ktg-scroll .ktg-offers__all small:first-child{margin-top:0}
   .ktg-kit.is-wide .ktg-scroll{max-height:220px}
-  .ktg-kits:not(.ktg-offers) .ktg-scroll{max-height:96px;padding-bottom:22px}
 }
 .ktg-sl{position:relative}
 .ktg-sl__track{display:flex;height:100%;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none}
