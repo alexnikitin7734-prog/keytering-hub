@@ -168,7 +168,10 @@
   var KIT_GROUPS = {
     'keytering-na-novyy-god': { title: 'Новогодний фуршет комплектом', kits: KITS.map(function (k) {
       var img = { box: 'img/kits/ng-box.webp', mini: 'img/kits/ng-mini.webp', midi: 'img/kits/ng-midi.webp', maxi: 'img/kits/ng-maxi.webp' }[k.key];
-      return k.p ? Object.assign({}, k, { img: img }) : Object.assign({}, k, { img: img, add: NG_DECOR, li: ['Новогоднее оформление линии'].concat(k.li) });
+      // Листалка (Маша №585): + 2 кадра с лендинга /novogodniy-furshet/ (галерея), у боксов — живые боксы Коли.
+      var gal = { box: ['img/offers/1407.webp', 'img/offers/1404.webp'], mini: ['img/kits/ng-mini-2.webp', 'img/kits/ng-mini-3.webp'],
+        midi: ['img/kits/ng-midi-2.webp', 'img/kits/ng-midi-3.webp'], maxi: ['img/kits/ng-maxi-2.webp', 'img/kits/ng-maxi-3.webp'] }[k.key];
+      return k.p ? Object.assign({}, k, { img: img, gal: [img].concat(gal) }) : Object.assign({}, k, { img: img, gal: [img].concat(gal), add: NG_DECOR, li: ['Новогоднее оформление линии'].concat(k.li) });
     }) }
   };
   // «Фуршетное меню» — наборы Коли (Битрикс 13.11, рекламки в Downloads/ai/furshet-boxy/kolya; «Связь» т.3 №518–529) вместо Мини/Миди/Макси.
@@ -279,7 +282,7 @@
       G.kits.map(function (k) {
         var out = k.out || FORMATS.furshet.levels[k.key][1];
         return '<div class="ktg-kit' + (k.hit ? ' is-hit' : '') + '">' + (k.hit ? '<span class="ktg-kit__hit">Чаще всего выбирают</span>' : '') +
-          '<div class="ktg-kit__img"><img src="' + k.img + '" alt="" loading="lazy"></div><div class="ktg-kit__body"><b>' + k.name + '</b>' +
+          (k.gal ? slider(k.gal) : '<div class="ktg-kit__img"><img src="' + k.img + '" alt="" loading="lazy"></div>') + '<div class="ktg-kit__body"><b>' + k.name + '</b>' +
           '<div class="ktg-kit__price">от ' + rub(kitPrice(k)) + '</div><small>на гостя</small><span class="ktg-kit__out">' + out + ' на персону</span>' +
           '<div class="ktg-scroll"><ul>' + k.li.map(function (x) { return '<li>' + TICK + x + '</li>'; }).join('') + '</ul></div>' +
           '<div class="ktg-mob"><ul>' + k.li.slice(0, ofs.open['kit' + k.key] ? 99 : 3).map(function (x) { return '<li>' + TICK + x + '</li>'; }).join('') + '</ul>' +  // мобилка: 3 пункта, остальное по тапу (Маша №572)
