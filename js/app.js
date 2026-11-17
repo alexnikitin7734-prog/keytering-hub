@@ -148,7 +148,7 @@
 
   function itemCard(it) {
     return '<div class="ktg-item" data-id="' + it.id + '"><div class="ktg-item__img" data-qv-open><img src="' + it.i + '" alt="" loading="lazy"></div>' +
-      '<div class="ktg-item__body"><div class="ktg-item__name" data-qv-open>' + it.n + '</div>' + (it.st ? '<small class="ktg-item__st">' + (it.bar ? 'бар с барменом' : 'станция с поваром и доставкой') + ', от 30 порций</small>' : '') + '<div class="ktg-item__row"><span class="ktg-item__price">' + it.p + '</span>' +
+      '<div class="ktg-item__body"><div class="ktg-item__name" data-qv-open>' + it.n + '</div>' + (it.st ? '<small class="ktg-item__st">' + (it.bar ? 'бар с барменом' : 'станция с поваром и доставкой') + (it.fee ? ', от ' + it.min + ' гостей' : ', от 30 порций') + '</small>' : '') + '<div class="ktg-item__row"><span class="ktg-item__price">' + it.p + '</span>' +
       '<button type="button" class="ktg-pick' + (isPicked(it.id) ? ' is-on' : '') + '" data-pick aria-label="В подборку">' + (isPicked(it.id) ? TICK.replace(/12/g, '18') : PLUS) + '</button></div></div></div>';
   }
 
@@ -314,7 +314,7 @@
     var st = $('[data-qv-st]');
     st.hidden = !it.st;
     $('[data-qv-inc]').hidden = true;
-    if (it.st) { stq = { it: it, g: STATION_MIN, v: 0 }; renderStation(); }
+    if (it.st) { stq = { it: it, g: it.min || STATION_MIN, v: 0 }; renderStation(); }
     $('[data-qv-link]').href = it.u;
     var cd = (window.KTG_CARDS || {})[it.id] || {o: [], s: '', d: ''};
     var esc = function (t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;'); };
@@ -344,24 +344,31 @@
     [STI('<path d="M3 9h18v3H3zM6 12v8M18 12v8"/><path d="M8 9V6a4 4 0 0 1 8 0v3"/>'), 'Стол и декор', 'Стойка и декор станции'],
     [STI('<path d="M4 9h16l-1.5 11h-13z"/><path d="M3 9h18"/><path d="M9 5c0-1 1-2 3-2s3 1 3 2"/>'), 'Крафтовая посуда', 'Одноразовая, на всех гостей']
   ];
+  // Бары Коли — как на сайте: стойка, доставка, бармен, 2 порции на гостя (Маша, Связь т.3 №641).
+  var BAR_INC = [
+    STATION_INC[0],
+    [STI('<path d="M3 9h18v3H3zM6 12v8M18 12v8"/><path d="M8 9V6a4 4 0 0 1 8 0v3"/>'), 'Барная стойка', 'Стойка и декор бара'],
+    [STI('<circle cx="12" cy="7" r="4"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/><path d="M10 14l2 2 2-2"/>'), 'Бармен', 'Готовит при гостях'],
+    [STI('<path d="M6 3h12l-1.5 9a4.5 4.5 0 0 1-9 0z"/><path d="M12 16.5V21M8 21h8"/>'), 'Напитки', 'По 2 порции на гостя']
+  ];
   function renderStation() {
     var st = $('[data-qv-st]'), it = stq.it, g = stq.g, sv = it.sv, pp = sv ? sv[stq.v][1] : it.st;
     var chip = function (attr, val, on, label) { return '<button type="button" ' + attr + '="' + val + '"' + (on ? ' class="is-on"' : '') + '>' + label + '</button>'; };
-    var own = STATION_GUESTS.indexOf(g) === -1;
-    var fee = STATION_FEE + (it.bar ? 0 : STATION_DELIVERY);
-    var who = it.bar ? 'Бар на ' + STATION_MIN + ' гостей, бармен и стойка включены' : 'Станция на ' + STATION_MIN + ' гостей, повар, оборудование и доставка включены';
+    var own = STATION_GUESTS.indexOf(g) === -1, mn = it.min || STATION_MIN, kb = !!it.fee;
+    var fee = it.fee || STATION_FEE + (it.bar ? 0 : STATION_DELIVERY);
+    var who = it.bar ? 'Бар на ' + mn + ' гостей, ' + (kb ? 'доставка, бармен и стойка' : 'бармен и стойка') + ' включены' : 'Станция на ' + STATION_MIN + ' гостей, повар, оборудование и доставка включены';
     st.innerHTML = (sv ? '<small>' + (it.bar ? 'Вариант' : 'Начинка') + '</small><div class="ktg-qv__chips">' + sv.map(function (x, k) { return chip('data-st-v', k, k === stq.v, x[0]); }).join('') + '</div>' : '') +
-      '<small>Сколько гостей</small><div class="ktg-qv__chips">' + STATION_GUESTS.map(function (n) { return chip('data-st-g', n, n === g, n); }).join('') +
+      '<small>Сколько гостей</small><div class="ktg-qv__chips">' + STATION_GUESTS.filter(function (n) { return n >= mn; }).map(function (n) { return chip('data-st-g', n, n === g, n); }).join('') +
         '<input type="text" inputmode="numeric" maxlength="4" placeholder="Своё" aria-label="Своё число гостей" data-st-in' + (own ? ' class="is-on" value="' + g + '"' : '') + '></div>' +
-      '<div class="ktg-qv__strow"><span>' + who + '</span><b>' + rub(fee + pp * STATION_MIN) + '</b></div>' +
-      (g > STATION_MIN ? '<div class="ktg-qv__strow"><span>+ ' + (g - STATION_MIN) + ' доп. ' + plural(g - STATION_MIN, 'порция', 'порции', 'порций') + ' × ' + rub(pp) + '</span><b>' + rub(pp * (g - STATION_MIN)) + '</b></div>'
-        : '<div class="ktg-qv__strow"><span>Доп. порция</span><b>' + rub(pp) + '</b></div>') +
+      '<div class="ktg-qv__strow"><span>' + who + '</span><b>' + rub(fee + pp * mn) + '</b></div>' +
+      (g > mn ? '<div class="ktg-qv__strow"><span>+ ' + (g - mn) + ' доп. ' + (kb ? plural(g - mn, 'гость', 'гостя', 'гостей') : plural(g - mn, 'порция', 'порции', 'порций')) + ' × ' + rub(pp) + '</span><b>' + rub(pp * (g - mn)) + '</b></div>'
+        : '<div class="ktg-qv__strow"><span>' + (kb ? 'Доп. гость' : 'Доп. порция') + '</span><b>' + rub(pp) + '</b></div>') +
       '<div class="ktg-qv__strow is-total"><span>Итого' + (it.bar ? ' за бар' : ' за станцию') + '</span><b>' + rub(fee + pp * g) + '</b></div>' +
       (g >= STATION_STAFF ? '<p class="ktg-qv__stnote">От ' + STATION_STAFF + ' гостей на станцию выходит больше персонала — посчитаем его в смете отдельно.</p>' : '') +
       '';
     var inc = $('[data-qv-inc]');
-    inc.hidden = !!it.bar;
-    inc.innerHTML = it.bar ? '' : '<small>В станцию включено</small><div class="ktg-qv__inc">' + STATION_INC.map(function (x, k) { return '<div' + (k ? '' : ' class="is-hot"') + '>' + x[0] + '<b>' + x[1] + '</b><span>' + x[2] + '</span></div>'; }).join('') + '</div>';
+    inc.hidden = it.bar && !kb;
+    inc.innerHTML = it.bar && !kb ? '' : '<small>' + (kb ? 'В бар включено' : 'В станцию включено') + '</small><div class="ktg-qv__inc">' + (kb ? BAR_INC : STATION_INC).map(function (x, k) { return '<div' + (k ? '' : ' class="is-hot"') + '>' + x[0] + '<b>' + x[1] + '</b><span>' + x[2] + '</span></div>'; }).join('') + '</div>';
   }
   function syncQvPick() {
     var m = $('[data-qv]'), id = +m.dataset.id, b = $('[data-qv-pick]');
@@ -461,7 +468,7 @@
     if (e.target.matches('[data-of-in]')) { var ov = parseInt(e.target.value.replace(/\D/g, ''), 10); if (ov) { ofs.g[OFFERS[ofs.o].key] = Math.max(10, ov); renderGrid(); } return; }
     if (!e.target.matches('[data-st-in]') || !stq) return;
     var v = parseInt(e.target.value.replace(/\D/g, ''), 10);
-    if (v) { stq.g = Math.max(STATION_MIN, v); renderStation(); }
+    if (v) { stq.g = Math.max(stq.it.min || STATION_MIN, v); renderStation(); }
   });
   root.addEventListener('keydown', function (e) { if (e.key === 'Enter' && e.target.matches('[data-st-in],[data-of-in]')) e.target.blur(); });
   $('[data-guests]').addEventListener('change', function () { setGuests(this.value); });
