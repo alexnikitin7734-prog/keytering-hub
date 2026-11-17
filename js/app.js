@@ -217,6 +217,7 @@
   }
   function offerGal(o, t, g) {
     var gal = t.gal.slice(), at = /\.mp4$/.test(gal[0]) ? 1 : 0;
+    if (at && g !== o.guests[0]) { gal.shift(); at = 0; }  // ролик — только на первом наборе гостей, дальше фото (Маша №688)
     gal.splice(at, 0, scaleShot(o, t, g));
     return gal;
   }
