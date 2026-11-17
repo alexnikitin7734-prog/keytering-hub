@@ -4,7 +4,15 @@
   var $ = function (s, el) { return (el || root).querySelector(s); };
   var $$ = function (s, el) { return Array.prototype.slice.call((el || root).querySelectorAll(s)); };
   var rub = function (n) { return Math.round(n).toLocaleString('ru-RU').replace(/,/g, ' ') + ' ₽'; };
-  var ICON = 'img/ikonki/';
+  // Папка файлов лендинга: на сайте её даёт data-lp у корня ({LP} в разметке), в прототипе — пусто, пути от страницы.
+  var LP = root.dataset.lp || '';
+  function lpFix(v) {
+    if (typeof v === 'string') return /^(img|video)\//.test(v) ? LP + v : v;
+    if (v && typeof v === 'object') Object.keys(v).forEach(function (k) { v[k] = lpFix(v[k]); });
+    return v;
+  }
+  if (LP) ['KTG_DATA', 'KTG_SETS', 'KTG_CARDS'].forEach(function (k) { lpFix(window[k]); });
+  var ICON = LP + 'img/ikonki/';
   var TICK = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>';
   var PLUS = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>';
   var DEL = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
@@ -205,6 +213,7 @@
           ['Десерты', ['Брауни мини', 'Медовик мини', 'Мини-эклер шоколадный']],
           ['Напитки', ['Морс «Лесные ягоды»', 'Лимонад «Цитрус»']]] }] }
   ];
+  lpFix(OFFERS);
   var ofs = { o: 0, g: { box: 20, plat: 20, fur: 30 }, staff: false, open: {} };
   function offerTotal(o, t, g) { return t.pp ? Math.round(t.pp * g) : t.t[g]; }
   function offerStaff(g) { return Math.max(1, Math.ceil(g / FORMATS.furshet.waiterPer)); }
@@ -214,7 +223,7 @@
   function scaleShot(o, t, g) {
     var k = o.guests.filter(function (n) { return n <= g; }).pop() || o.guests[0];
     var st = o.staff && ofs.staff && t.st && t.st[k];  // кадр с поваром — только когда включены официанты (Маша №697)
-    return 'img/offers/k/' + (st || (t.sc || o.sc)[k]) + '.webp';
+    return LP + 'img/offers/k/' + (st || (t.sc || o.sc)[k]) + '.webp';
   }
   function offerGal(o, t, g) {
     var gal = t.gal.slice(), at = /\.mp4$/.test(gal[0]) ? 1 : 0;
@@ -491,8 +500,36 @@
     var v = this.value.trim(); clearTimeout(qt);
     qt = setTimeout(function () { state.q = v; state.limit = 12; renderGroups(); renderGrid(); }, 150);
   });
+  // Заявки — на /_order.php, как у всех лендингов А+: name2 — ловушка для ботов, всегда пустой; расчёт и подборка — строками в text.
+  var digits = function (s) { return (s || '').replace(/\D/g, ''); };
+  function fmtPhone(d) {
+    if (!d) return '';
+    if (d[0] === '8') d = '7' + d.slice(1);
+    if (d[0] !== '7') d = '7' + d;
+    d = d.slice(0, 11);
+    return '+7' + (d.length > 1 ? ' (' + d.slice(1, 4) : '') + (d.length > 4 ? ') ' + d.slice(4, 7) : '') + (d.length > 7 ? '-' + d.slice(7, 9) : '') + (d.length > 9 ? '-' + d.slice(9, 11) : '');
+  }
+  function leadText(f) {
+    var rows = $$('[data-drawer-list] .ktg-dl').map(function (r) { return [].map.call(r.querySelectorAll('b,span'), function (x) { return x.textContent.trim(); }).join(' - '); });
+    var extra = $$('.ktg-field', f).slice(2).map(function (x) { return x.value.trim(); }).filter(Boolean);
+    return rows.concat(extra).join('\n').replace(/₽/g, 'руб.').replace(/["'<>«»]/g, '');
+  }
   $$('[data-form]').forEach(function (f) {
-    f.addEventListener('submit', function (e) { e.preventDefault(); f.classList.add('is-sent'); });
+    var ph = $('input[type="tel"]', f);
+    ph.addEventListener('focus', function () { if (!ph.value) ph.value = '+7 '; });
+    ph.addEventListener('blur', function () { if (digits(ph.value).length <= 1) ph.value = ''; });
+    ph.addEventListener('input', function () { ph.value = fmtPhone(digits(ph.value)); });
+    f.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (digits(ph.value).length !== 11) { ph.setCustomValidity('Нужно 11 цифр'); ph.reportValidity(); ph.setCustomValidity(''); return; }
+      var text = leadText(f), subject = f.closest('[data-drawer]') ? 'Кейтеринг: подборка с лендинга' : 'Кейтеринг: заявка с лендинга';
+      var body = { tip: 'phone', name: $('input[type="text"]', f).value.trim(), name2: '', subject: subject, phone: ph.value, text: text, fav: 0 };
+      fetch('/_order.php', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, credentials: 'same-origin',
+        body: Object.keys(body).map(function (k) { return encodeURIComponent(k) + '=' + encodeURIComponent(body[k]); }).join('&') }).catch(function () {});
+      f.classList.add('is-sent');
+      if (window.ym) window.ym(24366505, 'reachGoal', 'ktg_lead');
+      try { if (window.Comagic && Comagic.addOfflineRequest) Comagic.addOfflineRequest({ name: body.name, email: '', phone: body.phone, message: subject + '. ' + text.replace(/\n/g, ' ') }); } catch (er) {}
+    });
   });
 
   renderFormats(); setGuests(50); renderGroups(); renderGrid(); renderPicksEverywhere();
