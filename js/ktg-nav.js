@@ -54,7 +54,8 @@
     var b = e.target.closest('[data-ktgnav-sec]');
     if (b) showSec(b.dataset.ktgnavSec); else if (!e.target.closest('a,button')) toggle(false);
   });
-  document.addEventListener('click', function (e) { if (!panel.contains(e.target)) toggle(false); });
+  // «ещё N» шапка сайта убирает из DOM по клику — такой клик тоже внутри меню, не закрываем (Маша №711).
+  document.addEventListener('click', function (e) { if (e.target.isConnected && !panel.contains(e.target)) toggle(false); });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') toggle(false); });
 
   links.addEventListener('click', function (e) {
