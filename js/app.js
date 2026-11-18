@@ -60,10 +60,10 @@
   var store = { get: function (k, d) { try { var v = localStorage.getItem('ktg_' + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
                 set: function (k, v) { try { localStorage.setItem('ktg_' + k, JSON.stringify(v)); } catch (e) {} } };
 
-  var state = { fmt: 'furshet', lvl: 'mini', guests: 50, staff: true, welcome: false, wants: {}, picks: store.get('picks', []).filter(function (id) { return byId[id]; }),
+  var state = { fmt: 'furshet', lvl: 'mini', guests: 50, staff: true, welcome: false, wants: {}, picks: store.get('picks', []).filter(function (id) { return byId[id]; }), sets: store.get('sets', []).filter(function (k) { return (window.KTG_SETS || [])[k]; }), calcOn: false,
                 group: DATA[0] ? DATA[0].slug : '', q: '', sort: 'pop', limit: 12, list: [] };
 
-  function savePicks() { store.set('picks', state.picks); }
+  function savePicks() { store.set('picks', state.picks); store.set('sets', state.sets); }
   function isPicked(id) { return state.picks.indexOf(id) !== -1; }
   function togglePick(id) {
     var i = state.picks.indexOf(id);
@@ -86,7 +86,7 @@
     $('[data-adds]').innerHTML = ADDS.filter(function (a) { return !a.only || a.only === state.fmt; }).map(function (a) {
       var on, attr, extra = '';
       if (a.key === 'staff') { on = state.staff; attr = 'data-add-staff'; }
-      else if (a.key === 'welcome') { on = state.welcome || !!state.wants[STATION]; attr = 'data-add-welcome'; }
+      else if (a.key === 'welcome') { on = state.welcome && !state.wants[STATION]; attr = 'data-add-welcome'; if (state.wants[STATION]) extra = '<small class="ktg-add__incl">входит в станцию</small>'; }
       else {
         var n = state.picks.filter(function (id) { return byId[id].g.slug === a.group; }).length;
         on = !!state.wants[a.group]; attr = 'data-add-want="' + a.group + '"';
@@ -304,7 +304,7 @@
   function setName(n) { for (var i = 0; i < SET_NAMES.length; i++) if (SET_NAMES[i][0].test(n)) return n.replace(SET_NAMES[i][0], SET_NAMES[i][1]); return n; }
   function renderSets() {
     $('[data-sets]').innerHTML = SETS.map(function (s, k) {
-      var all = s.rows.every(function (r) { return isPicked(r.id); });
+      var all = state.sets.indexOf(k) !== -1;
       return '<div class="ktg-set" data-set="' + k + '"><div class="ktg-set__pics">' + s.rows.slice(0, 3).map(function (r) { return '<img src="' + r.i + '" alt="" loading="lazy">'; }).join('') + '</div>' +
         '<div class="ktg-set__body"><div class="ktg-set__top"><h3>' + s.name + '</h3><span>на ' + s.guests + ' гостей</span></div><p class="ktg-set__sub">' + s.sub + '</p>' +
         '<div class="ktg-set__meta"><span>' + kg(s.w) + '</span><span>≈ ' + Math.round(s.w / s.guests) + ' г на гостя</span><span>' + s.pcs + ' шт</span></div>' +
@@ -315,8 +315,8 @@
     }).join('');
   }
   function toggleSet(k) {
-    var s = SETS[k], all = s.rows.every(function (r) { return isPicked(r.id); });
-    s.rows.forEach(function (r) { var i = state.picks.indexOf(r.id); if (all && i !== -1) state.picks.splice(i, 1); if (!all && i === -1 && byId[r.id]) state.picks.push(r.id); });
+    var i = state.sets.indexOf(k), all = i !== -1;
+    if (all) state.sets.splice(i, 1); else state.sets.push(k);
     savePicks(); renderPicksEverywhere();
     if (!all) { var c = $('[data-cart]'); c.classList.remove('is-bump'); void c.offsetWidth; c.classList.add('is-bump'); }
   }
@@ -406,14 +406,21 @@
       $('[data-drawer-list]').innerHTML = '<div class="ktg-dl ktg-dl--calc"><div><b>' + state.ord[0] + '</b><span>' + state.ord[1] + '</span></div></div>';
       return;
     }
-    var calc = '<div class="ktg-dl ktg-dl--calc"><div><b>Расчёт: ' + calcTitle() + ', ' + state.guests + ' гостей' + (wants.length ? ' + ' + wants.join(', ').toLowerCase() : '') + '</b><span>от ' + $('[data-sum-total]').textContent + '</span></div></div>';
-    $('[data-drawer-list]').innerHTML = calc + (state.picks.length ? state.picks.map(function (id) {
+    var calc = !state.calcOn ? '' : '<div class="ktg-dl ktg-dl--calc"><div><b>Расчёт: ' + calcTitle() + ', ' + state.guests + ' гостей' + (wants.length ? ' + ' + wants.join(', ').toLowerCase() : '') + '</b><span>от ' + $('[data-sum-total]').textContent + '</span></div></div>';
+    // Набор — одной строкой: цена набора и состав (состав уходит менеджеру в заявке); несколько наборов — строка с суммой.
+    var sets = state.sets.map(function (k) {
+      var st = SETS[k];
+      return '<div class="ktg-dl" data-set-id="' + k + '"><img src="' + st.rows[0].i + '" alt=""><div><b>Набор «' + st.name + '» на ' + st.guests + ' гостей</b><span>' + rub(st.p) + '</span>' +
+        '<span class="ktg-dl__sub">' + st.rows.map(function (r) { return setName(r.n) + (r.q > 1 ? ' × ' + r.q : ''); }).join(', ') + '</span></div><button type="button" data-unset aria-label="Убрать">' + DEL + '</button></div>';
+    }).join('');
+    if (state.sets.length > 1) sets += '<div class="ktg-dl ktg-dl--calc"><div><b>Наборы вместе</b><span>' + rub(state.sets.reduce(function (a, k) { return a + SETS[k].p; }, 0)) + '</span></div></div>';
+    $('[data-drawer-list]').innerHTML = calc + sets + (state.picks.length ? state.picks.map(function (id) {
       var it = byId[id].it;
       return '<div class="ktg-dl" data-id="' + id + '"><img src="' + it.i + '" alt=""><div><b>' + it.n + '</b><span>' + it.p + '</span></div><button type="button" data-unpick aria-label="Убрать">' + DEL + '</button></div>';
-    }).join('') : '<p class="ktg-empty" style="padding:24px 0">Добавляйте позиции из меню — они появятся здесь.</p>');
+    }).join('') : calc || sets ? '' : '<p class="ktg-empty" style="padding:24px 0">Добавляйте позиции из меню — они появятся здесь.</p>');
   }
   function renderPicksEverywhere() {
-    var n = state.picks.length, c = $('[data-cart]');
+    var n = state.picks.length + state.sets.length, c = $('[data-cart]');
     $('[data-cart-n]').textContent = n;
     c.classList.toggle('is-shown', n > 0);
     $$('.ktg-item').forEach(function (el) { var id = +el.dataset.id, b = $('[data-pick]', el); b.classList.toggle('is-on', isPicked(id)); b.innerHTML = isPicked(id) ? TICK.replace(/12/g, '18') : PLUS; });
@@ -428,6 +435,8 @@
 
   /* ---------- события ---------- */
   root.addEventListener('click', function (e) {
+    // Расчёт идёт в подборку, только если калькулятор трогали — иначе там висел «Фуршет · Мини» по умолчанию (Антон, №735).
+    if (e.target.closest('#calc,[data-fmt]')) state.calcOn = true;
     var t = e.target.closest('button,a,[data-qv-open],[data-qv-photo],[data-add-staff],[data-add-want],[data-add-welcome],[data-of-staff]');
     var dd = $('[data-dd]');
     if (!e.target.closest('[data-dd]')) dd.classList.remove('is-open');
@@ -472,6 +481,7 @@
     if (t.matches('[data-qv-pick]')) { togglePick(+$('[data-qv]').dataset.id); return; }
     if (t.matches('[data-qv-prev]') && qvIndex > 0) { openQv(state.list[qvIndex - 1].id); return; }
     if (t.matches('[data-qv-next]') && qvIndex < state.list.length - 1) { openQv(state.list[qvIndex + 1].id); return; }
+    if (t.matches('[data-unset]')) { toggleSet(+t.closest('[data-set-id]').dataset.setId); return; }
     if (t.matches('[data-unpick]')) { togglePick(+t.closest('[data-id]').dataset.id); return; }
     if (t.matches('[data-open-drawer]')) { state.ord = null; renderDrawer(); open($('[data-drawer]')); return; }
     if (t.matches('[data-close]')) { closeAll(); return; }
@@ -493,6 +503,7 @@
     if (v) { stq.g = Math.max(stq.it.min || STATION_MIN, v); renderStation(); }
   });
   root.addEventListener('keydown', function (e) { if (e.key === 'Enter' && e.target.matches('[data-st-in],[data-of-in]')) e.target.blur(); });
+  $('#calc').addEventListener('input', function () { state.calcOn = true; });
   $('[data-guests]').addEventListener('change', function () { setGuests(this.value); });
   $('[data-guests-range]').addEventListener('input', function () { setGuests(this.value); });
   var qt;
@@ -522,7 +533,7 @@
     f.addEventListener('submit', function (e) {
       e.preventDefault();
       if (digits(ph.value).length !== 11) { ph.setCustomValidity('Нужно 11 цифр'); ph.reportValidity(); ph.setCustomValidity(''); return; }
-      var text = leadText(f), subject = f.closest('[data-drawer]') ? 'Кейтеринг: подборка с лендинга' : 'Кейтеринг: заявка с лендинга';
+      var text = leadText(f), subject = f.closest('[data-drawer]') ? 'Кейтеринг: подборка с лендинга' : f.closest('[data-atr]') ? 'Кейтеринг: дата в Атриуме с лендинга' : 'Кейтеринг: заявка с лендинга';
       var body = { tip: 'phone', name: $('input[type="text"]', f).value.trim(), name2: '', subject: subject, phone: ph.value, text: text, fav: 0 };
       fetch('/_order.php', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, credentials: 'same-origin',
         body: Object.keys(body).map(function (k) { return encodeURIComponent(k) + '=' + encodeURIComponent(body[k]); }).join('&') }).catch(function () {});
@@ -531,6 +542,33 @@
       try { if (window.Comagic && Comagic.addOfflineRequest) Comagic.addOfflineRequest({ name: body.name, email: '', phone: body.phone, message: subject + '. ' + text.replace(/\n/g, ' ') }); } catch (er) {}
     });
   });
+
+  // «Атриум»: месяц и занятые дни — вручную в data-month / data-busy секции, остальное считается само. Выбранный день уходит в заявку.
+  var atr = $('[data-atr]');
+  if (atr) {
+    var am = atr.dataset.month.split('-'), ay = +am[0], amo = +am[1] - 1;
+    var busy = atr.dataset.busy.split(',').map(function (s) { return +s; });
+    var today = new Date(); today.setHours(0, 0, 0, 0);
+    var html = new Array((new Date(ay, amo, 1).getDay() + 6) % 7 + 1).join('<span></span>'), free = 0;
+    for (var d = 1, n = new Date(ay, amo + 1, 0).getDate(); d <= n; d++) {
+      var dt = new Date(ay, amo, d), off = dt < today || busy.indexOf(d) > -1, wd = dt.getDay();
+      if (!off) free++;
+      html += '<button type="button" class="ktg-atr__d' + (wd === 0 || wd === 6 ? ' is-wk' : '') + (busy.indexOf(d) > -1 ? ' is-busy' : dt < today ? ' is-past' : '') + '" data-d="' + d + '"' + (off ? ' disabled' : '') + '>' + d + '</button>';
+    }
+    $('[data-atr-days]', atr).innerHTML = html;
+    $('[data-atr-free]', atr).textContent = 'свободно ' + free + ' из ' + n;
+    var mn = new Date(ay, amo, 1).toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' }).replace(' г.', '');
+    $('[data-atr-month]', atr).textContent = mn.charAt(0).toUpperCase() + mn.slice(1);
+    $('[data-atr-days]', atr).addEventListener('click', function (e) {
+      var b = e.target.closest('[data-d]');
+      if (!b || b.disabled) return;
+      $$('.ktg-atr__d.is-on', atr).forEach(function (x) { x.classList.remove('is-on'); });
+      b.classList.add('is-on');
+      var label = new Date(ay, amo, +b.dataset.d).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', weekday: 'long' });
+      $('[data-atr-pick]', atr).innerHTML = '<b>' + label + '</b> — свободно';
+      $('[data-atr-val]', atr).value = 'Атриум: ' + label;
+    });
+  }
 
   renderFormats(); setGuests(50); renderGroups(); renderGrid(); renderPicksEverywhere();
 })();
