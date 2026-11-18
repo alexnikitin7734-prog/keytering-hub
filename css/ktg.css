@@ -302,8 +302,9 @@
 .ktg-root .ktg-atr__d:disabled{cursor:default}
 .ktg-atr__d.is-busy,.ktg-atr__legend i.is-busy{background:repeating-linear-gradient(-45deg,var(--ktg-sunken) 0 4px,transparent 4px 8px);box-shadow:inset 0 0 0 1px var(--ktg-border)}
 .ktg-atr__d.is-busy{color:var(--ktg-text-3);text-decoration:line-through}
+.ktg-atr__d.is-res,.ktg-atr__legend i.is-res{outline:1px dashed var(--ktg-accent-soft);outline-offset:-3px}
 .ktg-atr__d.is-past{background:none;color:var(--ktg-text-3)}
-.ktg-atr__legend{display:flex;gap:16px;font-size:13px;color:var(--ktg-text-2)}
+.ktg-atr__legend{display:flex;flex-wrap:wrap;gap:16px;font-size:13px;color:var(--ktg-text-2)}
 .ktg-atr__legend span{display:flex;align-items:center;gap:6px}
 .ktg-atr__legend i{width:14px;height:14px;border-radius:4px;background:var(--ktg-page);box-shadow:inset 0 0 0 1px var(--ktg-border)}
 .ktg-atr__pick{min-height:24px;margin-top:4px;color:var(--ktg-text-2)}

@@ -543,20 +543,30 @@
     });
   });
 
-  // «Атриум»: месяц и занятые дни — вручную в data-month / data-busy секции, остальное считается само. Выбранный день уходит в заявку.
+  // «Атриум»: месяц — в data-month секции, занятые дни — из брони в Tony (ручка вызовчата, docs/JARVIS-SYNC.md там):
+  // busy — занято, reserve — предварительно занято, выбрать можно. Ручка не ответила — дни из data-busy.
   var atr = $('[data-atr]');
   if (atr) {
     var am = atr.dataset.month.split('-'), ay = +am[0], amo = +am[1] - 1;
-    var busy = atr.dataset.busy.split(',').map(function (s) { return +s; });
+    var busy = atr.dataset.busy.split(',').map(function (s) { return +s; }), reserve = [];
     var today = new Date(); today.setHours(0, 0, 0, 0);
-    var html = new Array((new Date(ay, amo, 1).getDay() + 6) % 7 + 1).join('<span></span>'), free = 0;
-    for (var d = 1, n = new Date(ay, amo + 1, 0).getDate(); d <= n; d++) {
-      var dt = new Date(ay, amo, d), off = dt < today || busy.indexOf(d) > -1, wd = dt.getDay();
-      if (!off) free++;
-      html += '<button type="button" class="ktg-atr__d' + (wd === 0 || wd === 6 ? ' is-wk' : '') + (busy.indexOf(d) > -1 ? ' is-busy' : dt < today ? ' is-past' : '') + '" data-d="' + d + '"' + (off ? ' disabled' : '') + '>' + d + '</button>';
-    }
-    $('[data-atr-days]', atr).innerHTML = html;
-    $('[data-atr-free]', atr).textContent = 'свободно ' + free + ' из ' + n;
+    var drawAtr = function () {
+      var html = new Array((new Date(ay, amo, 1).getDay() + 6) % 7 + 1).join('<span></span>'), free = 0;
+      for (var d = 1, n = new Date(ay, amo + 1, 0).getDate(); d <= n; d++) {
+        var dt = new Date(ay, amo, d), off = dt < today || busy.indexOf(d) > -1, wd = dt.getDay();
+        if (!off && reserve.indexOf(d) < 0) free++;
+        html += '<button type="button" class="ktg-atr__d' + (wd === 0 || wd === 6 ? ' is-wk' : '') + (busy.indexOf(d) > -1 ? ' is-busy' : dt < today ? ' is-past' : reserve.indexOf(d) > -1 ? ' is-res' : '') + '" data-d="' + d + '"' + (off ? ' disabled' : '') + '>' + d + '</button>';
+      }
+      $('[data-atr-days]', atr).innerHTML = html;
+      $('[data-atr-free]', atr).textContent = 'свободно ' + free + ' из ' + n;
+    };
+    var atrDone = false, atrDraw = function () { if (!atrDone) { atrDone = true; drawAtr(); } };
+    setTimeout(atrDraw, 4000);
+    fetch('https://vyzovchat.ru/api/public/atrium?month=' + atr.dataset.month)
+      .then(function (r) { if (!r.ok) throw r; return r.json(); })
+      .then(function (j) { if (!atrDone) { busy = j.busy; reserve = j.reserve; } })
+      .catch(function () {})
+      .then(atrDraw);
     var mn = new Date(ay, amo, 1).toLocaleDateString('ru-RU', { month: 'long', year: 'numeric' }).replace(' г.', '');
     $('[data-atr-month]', atr).textContent = mn.charAt(0).toUpperCase() + mn.slice(1);
     $('[data-atr-days]', atr).addEventListener('click', function (e) {
@@ -565,7 +575,7 @@
       $$('.ktg-atr__d.is-on', atr).forEach(function (x) { x.classList.remove('is-on'); });
       b.classList.add('is-on');
       var label = new Date(ay, amo, +b.dataset.d).toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', weekday: 'long' });
-      $('[data-atr-pick]', atr).innerHTML = '<b>' + label + '</b> — свободно';
+      $('[data-atr-pick]', atr).innerHTML = '<b>' + label + '</b> — ' + (b.classList.contains('is-res') ? 'предварительно занято, менеджер уточнит' : 'свободно');
       $('[data-atr-val]', atr).value = 'Атриум: ' + label;
     });
   }
