@@ -276,11 +276,15 @@
 .ktg-atr__shots{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:var(--ktg-gap)}
 .ktg-atr__shots img{width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;border-radius:var(--ktg-r-img)}
 .ktg-atr__shots img:first-child{grid-column:1/-1;aspect-ratio:16/8}
+.ktg-atr__sl{aspect-ratio:16/9;border-radius:var(--ktg-r-img);overflow:hidden}
+.ktg-atr__sl img{width:100%;height:100%;object-fit:cover}
 .ktg-atr__free{position:absolute;left:20px;top:20px;display:flex;align-items:baseline;gap:8px;padding:10px 18px;border-radius:var(--ktg-r-pill);background:#fff;box-shadow:var(--ktg-shadow-hover);font-size:14px;color:var(--ktg-text-2)}
 .ktg-atr__free b{font-family:var(--ktg-head);font-size:24px;line-height:28px;color:var(--ktg-accent)}
 .ktg-atr__nums{list-style:none;display:grid;grid-template-columns:repeat(4,1fr);gap:var(--ktg-gap)}
 .ktg-atr__nums li{background:var(--ktg-card);border-radius:var(--ktg-r-lg);padding:16px 18px}
+.ktg-atr__sl~.ktg-atr__nums li{padding:12px 16px}
 .ktg-atr__nums b{display:block;font-family:var(--ktg-head);font-size:24px;line-height:30px;color:var(--ktg-ink)}
+.ktg-atr__sl~.ktg-atr__nums b{font-size:22px;line-height:28px}
 .ktg-atr__nums span{font-size:13px;line-height:18px;color:var(--ktg-text-2)}
 .ktg-atr__addr{display:flex;align-items:center;gap:12px;color:var(--ktg-accent)}
 .ktg-atr__addr svg{flex:none}
@@ -476,7 +480,7 @@
   .ktg-grid{grid-template-columns:repeat(3,1fr)}
   .ktg-kits__row{grid-template-columns:1fr 1fr}
   .ktg-final{grid-template-columns:1fr;gap:28px}
-  .ktg-atr{grid-template-columns:1fr}
+  .ktg-atr{grid-template-columns:minmax(0,1fr)}
   .ktg-atr__card{position:static}
 }
 @media (max-width:767px){
@@ -541,11 +545,12 @@
   .ktg-final h2{font-size:26px;line-height:32px}
   .ktg-atr__shots{gap:10px}
   .ktg-atr__shots img:first-child{aspect-ratio:3/2}
+  .ktg-atr__sl{aspect-ratio:3/2}
   .ktg-atr__free{left:12px;top:12px;padding:8px 14px}
   .ktg-atr__free b{font-size:20px;line-height:24px}
   .ktg-atr__nums{grid-template-columns:1fr 1fr;gap:10px}
-  .ktg-atr__nums li{padding:12px 14px}
-  .ktg-atr__nums b{font-size:20px;line-height:26px}
+  .ktg-atr__nums li,.ktg-atr__sl~.ktg-atr__nums li{padding:12px 14px}
+  .ktg-atr__nums b,.ktg-atr__sl~.ktg-atr__nums b{font-size:20px;line-height:26px}
   .ktg-atr__addr{flex-wrap:wrap}
   .ktg-atr__card{padding:20px 16px}
   .ktg-atr__wd,.ktg-atr__days{gap:4px}
