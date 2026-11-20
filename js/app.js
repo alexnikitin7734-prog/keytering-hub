@@ -401,6 +401,8 @@
   function renderDrawer() {
     var f = FORMATS[state.fmt];
     var wants = ADDS.filter(function (x) { return x.group && state.wants[x.group] && !(x.group === STATION && state.fmt === 'furshet'); }).map(function (x) { return x.name; });
+    var tc = $('[data-to-cart]');
+    if (tc) tc.style.display = !state.ord && (state.picks.length || state.sets.length) ? '' : 'none';
     if (state.ord) {
       $('[data-drawer-list]').innerHTML = '<div class="ktg-dl ktg-dl--calc"><div><b>' + state.ord[0] + '</b><span>' + state.ord[1] + '</span></div></div>';
       return;
@@ -417,6 +419,21 @@
       var it = byId[id].it;
       return '<div class="ktg-dl" data-id="' + id + '"><img src="' + it.i + '" alt=""><div><b>' + it.n + '</b><span>' + it.p + '</span></div><button type="button" data-unpick aria-label="Убрать">' + DEL + '</button></div>';
     }).join('') : calc || sets ? '' : '<p class="ktg-empty" style="padding:24px 0">Добавляйте позиции из меню — они появятся здесь.</p>');
+  }
+  // Позиции подборки и наборов — в корзину сайта тем, что кладёт карточка по умолчанию (_ktg_tocart.php, Маша, Связь т.21 №172–180).
+  // Станции — на гостей из калькулятора, если его трогали. Расчёт калькулятора не товар — в корзину не идёт.
+  function toCart(b) {
+    var q = {};
+    state.picks.forEach(function (id) { q[id] = (q[id] || 0) + 1; });
+    state.sets.forEach(function (k) { SETS[k].rows.forEach(function (r) { q[r.id] = (q[r.id] || 0) + r.q; }); });
+    var body = new URLSearchParams();
+    body.append('items', Object.keys(q).map(function (id) { return id + ':' + q[id]; }).join(','));
+    body.append('guests', state.calcOn ? state.guests : 0);
+    b.disabled = true;
+    fetch('/_ktg_tocart.php', { method: 'POST', body: body, credentials: 'same-origin' })
+      .then(function (r) { return r.json(); })
+      .then(function () { state.picks = []; state.sets = []; savePicks(); location.href = '/cart/'; })
+      .catch(function () { b.disabled = false; });
   }
   function renderPicksEverywhere() {
     var n = state.picks.length + state.sets.length, c = $('[data-cart]');
@@ -482,6 +499,7 @@
     if (t.matches('[data-qv-next]') && qvIndex < state.list.length - 1) { openQv(state.list[qvIndex + 1].id); return; }
     if (t.matches('[data-unset]')) { toggleSet(+t.closest('[data-set-id]').dataset.setId); return; }
     if (t.matches('[data-unpick]')) { togglePick(+t.closest('[data-id]').dataset.id); return; }
+    if (t.matches('[data-to-cart]')) { toCart(t); return; }
     if (t.matches('[data-open-drawer]')) { state.ord = null; renderDrawer(); open($('[data-drawer]')); return; }
     if (t.matches('[data-close]')) { closeAll(); return; }
   });
