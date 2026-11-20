@@ -466,6 +466,7 @@
 .ktg-dl button:hover{color:var(--ktg-accent);background:var(--ktg-accent-tint)}
 .ktg-root .ktg-dl__sub{display:block;margin-top:2px;font-size:12px;line-height:16px;font-weight:400;color:var(--ktg-text-2)}
 .ktg-dl--calc{background:var(--ktg-page);border-radius:var(--ktg-r-md);padding:12px;grid-template-columns:1fr}
+.ktg-dl--calc:has(button){grid-template-columns:1fr auto}
 .ktg-drawer__foot{padding:16px 24px 24px;border-top:1px solid var(--ktg-border);display:flex;flex-direction:column;gap:10px}
 .ktg-drawer__foot .ktg-field{background:var(--ktg-page)}
 

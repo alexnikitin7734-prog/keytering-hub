@@ -407,7 +407,7 @@
       $('[data-drawer-list]').innerHTML = '<div class="ktg-dl ktg-dl--calc"><div><b>' + state.ord[0] + '</b><span>' + state.ord[1] + '</span></div></div>';
       return;
     }
-    var calc = !state.calcOn ? '' : '<div class="ktg-dl ktg-dl--calc"><div><b>Расчёт: ' + calcTitle() + ', ' + state.guests + ' гостей' + (wants.length ? ' + ' + wants.join(', ').toLowerCase() : '') + '</b><span>от ' + $('[data-sum-total]').textContent + '</span></div></div>';
+    var calc = !state.calcOn ? '' : '<div class="ktg-dl ktg-dl--calc"><div><b>Расчёт: ' + calcTitle() + ', ' + state.guests + ' гостей' + (wants.length ? ' + ' + wants.join(', ').toLowerCase() : '') + '</b><span>от ' + $('[data-sum-total]').textContent + '</span></div><button type="button" data-uncalc aria-label="Убрать">' + DEL + '</button></div>';
     // Набор — одной строкой: цена набора и состав (состав уходит менеджеру в заявке); несколько наборов — строка с суммой.
     var sets = state.sets.map(function (k) {
       var st = SETS[k];
@@ -497,6 +497,7 @@
     if (t.matches('[data-qv-pick]')) { togglePick(+$('[data-qv]').dataset.id); return; }
     if (t.matches('[data-qv-prev]') && qvIndex > 0) { openQv(state.list[qvIndex - 1].id); return; }
     if (t.matches('[data-qv-next]') && qvIndex < state.list.length - 1) { openQv(state.list[qvIndex + 1].id); return; }
+    if (t.matches('[data-uncalc]')) { state.calcOn = false; renderDrawer(); return; }
     if (t.matches('[data-unset]')) { toggleSet(+t.closest('[data-set-id]').dataset.setId); return; }
     if (t.matches('[data-unpick]')) { togglePick(+t.closest('[data-id]').dataset.id); return; }
     if (t.matches('[data-to-cart]')) { toCart(t); return; }
