@@ -63,6 +63,11 @@
   var state = { fmt: 'furshet', lvl: 'mini', guests: 50, staff: true, welcome: false, wants: {}, picks: store.get('picks', []).filter(function (id) { return byId[id]; }), sets: store.get('sets', []).filter(function (k) { return (window.KTG_SETS || [])[k]; }), calcOn: false,
                 group: DATA[0] ? DATA[0].slug : '', q: '', sort: 'pop', limit: 12, list: [] };
 
+  // Цели Метрики — общие на все лендинги (условие «содержит» _lead/_cta/_calc_use), lp — разрез по странице.
+  var calcUsed = false;
+  function goal(name, params) { if (window.ym) window.ym(24366505, 'reachGoal', name, Object.assign({ lp: 'keytering' }, params)); }
+  function calcUse() { if (!calcUsed) { calcUsed = true; goal('ktg_calc_use'); } }
+
   function savePicks() { store.set('picks', state.picks); store.set('sets', state.sets); }
   function isPicked(id) { return state.picks.indexOf(id) !== -1; }
   function togglePick(id) {
@@ -423,6 +428,7 @@
   // Позиции подборки и наборов — в корзину сайта тем, что кладёт карточка по умолчанию (_ktg_tocart.php, Маша, Связь т.21 №172–180).
   // Станции — на гостей из калькулятора, если его трогали. Наборы — своими сетами × штук (№224). Расчёт калькулятора не товар — в корзину не идёт.
   function toCart(b) {
+    goal('ktg_cart');
     var q = {};
     state.picks.forEach(function (id) { q[id] = (q[id] || 0) + 1; });
     state.sets.forEach(function (k) { SETS[k].rows.forEach(function (r) { q[r.id] = (q[r.id] || 0) + r.q; }); });
@@ -453,10 +459,13 @@
   root.addEventListener('click', function (e) {
     // Расчёт идёт в подборку, только если калькулятор трогали — иначе там висел «Фуршет · Мини» по умолчанию (Антон, №735).
     if (e.target.closest('#calc,[data-fmt]')) state.calcOn = true;
+    if (e.target.closest('#calc')) calcUse();
     var t = e.target.closest('button,a,[data-qv-open],[data-qv-photo],[data-add-staff],[data-add-want],[data-add-welcome],[data-of-staff]');
     var dd = $('[data-dd]');
     if (!e.target.closest('[data-dd]')) dd.classList.remove('is-open');
     if (!t) return;
+    if (t.matches('a[href$="#calc"],a[href$="#zayavka"],[data-fmt],[data-of-order],[data-open-drawer]'))
+      goal('ktg_cta', { place: t.matches('[data-cart]') ? 'cart' : t.matches('[data-fmt]') ? 'formats' : t.closest('.ktg-hero') ? 'hero' : (t.closest('section') || {}).id || '' });
     if (t.matches('[data-fmt]')) { goCalc(t.dataset.fmt); return; }
     if (t.matches('[data-fmt-set]')) { state.fmt = t.dataset.fmtSet; renderFormats(); renderSum(); return; }
     if (t.matches('[data-lvl]')) { state.lvl = t.dataset.lvl; renderFormats(); renderSum(); return; }
@@ -522,7 +531,7 @@
     if (v) { stq.g = Math.max(stq.it.min || STATION_MIN, v); renderStation(); }
   });
   root.addEventListener('keydown', function (e) { if (e.key === 'Enter' && e.target.matches('[data-st-in],[data-of-in]')) e.target.blur(); });
-  $('#calc').addEventListener('input', function () { state.calcOn = true; });
+  $('#calc').addEventListener('input', function () { state.calcOn = true; calcUse(); });
   $('[data-guests]').addEventListener('change', function () { setGuests(this.value); });
   $('[data-guests-range]').addEventListener('input', function () { setGuests(this.value); });
   var qt;
@@ -557,7 +566,7 @@
       fetch('/_order.php', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, credentials: 'same-origin',
         body: Object.keys(body).map(function (k) { return encodeURIComponent(k) + '=' + encodeURIComponent(body[k]); }).join('&') }).catch(function () {});
       f.classList.add('is-sent');
-      if (window.ym) window.ym(24366505, 'reachGoal', 'ktg_lead');
+      goal('ktg_lead', { form: f.closest('[data-drawer]') ? 'drawer' : f.closest('[data-atr]') ? 'atrium' : 'zayavka' });
       try { if (window.Comagic && Comagic.addOfflineRequest) Comagic.addOfflineRequest({ name: body.name, email: '', phone: body.phone, message: subject + '. ' + text.replace(/\n/g, ' ') }); } catch (er) {}
     });
   });
