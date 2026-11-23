@@ -161,14 +161,14 @@
 
   function itemCard(it) {
     return '<div class="ktg-item" data-id="' + it.id + '"><div class="ktg-item__img" data-qv-open><img src="' + it.i + '" alt="" loading="lazy"></div>' +
-      '<div class="ktg-item__body"><div class="ktg-item__name" data-qv-open>' + it.n + '</div>' + (it.st ? '<small class="ktg-item__st">' + (it.bar ? 'бар с барменом' : 'станция с поваром и доставкой') + (it.fee ? ', от ' + it.min + ' гостей' : ', от 30 порций') + '</small>' : '') + '<div class="ktg-item__row"><span class="ktg-item__price">' + it.p + '</span>' +
+      '<div class="ktg-item__body"><div class="ktg-item__name" data-qv-open>' + it.n + '</div>' + (it.st ? '<small class="ktg-item__st">' + (it.bar ? 'бар с барменом' : 'станция с поваром') + (it.fee ? ', от ' + it.min + ' гостей' : ', от 30 порций') + '</small>' : '') + '<div class="ktg-item__row"><span class="ktg-item__price">' + it.p + '</span>' +
       '<button type="button" class="ktg-pick' + (isPicked(it.id) ? ' is-on' : '') + '" data-pick aria-label="В подборку">' + (isPicked(it.id) ? TICK.replace(/12/g, '18') : PLUS) + '</button></div></div></div>';
   }
 
   // «Фуршетное меню» — наборы Коли (Битрикс 13.11, рекламки в Downloads/ai/furshet-boxy/kolya; «Связь» т.3 №518–529) вместо Мини/Миди/Макси.
   // Боксы — жёсткий состав, гостей сколько угодно; плеттер — конструктор, уровни стартовые; фуршет без обслуживания — официанты отдельно.
   // t — сумма с рекламки по числу гостей; состав фуршета — версия на 30 гостей.
-  var OFFER_GROUPS = { 'dostavka-fursheta-v-ofis': 'Фуршет комплектом', 'keytering-na-novyy-god': 'Новогодний фуршет комплектом' }, FREE_DELIVERY = 35000;  // НГ — те же наборы Коли (Маша №590)
+  var OFFER_GROUPS = { 'dostavka-fursheta-v-ofis': 'Фуршет комплектом', 'keytering-na-novyy-god': 'Новогодний фуршет комплектом' };  // НГ — те же наборы Коли (Маша №590)
   var P1 = ['Канапе «Капрезе»', 'Канапе с цыплёнком терияки в кунжуте', 'Канапе с голубым сыром и виноградом', 'Рулетики с сыром и ветчиной', 'Профитроли с куриным муссом',
     'Блинный рулетик с лососем, сливочным кремом и тобико', 'Рулетики из баклажан', 'Брускетта с бужениной и огуречным релишем', 'Брускетта с тремя видами томатов', 'Салат «Цезарь» с курицей', 'Салат оливье'];
   var P2 = ['Канапе с тигровой креветкой и ананасом', 'Брускетта с ростбифом и соусом вителло', 'Брускетта с лососем и крем-чизом', 'Салат «Руккола» с креветками'];
@@ -253,7 +253,7 @@
     var own = o.own && o.guests.indexOf(g) === -1;
     var count = function (t) { return t.cats.reduce(function (s, c) { return s + c[1].length; }, 0); };
     return '<div class="ktg-kits ktg-offers"><div class="ktg-kits__head"><h3>' + OFFER_GROUPS[state.group] + '</h3>' +
-      '<p class="ktg-offers__promo">Заказ кейтеринга от ' + rub(FREE_DELIVERY) + ' — доставка в пределах МКАД бесплатно</p></div>' +
+      '<p class="ktg-offers__promo">Доставку в пределах МКАД посчитаем в корзине по сумме заказа</p></div>' +
       '<div class="ktg-offers__tabs">' + OFFERS.map(function (x, k) { return chip('data-of-o', k, k === ofs.o, x.name); }).join('') + '</div>' +
       '<p class="ktg-offers__note">' + o.note + '</p>' +
       '<div class="ktg-offers__bar"><small>Сколько гостей</small><div class="ktg-qv__chips">' + o.guests.map(function (n) { return chip('data-of-g', n, n === g, n); }).join('') +
@@ -274,7 +274,7 @@
         return '<div class="ktg-kit' + (t.hit ? ' is-hit' : '') + (o.tiers.length === 1 ? ' is-wide' : '') + '">' + (t.hit ? '<span class="ktg-kit__hit">Чаще всего выбирают</span>' : '') +
           slider(offerGal(o, t, g)) + '<div class="ktg-kit__body"><b>' + t.name + '</b><span class="ktg-offers__n">' + count(t) + ' ' + plural(count(t), 'позиция', 'позиции', 'позиций') + '</span>' +
           '<div class="ktg-kit__price">' + rub(sum) + '</div><small>на ' + g + ' ' + plural(g, 'гостя', 'гостей', 'гостей') + ' · ≈ ' + rub(sum / g) + ' на гостя</small>' +
-          '<div class="ktg-offers__tags"><span class="ktg-kit__out">' + t.out + ' на гостя</span>' + (sum >= FREE_DELIVERY ? '<span class="ktg-kit__out is-free">Доставка бесплатно</span>' : '') + '</div>' +
+          '<div class="ktg-offers__tags"><span class="ktg-kit__out">' + t.out + ' на гостя</span></div>' +
           // Десктоп — весь состав в окне с прокруткой и градиентом, мобилка — коротко + раскрытие по тапу (Маша №574–576).
           '<div class="ktg-scroll">' + full + '</div><div class="ktg-mob">' + (ofs.open[id] ? full : short) + '<button type="button" class="ktg-set__more" data-of-all="' + id + '">' + (ofs.open[id] ? 'Свернуть' : 'Весь состав') + '</button></div>' +
           '<button type="button" class="ktg-btn ktg-btn--wide ' + (t.hit || o.tiers.length === 1 ? 'ktg-btn--primary' : 'ktg-btn--ghost') + '" data-of-order="' + k + '">Заказать</button></div></div>';
@@ -359,12 +359,12 @@
   }
   // Станция: повар и оборудование + порции «готовим на месте», не меньше 30 (docs/build_data.py). Клиенту — одной суммой на 30 гостей + доп. порции (Маша №313).
   // Несколько начинок (у баров — Б/А и алкогольный) — чипы, от выбранной зависят станция и доп. порция (Маша №323, №327).
-  var STATION_FEE = 12000, STATION_DELIVERY = 5000, STATION_STAFF = 100, STATION_MIN = 30, STATION_GUESTS = [30, 50, 100, 150, 200], stq = null;
+  var STATION_FEE = 12000, STATION_STAFF = 100, STATION_MIN = 30, STATION_GUESTS = [30, 50, 100, 150, 200], stq = null;
   // «В станцию включено» — подача как у Министерства (Маша №363).
   var STI = function (d) { return '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">' + d + '</svg>'; };
-  // Доставка первой и с переливом — Стас (Маша №427).
+  // Доставка первой; у станций — по калькулятору в корзине, с переливом «бесплатно» — только у баров (Маша №427, т.21 №594).
   var STATION_INC = [
-    [STI('<path d="M2 7h11v9H2zM13 10h4l3 3v3h-7z"/><circle cx="6" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>'), 'Доставка', 'Бесплатно в пределах МКАД'],
+    [STI('<path d="M2 7h11v9H2zM13 10h4l3 3v3h-7z"/><circle cx="6" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>'), 'Доставка', 'Считаем по сумме заказа'],
     [STI('<path d="M3 10h18M5 10v10M19 10v10M8 10V6h8v4M10 6V4h4v2"/>'), 'Оборудование', 'Своё, всё для готовки'],
     [STI('<path d="M7 10a3 3 0 1 1 2-5.2A3 3 0 0 1 15 4.8 3 3 0 1 1 17 10v3H7z"/><path d="M7 13v2a5 5 0 0 0 10 0v-2"/><path d="M9 21h6"/>'), 'Повар', 'Готовит при гостях'],
     [STI('<path d="M4 20c0-6 4-11 12-14-1 8-5 13-12 14z"/><path d="M4 20l7-7"/>'), 'Продукты', 'На утверждённое меню'],
@@ -373,7 +373,7 @@
   ];
   // Бары Коли — как на сайте: стойка, доставка, бармен (Маша, Связь т.3 №641).
   var BAR_INC = [
-    STATION_INC[0],
+    [STI('<path d="M2 7h11v9H2zM13 10h4l3 3v3h-7z"/><circle cx="6" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>'), 'Доставка', 'Бесплатно в пределах МКАД'],
     [STI('<path d="M3 9h18v3H3zM6 12v8M18 12v8"/><path d="M8 9V6a4 4 0 0 1 8 0v3"/>'), 'Барная стойка', 'Стойка и декор бара'],
     [STI('<circle cx="12" cy="7" r="4"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/><path d="M10 14l2 2 2-2"/>'), 'Бармен', 'Готовит при гостях']
   ];
@@ -381,8 +381,8 @@
     var st = $('[data-qv-st]'), it = stq.it, g = stq.g, sv = it.sv, pp = sv ? sv[stq.v][1] : it.st;
     var chip = function (attr, val, on, label) { return '<button type="button" ' + attr + '="' + val + '"' + (on ? ' class="is-on"' : '') + '>' + label + '</button>'; };
     var own = STATION_GUESTS.indexOf(g) === -1, mn = it.min || STATION_MIN, kb = !!it.fee;
-    var fee = it.fee || STATION_FEE + (it.bar ? 0 : STATION_DELIVERY);
-    var who = it.bar ? 'Бар на ' + mn + ' гостей, ' + (kb ? 'доставка, бармен и стойка' : 'бармен и стойка') + ' включены' : 'Станция на ' + STATION_MIN + ' гостей, повар, оборудование и доставка включены';
+    var fee = it.fee || STATION_FEE;  // доставка станций — по калькулятору в корзине, не внутри сбора (Маша, т.21 №594)
+    var who = it.bar ? 'Бар на ' + mn + ' гостей, ' + (kb ? 'доставка, бармен и стойка' : 'бармен и стойка') + ' включены' : 'Станция на ' + STATION_MIN + ' гостей, повар и оборудование включены';
     st.innerHTML = (sv ? '<small>' + (it.bar ? 'Вариант' : 'Начинка') + '</small><div class="ktg-qv__chips">' + sv.map(function (x, k) { return chip('data-st-v', k, k === stq.v, x[0]); }).join('') + '</div>' : '') +
       '<small>Сколько гостей</small><div class="ktg-qv__chips">' + STATION_GUESTS.filter(function (n) { return n >= mn; }).map(function (n) { return chip('data-st-g', n, n === g, n); }).join('') +
         '<input type="text" inputmode="numeric" maxlength="4" placeholder="Своё" aria-label="Своё число гостей" data-st-in' + (own ? ' class="is-on" value="' + g + '"' : '') + '></div>' +
@@ -394,7 +394,7 @@
       '';
     var inc = $('[data-qv-inc]');
     inc.hidden = it.bar && !kb;
-    inc.innerHTML = it.bar && !kb ? '' : '<small>' + (kb ? 'В бар включено' : 'В станцию включено') + '</small><div class="ktg-qv__inc">' + (kb ? BAR_INC : STATION_INC).map(function (x, k) { return '<div' + (k ? '' : ' class="is-hot"') + '>' + x[0] + '<b>' + x[1] + '</b><span>' + x[2] + '</span></div>'; }).join('') + '</div>';
+    inc.innerHTML = it.bar && !kb ? '' : '<small>' + (kb ? 'В бар включено' : 'В станцию включено') + '</small><div class="ktg-qv__inc">' + (kb ? BAR_INC : STATION_INC).map(function (x, k) { return '<div' + (kb && !k ? ' class="is-hot"' : '') + '>' + x[0] + '<b>' + x[1] + '</b><span>' + x[2] + '</span></div>'; }).join('') + '</div>';
   }
   function syncQvPick() {
     var m = $('[data-qv]'), id = +m.dataset.id, b = $('[data-qv-pick]');
@@ -490,7 +490,7 @@
     if (t.matches('[data-of-order]')) {
       var oo = OFFERS[ofs.o], ot = oo.tiers[+t.dataset.ofOrder], og = ofs.g[oo.key], st = oo.staff && ofs.staff ? offerStaff(og) : 0, osum = offerTotal(oo, ot, og) + st * WAITER;
       state.ord = [(oo.tiers.length > 1 ? oo.name + ' «' + ot.name + '»' : oo.name) + ', ' + og + ' ' + plural(og, 'гость', 'гостя', 'гостей') + (st ? ' + официанты: ' + st : '') + ' · ' + ot.out + ' на гостя',
-        rub(osum) + (osum >= FREE_DELIVERY ? ' · доставка в пределах МКАД бесплатно' : ' · доставку посчитаем в смете')];
+        rub(osum) + ' · доставку посчитаем в корзине'];
       renderDrawer(); open($('[data-drawer]')); return;
     }
     if (t.matches('[data-set-pick]')) { toggleSet(+t.closest('[data-set]').dataset.set); return; }
